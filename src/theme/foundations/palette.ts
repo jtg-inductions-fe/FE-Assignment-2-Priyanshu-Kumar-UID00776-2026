@@ -7,8 +7,11 @@ export const palette: PaletteOptions = {
     // TODO: Add necessary colors here
     primary: {
         main: COLORS.PRIMARY.MAIN,
+        light: COLORS.PRIMARY.LIGHT,
     },
     secondary: {
         main: COLORS.SECONDARY.MAIN,
+        light: COLORS.SECONDARY.LIGHT,
+        dark: COLORS.SECONDARY.DARK,
     },
 };

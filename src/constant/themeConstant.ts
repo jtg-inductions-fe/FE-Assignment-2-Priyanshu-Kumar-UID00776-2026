@@ -4,10 +4,13 @@
  */
 export const COLORS = {
     PRIMARY: {
-        MAIN: '#F24822',
+        MAIN: '#8B1900',
+        LIGHT: '#DD3914',
     },
     SECONDARY: {
         MAIN: '#F9F8F3',
+        LIGHT: '#FFFFFF',
+        DARK: '#434242',
     },
 };
 

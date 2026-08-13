@@ -15,8 +15,8 @@ const rootElement = document.getElementById('root') as HTMLElement;
 createRoot(rootElement).render(
     <StrictMode>
         <ThemeProvider theme={theme}>
-            <CssBaseline />
             <Provider store={store}>
+                <CssBaseline />
                 <App />
             </Provider>
         </ThemeProvider>

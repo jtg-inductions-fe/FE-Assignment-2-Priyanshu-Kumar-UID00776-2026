@@ -8,4 +8,7 @@ export const palette: PaletteOptions = {
     primary: {
         main: COLORS.PRIMARY.MAIN,
     },
+    secondary: {
+        main: COLORS.SECONDARY.MAIN,
+    },
 };

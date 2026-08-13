@@ -4,7 +4,10 @@
  */
 export const COLORS = {
     PRIMARY: {
-        MAIN: '#0E9F6E',
+        MAIN: '#F24822',
+    },
+    SECONDARY: {
+        MAIN: '#F9F8F3',
     },
 };
 

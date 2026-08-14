@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-import { SCALING_FACTOR } from '@constant';
+import { COLORS, SCALING_FACTOR } from '@constant';
 
 /* Customized MUI components themes */
 import { components } from './components';
@@ -27,6 +27,13 @@ let theme = createTheme({
 theme = createTheme(theme, {
     typography: {
         ...typography.typographyStyle(theme),
+    },
+    palette: {
+        tertiary: {
+            main: COLORS.TERTIARY.MAIN,
+            light: COLORS.TERTIARY.LIGHT,
+            dark: COLORS.TERTIARY.DARK,
+        },
     },
 });
 

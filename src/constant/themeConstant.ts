@@ -12,6 +12,11 @@ export const COLORS = {
         LIGHT: '#FFFFFF',
         DARK: '#434242',
     },
+    TERTIARY: {
+        MAIN: '#006D37',
+        LIGHT: '#008946',
+        DARK: '#474747',
+    },
 };
 
 /**

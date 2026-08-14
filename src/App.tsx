@@ -1,16 +1,7 @@
-import React from 'react';
+import { RouterProvider } from 'react-router-dom';
 
-import OnBoarding from 'pages/OnBoarding';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { appRouter } from './routes/appRouter';
 
-const App = () => (
-    <>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<OnBoarding />} />
-            </Routes>
-        </BrowserRouter>
-    </>
-);
+const App = () => <RouterProvider router={appRouter} />;
 
 export default App;

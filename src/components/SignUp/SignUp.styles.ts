@@ -76,7 +76,7 @@ export const FormSection = styled(Box)(({ theme }) => ({
     },
 }));
 
-export const FormCard = styled(Paper)(({ theme }) => ({
+export const FormCard = styled('form')(({ theme }) => ({
     width: '100%',
     backgroundColor: 'transparent',
     boxShadow: 'none',

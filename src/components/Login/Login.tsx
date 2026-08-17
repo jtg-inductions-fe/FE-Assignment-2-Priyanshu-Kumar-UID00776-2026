@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -20,6 +20,10 @@ import {
     SubtitleText,
     TitleText,
 } from './Login.styles';
+import { login } from '../../services/auth.service';
+import { setUser } from '../../slices/authSlice';
+import { showNotification } from '../../slices/notificationSlice';
+import { useAppDispatch } from '../../store/store';
 
 interface LoginFormData {
     email: string;
@@ -27,6 +31,9 @@ interface LoginFormData {
 }
 
 const Login = () => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => {
@@ -41,6 +48,7 @@ const Login = () => {
 
     const {
         control,
+        handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm<LoginFormData>({
         defaultValues: {
@@ -50,15 +58,54 @@ const Login = () => {
         mode: 'onTouched',
     });
 
+    const handleLogin = async (data: LoginFormData) => {
+        try {
+            const user = await login({
+                email: data.email,
+                password: data.password,
+            });
+
+            dispatch(setUser(user));
+
+            dispatch(
+                showNotification({
+                    message: 'Successfully logged in!',
+                    severity: 'success',
+                }),
+            );
+
+            setTimeout(() => {
+                void navigate('/restaurant');
+            }, 1500);
+        } catch (error) {
+            dispatch(
+                showNotification({
+                    message:
+                        error instanceof Error
+                            ? error.message
+                            : 'Unable to login',
+                    severity: 'error',
+                }),
+            );
+        }
+    };
+
     return (
         <PageContainer disableGutters maxWidth={false}>
             <HeroSection />
 
             <FormSection>
-                <FormCard elevation={0} component="form" noValidate>
+                <FormCard
+                    noValidate
+                    onSubmit={(event) => {
+                        void handleSubmit(handleLogin)(event);
+                    }}
+                >
                     <HeaderBox>
                         <BrandTitle>Khana Peena</BrandTitle>
+
                         <TitleText>Sign in to your account</TitleText>
+
                         <SubtitleText>
                             Enter your details to proceed
                         </SubtitleText>
@@ -91,6 +138,9 @@ const Login = () => {
                     <Controller
                         name="password"
                         control={control}
+                        rules={{
+                            required: 'Password is required',
+                        }}
                         render={({ field }) => (
                             <TextField
                                 {...field}
@@ -99,6 +149,8 @@ const Login = () => {
                                 type={showPassword ? 'text' : 'password'}
                                 variant="outlined"
                                 fullWidth
+                                error={!!errors.password}
+                                helperText={errors.password?.message}
                                 slotProps={{
                                     input: {
                                         endAdornment: (
@@ -131,7 +183,7 @@ const Login = () => {
                         <SubmitButton
                             type="submit"
                             variant="contained"
-                            disabled={isSubmitting}
+                            loading={isSubmitting}
                         >
                             Login
                         </SubmitButton>
@@ -143,7 +195,10 @@ const Login = () => {
                             component={RouterLink}
                             to="/signup"
                             underline="none"
-                            sx={{ cursor: 'pointer', marginLeft: '4px' }}
+                            sx={{
+                                cursor: 'pointer',
+                                marginLeft: '4px',
+                            }}
                         >
                             Sign Up
                         </Link>

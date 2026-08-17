@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -33,24 +33,32 @@ import {
     SubtitleText,
     TitleText,
 } from './SignUp.styles';
+import { signup } from '../../services/auth.service';
+import { setUser } from '../../slices/authSlice';
+import { showNotification } from '../../slices/notificationSlice';
+import { useAppDispatch } from '../../store/store';
+import { UserRole } from '../../types/auth.types';
 
 interface SignUpFormData {
     fullName: string;
     email: string;
     contactNo: string;
-    role: string;
+    role: UserRole | '';
     password: string;
     confirmPassword: string;
 }
 
 const SignUp = () => {
     const theme = useTheme();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const {
         control,
+        handleSubmit,
         watch,
         formState: { errors, isSubmitting },
     } = useForm<SignUpFormData>({
@@ -58,7 +66,7 @@ const SignUp = () => {
             fullName: '',
             email: '',
             contactNo: '',
-            role: 'USER',
+            role: '',
             password: '',
             confirmPassword: '',
         },
@@ -67,9 +75,13 @@ const SignUp = () => {
 
     const passwordValue = watch('password');
 
-    const handleClickShowPassword = () => setShowPassword((prev) => !prev);
-    const handleClickShowConfirmPassword = () =>
+    const handleClickShowPassword = () => {
+        setShowPassword((prev) => !prev);
+    };
+
+    const handleClickShowConfirmPassword = () => {
         setShowConfirmPassword((prev) => !prev);
+    };
 
     const handleMouseDownPassword = (
         event: React.MouseEvent<HTMLButtonElement>,
@@ -77,15 +89,57 @@ const SignUp = () => {
         event.preventDefault();
     };
 
+    const setUserData = async (data: SignUpFormData) => {
+        try {
+            const user = await signup({
+                fullName: data.fullName,
+                email: data.email,
+                contactNo: data.contactNo,
+                role: data.role as UserRole,
+                password: data.password,
+            });
+
+            dispatch(setUser(user));
+
+            dispatch(
+                showNotification({
+                    message: 'Successfully signed up!',
+                    severity: 'success',
+                }),
+            );
+
+            setTimeout(() => {
+                void navigate('/restaurant');
+            }, 1500);
+        } catch (error) {
+            dispatch(
+                showNotification({
+                    message:
+                        error instanceof Error
+                            ? error.message
+                            : 'Unable to sign up',
+                    severity: 'error',
+                }),
+            );
+        }
+    };
+
     return (
         <PageContainer disableGutters maxWidth={false}>
             <HeroSection />
 
             <FormSection>
-                <FormCard component="form" elevation={0} noValidate>
+                <FormCard
+                    noValidate
+                    onSubmit={(e) => {
+                        void handleSubmit(setUserData)(e);
+                    }}
+                >
                     <HeaderBox>
                         <BrandTitle>Khana Peena</BrandTitle>
+
                         <TitleText>Create an Account</TitleText>
+
                         <SubtitleText>
                             Start your journey with us today
                         </SubtitleText>
@@ -166,10 +220,13 @@ const SignUp = () => {
                     <StyledRadioBox>
                         <FormControl error={!!errors.role}>
                             <FormLabel id="i-am-label">I am a</FormLabel>
+
                             <Controller
                                 name="role"
                                 control={control}
-                                rules={{ required: 'Please select a role' }}
+                                rules={{
+                                    required: 'Please select a role',
+                                }}
                                 render={({ field }) => (
                                     <RadioGroup
                                         {...field}
@@ -184,6 +241,7 @@ const SignUp = () => {
                                             control={<Radio />}
                                             label="USER"
                                         />
+
                                         <FormControlLabel
                                             value="RESTAURANT OWNER"
                                             control={<Radio />}
@@ -192,6 +250,7 @@ const SignUp = () => {
                                     </RadioGroup>
                                 )}
                             />
+
                             {errors.role && (
                                 <FormHelperText>
                                     {errors.role.message}
@@ -305,7 +364,7 @@ const SignUp = () => {
                         <SubmitButton
                             type="submit"
                             variant="contained"
-                            disabled={isSubmitting}
+                            loading={isSubmitting}
                         >
                             Sign up
                         </SubmitButton>
@@ -317,7 +376,10 @@ const SignUp = () => {
                             component={RouterLink}
                             to="/login"
                             underline="none"
-                            sx={{ cursor: 'pointer', marginLeft: '4px' }}
+                            sx={{
+                                cursor: 'pointer',
+                                marginLeft: '4px',
+                            }}
                         >
                             Login
                         </Link>

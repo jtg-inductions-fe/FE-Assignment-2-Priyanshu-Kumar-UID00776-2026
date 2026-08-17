@@ -7,7 +7,7 @@ import Restaurant from '../pages/Restuarant/Restaurant';
 export const appRouter = createBrowserRouter([
     {
         path: '/',
-        element: <Navigate to="/signup" replace />,
+        element: <Navigate to="/restaurant" replace />,
     },
     {
         path: '/signup',

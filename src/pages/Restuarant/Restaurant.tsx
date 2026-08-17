@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 
 import { RestaurantContainer, RestaurantContent } from './Restaurant.styles';
+import BottomNavgation from '../../components/BottomNavigation/BottomNavigation';
 import Navbar from '../../components/Navbar/Navbar';
 
 const Restaurant = () => (
@@ -16,6 +17,8 @@ const Restaurant = () => (
                 Discover restaurants and explore their menus.
             </Typography>
         </RestaurantContent>
+
+        <BottomNavgation />
     </RestaurantContainer>
 );
 

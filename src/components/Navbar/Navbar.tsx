@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { Avatar, IconButton, Menu, MenuItem, Typography } from '@mui/material';
@@ -12,10 +12,21 @@ import {
     NavbarContainer,
     ProfileInfo,
 } from './Navbar.styles';
+import LogoImage from '../../assets/images/logo.webp';
 import { logout } from '../../services/auth.service';
 import { clearUser } from '../../slices/authSlice';
 import { showNotification } from '../../slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
+
+interface NavigationPage {
+    name: string;
+    path: string;
+}
+
+const pages: NavigationPage[] = [
+    { name: 'Home', path: '/' },
+    { name: 'Orders', path: '/orders' },
+];
 
 const Navbar = () => {
     const dispatch = useAppDispatch();
@@ -72,18 +83,38 @@ const Navbar = () => {
         <NavbarContainer>
             <LogoContainer>
                 <Logo>
-                    <img src="../../assets/images" alt="" />
+                    <img
+                        src={LogoImage}
+                        height="100%"
+                        width="100%"
+                        alt="Logo"
+                    />
                 </Logo>
 
-                <Typography variant="h6" fontWeight={700}>
+                <Typography variant="h6" fontWeight={700} color="primary.main">
                     Khana Peena
                 </Typography>
             </LogoContainer>
 
             <NavbarActions>
-                <IconButton aria-label="shopping cart" size="large">
-                    <ShoppingCartOutlinedIcon />
-                </IconButton>
+                {pages.map((item) => (
+                    <MenuItem component={Link} to={item.path} key={item.name}>
+                        {item.name}
+                    </MenuItem>
+                ))}
+
+                {!!user ? (
+                    <IconButton
+                        aria-label="shopping cart"
+                        size="large"
+                        component={Link}
+                        to="/cart"
+                    >
+                        <ShoppingCartOutlinedIcon />
+                    </IconButton>
+                ) : (
+                    ''
+                )}
 
                 <IconButton
                     onClick={handleProfileClick}

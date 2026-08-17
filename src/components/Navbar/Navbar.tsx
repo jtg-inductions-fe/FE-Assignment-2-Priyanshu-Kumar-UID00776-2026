@@ -71,7 +71,9 @@ const Navbar = () => {
     return (
         <NavbarContainer>
             <LogoContainer>
-                <Logo>K</Logo>
+                <Logo>
+                    <img src="../../assets/images" alt="" />
+                </Logo>
 
                 <Typography variant="h6" fontWeight={700}>
                     Khana Peena

@@ -11,6 +11,8 @@ export const AllFilterButton = styled(Button)({
     fontWeight: 600,
     paddingLeft: '20px',
     paddingRight: '20px',
+    borderTopLeftRadius: '10px',
+    borderBottomLeftRadius: '10px',
 });
 
 export const VegFilterButton = styled(Button, {
@@ -35,8 +37,10 @@ export const NonVegFilterButton = styled(Button, {
     color: isActive ? '#fff' : 'red',
     backgroundColor: isActive ? 'red' : 'transparent',
     borderColor: 'red',
+    borderTopRightRadius: '10px',
+    borderBottomRightRadius: '10px',
     '&:hover': {
-        backgroundColor: isActive ? 'darkred' : '#ffebee',
+        backgroundColor: isActive ? 'red' : '#ffebee',
         borderColor: 'red',
     },
 }));

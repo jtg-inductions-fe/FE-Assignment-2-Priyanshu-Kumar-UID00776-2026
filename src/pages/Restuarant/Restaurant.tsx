@@ -47,6 +47,7 @@ import DietFilterToggle, {
 } from '../../components/FilterToggleButton/FilterToggleButton';
 import Navbar from '../../components/Navbar/Navbar';
 import RestaurantSearch from '../../components/SearchBar/SearchBar';
+import { useDebounce } from '../../hooks/useDebounce';
 import { useAppSelector } from '../../store/store';
 import RestaurantItemTypes from '../../types/restaurant.types';
 
@@ -118,12 +119,14 @@ const Restaurant = () => {
         },
     ]);
 
+    const debouncedValue = useDebounce<string>(searchTerm);
+
     const filteredRestaurants = useMemo(
         () =>
             restaurants.filter((restaurant) => {
                 const matchesSearch = restaurant.name
                     .toLowerCase()
-                    .includes(searchTerm.toLowerCase());
+                    .includes(debouncedValue.toLowerCase());
                 if (!matchesSearch) return false;
 
                 if (!isOwner && dietFilter !== 'ALL') {
@@ -141,7 +144,7 @@ const Restaurant = () => {
 
                 return true;
             }),
-        [restaurants, isOwner, searchTerm, dietFilter],
+        [restaurants, isOwner, debouncedValue, dietFilter],
     );
 
     const handleDelete = (id: string) => {

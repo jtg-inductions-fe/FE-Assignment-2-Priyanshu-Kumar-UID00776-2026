@@ -1,4 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import {
     AccountCircle,
@@ -6,15 +8,74 @@ import {
     Home,
     ShoppingCart,
 } from '@mui/icons-material';
-import { BottomNavigationAction } from '@mui/material';
+import {
+    BottomNavigationAction,
+    Menu,
+    MenuItem,
+    Typography,
+} from '@mui/material';
 
 import {
     BottomNavigationContainer,
     NavigationBox,
+    ProfileInfo,
 } from './BottomNavigation.styles';
+import userSessionCheck from '../../hooks/activeUserRoutes';
+import { logout } from '../../services/auth.service';
+import { clearUser } from '../../slices/authSlice';
+import { showNotification } from '../../slices/notificationSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 
 const SimpleBottomNavigation = () => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const location = useLocation();
+    const user = useAppSelector((state) => state.auth.user);
+    const isUserActive = !!user;
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const isMenuOpen = Boolean(anchorEl);
+
+    const { handleUserRoute } = userSessionCheck();
+
+    const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogout = async () => {
+        handleCloseMenu();
+
+        try {
+            await logout();
+
+            dispatch(clearUser());
+
+            dispatch(
+                showNotification({
+                    message: 'Successfully logged out!',
+                    severity: 'success',
+                }),
+            );
+
+            setTimeout(() => {
+                void navigate('/login');
+            }, 1000);
+        } catch (error) {
+            dispatch(
+                showNotification({
+                    message:
+                        error instanceof Error
+                            ? error.message
+                            : 'Unable to logout.',
+                    severity: 'error',
+                }),
+            );
+        }
+    };
 
     return (
         <BottomNavigationContainer sx={{ width: 500 }}>
@@ -26,27 +87,72 @@ const SimpleBottomNavigation = () => {
                     to="/restaurant"
                     value="/restaurant"
                 />
-                <BottomNavigationAction
-                    label="Cart"
-                    icon={<ShoppingCart />}
-                    component={Link}
-                    to="/cart"
-                    value="/cart"
-                />
+                {(user?.role === 'USER' || !isUserActive) && (
+                    <BottomNavigationAction
+                        label="Cart"
+                        icon={<ShoppingCart />}
+                        onClick={() => handleUserRoute('/cart', '/login')}
+                        value="/cart"
+                    />
+                )}
                 <BottomNavigationAction
                     label="Orders"
                     icon={<Assignment />}
-                    component={Link}
-                    to="/orders"
+                    onClick={() => handleUserRoute('/orders', '/login')}
                     value="/orders"
                 />
                 <BottomNavigationAction
                     label="Profile"
+                    onClick={handleProfileClick}
                     icon={<AccountCircle />}
-                    component={Link}
-                    to="/profile"
-                    value="/profile"
+                    value="profile"
                 />
+                <Menu
+                    anchorEl={anchorEl}
+                    open={isMenuOpen}
+                    onClose={handleCloseMenu}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    {isUserActive ? (
+                        <>
+                            <ProfileInfo>
+                                <Typography variant="body1" fontWeight={600}>
+                                    {user?.fullName}
+                                </Typography>
+
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    {user?.email}
+                                </Typography>
+                            </ProfileInfo>
+
+                            <MenuItem
+                                onClick={() => {
+                                    void handleLogout();
+                                }}
+                            >
+                                Logout
+                            </MenuItem>
+                        </>
+                    ) : (
+                        <MenuItem
+                            onClick={() => {
+                                void navigate('/login');
+                            }}
+                        >
+                            Login
+                        </MenuItem>
+                    )}
+                </Menu>
             </NavigationBox>
         </BottomNavigationContainer>
     );

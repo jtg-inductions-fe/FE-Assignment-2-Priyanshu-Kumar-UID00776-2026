@@ -82,7 +82,7 @@ const Navbar = () => {
         }
     };
 
-    const userInitial = user?.fullName?.charAt(0).toUpperCase() ?? 'U';
+    const userInitial = user?.fullName?.charAt(0).toUpperCase() || 'U';
 
     return (
         <NavbarContainer>
@@ -100,9 +100,9 @@ const Navbar = () => {
                     Khana Peena
                 </Typography>
             </LogoContainer>
-            {isUserActive && (
-                <NavbarActions>
-                    {pages.map((item) => (
+            <NavbarActions>
+                {isUserActive &&
+                    pages.map((item) => (
                         <MenuItem
                             component={Link}
                             to={item.path}
@@ -112,66 +112,65 @@ const Navbar = () => {
                         </MenuItem>
                     ))}
 
-                    {isUserActive ? (
-                        <>
-                            {user && user.role === 'USER' && (
-                                <IconButton
-                                    aria-label="shopping cart"
-                                    size="large"
-                                    component={Link}
-                                    to="/cart"
-                                >
-                                    <ShoppingCartOutlinedIcon />
-                                </IconButton>
-                            )}
-
+                {isUserActive ? (
+                    <>
+                        {user && user.role === 'USER' && (
                             <IconButton
-                                onClick={handleProfileClick}
-                                size="small"
-                                aria-label="profile"
+                                aria-label="shopping cart"
+                                size="large"
+                                component={Link}
+                                to="/cart"
                             >
-                                <Avatar>{userInitial}</Avatar>
+                                <ShoppingCartOutlinedIcon />
                             </IconButton>
-                        </>
-                    ) : (
-                        <Button href="/login" variant="outlined">
-                            Login
-                        </Button>
-                    )}
+                        )}
 
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={isMenuOpen}
-                        onClose={handleCloseMenu}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
+                        <IconButton
+                            onClick={handleProfileClick}
+                            size="small"
+                            aria-label="profile"
+                        >
+                            <Avatar>{userInitial}</Avatar>
+                        </IconButton>
+                    </>
+                ) : (
+                    <Button href="/login" variant="outlined">
+                        Login
+                    </Button>
+                )}
+
+                <Menu
+                    anchorEl={anchorEl}
+                    open={isMenuOpen}
+                    onClose={handleCloseMenu}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    <ProfileInfo>
+                        <Typography variant="body1" fontWeight={600}>
+                            {user?.fullName}
+                        </Typography>
+
+                        <Typography variant="body2" color="text.secondary">
+                            {user?.email}
+                        </Typography>
+                    </ProfileInfo>
+
+                    <MenuItem
+                        onClick={() => {
+                            void handleLogout();
                         }}
                     >
-                        <ProfileInfo>
-                            <Typography variant="body1" fontWeight={600}>
-                                {user?.fullName}
-                            </Typography>
-
-                            <Typography variant="body2" color="text.secondary">
-                                {user?.email}
-                            </Typography>
-                        </ProfileInfo>
-
-                        <MenuItem
-                            onClick={() => {
-                                void handleLogout();
-                            }}
-                        >
-                            Logout
-                        </MenuItem>
-                    </Menu>
-                </NavbarActions>
-            )}
+                        Logout
+                    </MenuItem>
+                </Menu>
+            </NavbarActions>
         </NavbarContainer>
     );
 };

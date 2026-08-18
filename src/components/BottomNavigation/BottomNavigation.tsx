@@ -31,6 +31,7 @@ const SimpleBottomNavigation = () => {
     const dispatch = useAppDispatch();
     const location = useLocation();
     const user = useAppSelector((state) => state.auth.user);
+    const isUserActive = !!user;
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -86,7 +87,7 @@ const SimpleBottomNavigation = () => {
                     to="/restaurant"
                     value="/restaurant"
                 />
-                {user && user.role === 'USER' && (
+                {(user?.role === 'USER' || !isUserActive) && (
                     <BottomNavigationAction
                         label="Cart"
                         icon={<ShoppingCart />}
@@ -119,23 +120,38 @@ const SimpleBottomNavigation = () => {
                         horizontal: 'right',
                     }}
                 >
-                    <ProfileInfo>
-                        <Typography variant="body1" fontWeight={600}>
-                            {user?.fullName}
-                        </Typography>
+                    {isUserActive ? (
+                        <>
+                            <ProfileInfo>
+                                <Typography variant="body1" fontWeight={600}>
+                                    {user?.fullName}
+                                </Typography>
 
-                        <Typography variant="body2" color="text.secondary">
-                            {user?.email}
-                        </Typography>
-                    </ProfileInfo>
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    {user?.email}
+                                </Typography>
+                            </ProfileInfo>
 
-                    <MenuItem
-                        onClick={() => {
-                            void handleLogout();
-                        }}
-                    >
-                        Logout
-                    </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    void handleLogout();
+                                }}
+                            >
+                                Logout
+                            </MenuItem>
+                        </>
+                    ) : (
+                        <MenuItem
+                            onClick={() => {
+                                void navigate('/login');
+                            }}
+                        >
+                            Login
+                        </MenuItem>
+                    )}
                 </Menu>
             </NavigationBox>
         </BottomNavigationContainer>

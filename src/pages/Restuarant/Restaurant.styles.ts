@@ -29,7 +29,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
 export const ScrollableContent = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
-    padding: theme.spacing(0, 3, 15, 3),
+    padding: theme.spacing(0, 1, 15, 3),
     maxWidth: '1200px',
     width: '100%',
     margin: '0 auto',
@@ -75,7 +75,7 @@ export const RestaurantGrid = styled(Box)(({ theme }) => ({
 export const StyledCard = styled(Card)(({ theme }) => ({
     borderRadius: theme.shape.borderRadius * 3,
     overflow: 'hidden',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.30)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',

@@ -3,7 +3,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import { Avatar, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import {
+    Avatar,
+    Button,
+    IconButton,
+    Menu,
+    MenuItem,
+    Typography,
+} from '@mui/material';
 
 import {
     Logo,
@@ -23,16 +30,14 @@ interface NavigationPage {
     path: string;
 }
 
-const pages: NavigationPage[] = [
-    { name: 'Home', path: '/' },
-    { name: 'Orders', path: '/orders' },
-];
+const pages: NavigationPage[] = [{ name: 'Orders', path: '/orders' }];
 
 const Navbar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
     const user = useAppSelector((state) => state.auth.user);
+
+    const isUserActive = !!user;
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -81,7 +86,7 @@ const Navbar = () => {
 
     return (
         <NavbarContainer>
-            <LogoContainer>
+            <LogoContainer onClick={() => void navigate('/')}>
                 <Logo>
                     <img
                         src={LogoImage}
@@ -95,67 +100,78 @@ const Navbar = () => {
                     Khana Peena
                 </Typography>
             </LogoContainer>
+            {isUserActive && (
+                <NavbarActions>
+                    {pages.map((item) => (
+                        <MenuItem
+                            component={Link}
+                            to={item.path}
+                            key={item.name}
+                        >
+                            {item.name}
+                        </MenuItem>
+                    ))}
 
-            <NavbarActions>
-                {pages.map((item) => (
-                    <MenuItem component={Link} to={item.path} key={item.name}>
-                        {item.name}
-                    </MenuItem>
-                ))}
+                    {isUserActive ? (
+                        <>
+                            {user && user.role === 'USER' && (
+                                <IconButton
+                                    aria-label="shopping cart"
+                                    size="large"
+                                    component={Link}
+                                    to="/cart"
+                                >
+                                    <ShoppingCartOutlinedIcon />
+                                </IconButton>
+                            )}
 
-                {!!user ? (
-                    <IconButton
-                        aria-label="shopping cart"
-                        size="large"
-                        component={Link}
-                        to="/cart"
-                    >
-                        <ShoppingCartOutlinedIcon />
-                    </IconButton>
-                ) : (
-                    ''
-                )}
+                            <IconButton
+                                onClick={handleProfileClick}
+                                size="small"
+                                aria-label="profile"
+                            >
+                                <Avatar>{userInitial}</Avatar>
+                            </IconButton>
+                        </>
+                    ) : (
+                        <Button href="/login" variant="outlined">
+                            Login
+                        </Button>
+                    )}
 
-                <IconButton
-                    onClick={handleProfileClick}
-                    size="small"
-                    aria-label="profile"
-                >
-                    <Avatar>{userInitial}</Avatar>
-                </IconButton>
-
-                <Menu
-                    anchorEl={anchorEl}
-                    open={isMenuOpen}
-                    onClose={handleCloseMenu}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                >
-                    <ProfileInfo>
-                        <Typography variant="body1" fontWeight={600}>
-                            {user?.fullName}
-                        </Typography>
-
-                        <Typography variant="body2" color="text.secondary">
-                            {user?.email}
-                        </Typography>
-                    </ProfileInfo>
-
-                    <MenuItem
-                        onClick={() => {
-                            void handleLogout();
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={isMenuOpen}
+                        onClose={handleCloseMenu}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
                         }}
                     >
-                        Logout
-                    </MenuItem>
-                </Menu>
-            </NavbarActions>
+                        <ProfileInfo>
+                            <Typography variant="body1" fontWeight={600}>
+                                {user?.fullName}
+                            </Typography>
+
+                            <Typography variant="body2" color="text.secondary">
+                                {user?.email}
+                            </Typography>
+                        </ProfileInfo>
+
+                        <MenuItem
+                            onClick={() => {
+                                void handleLogout();
+                            }}
+                        >
+                            Logout
+                        </MenuItem>
+                    </Menu>
+                </NavbarActions>
+            )}
         </NavbarContainer>
     );
 };

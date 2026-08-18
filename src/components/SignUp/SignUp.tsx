@@ -149,7 +149,7 @@ const SignUp = () => {
                         name="fullName"
                         control={control}
                         rules={{
-                            required: 'Full name is required',
+                            required: 'This field is required',
                             minLength: {
                                 value: 3,
                                 message:

@@ -17,7 +17,6 @@ import {
     PageContainer,
     SubmitButton,
     SubmitPaperWrapper,
-    SubtitleText,
     TitleText,
 } from './Login.styles';
 import { login } from '../../services/auth.service';
@@ -105,10 +104,6 @@ const Login = () => {
                         <BrandTitle>Khana Peena</BrandTitle>
 
                         <TitleText>Sign in to your account</TitleText>
-
-                        <SubtitleText>
-                            Enter your details to proceed
-                        </SubtitleText>
                     </HeaderBox>
 
                     <Controller

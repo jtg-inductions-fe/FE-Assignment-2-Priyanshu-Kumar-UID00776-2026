@@ -4,7 +4,6 @@ import { COLORS } from '@constant';
 
 /* Custom Palette */
 export const palette: PaletteOptions = {
-    // TODO: Add necessary colors here
     primary: {
         main: COLORS.PRIMARY.MAIN,
         light: COLORS.PRIMARY.LIGHT,

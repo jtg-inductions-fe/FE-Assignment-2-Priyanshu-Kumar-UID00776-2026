@@ -136,7 +136,7 @@ const SignUp = () => {
                     }}
                 >
                     <HeaderBox>
-                        <BrandTitle>Khana Peena</BrandTitle>
+                        <BrandTitle>Khanna Peena</BrandTitle>
 
                         <TitleText>Create an Account</TitleText>
 

@@ -101,7 +101,7 @@ const Login = () => {
                     }}
                 >
                     <HeaderBox>
-                        <BrandTitle>Khana Peena</BrandTitle>
+                        <BrandTitle>Khanna Peena</BrandTitle>
 
                         <TitleText>Sign in to your account</TitleText>
                     </HeaderBox>

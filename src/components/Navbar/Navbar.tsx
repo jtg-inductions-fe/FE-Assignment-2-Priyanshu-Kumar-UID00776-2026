@@ -97,7 +97,7 @@ const Navbar = () => {
                 </Logo>
 
                 <Typography variant="h6" fontWeight={700} color="primary.main">
-                    Khana Peena
+                    Khanna Peena
                 </Typography>
             </LogoContainer>
             <NavbarActions>

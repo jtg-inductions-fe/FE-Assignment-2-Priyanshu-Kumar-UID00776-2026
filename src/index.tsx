@@ -8,8 +8,8 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import { theme } from '@theme';
 
-import SnackBar from './components/SnackBar/SnackBar';
-import { appRouter } from './routes/appRouter';
+import { GlobalSnackbar } from './components/SnackBar/SnackBar';
+import { AppRouter } from './routes/AppRouter';
 import { store } from './store/store';
 
 const rootElement = document.getElementById('root') as HTMLElement;
@@ -19,8 +19,8 @@ createRoot(rootElement).render(
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <CssBaseline />
-                <RouterProvider router={appRouter} />
-                <SnackBar />
+                <RouterProvider router={AppRouter} />
+                <GlobalSnackbar />
             </Provider>
         </ThemeProvider>
     </StrictMode>,

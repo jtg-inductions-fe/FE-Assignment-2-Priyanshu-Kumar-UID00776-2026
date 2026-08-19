@@ -17,7 +17,7 @@ import { clearUser } from '../../slices/authSlice';
 import { showNotification } from '../../slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 
-const Navbar = () => {
+export const Navbar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -128,5 +128,3 @@ const Navbar = () => {
         </NavbarContainer>
     );
 };
-
-export default Navbar;

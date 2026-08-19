@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 
 import { RestaurantContainer, RestaurantContent } from './Restaurant.styles';
-import Navbar from '../../components/Navbar/Navbar';
+import { Navbar } from '../../components/Navbar/Navbar';
 
-const Restaurant = () => (
+export const Restaurant = () => (
     <RestaurantContainer>
         <Navbar />
 
@@ -18,5 +18,3 @@ const Restaurant = () => (
         </RestaurantContent>
     </RestaurantContainer>
 );
-
-export default Restaurant;

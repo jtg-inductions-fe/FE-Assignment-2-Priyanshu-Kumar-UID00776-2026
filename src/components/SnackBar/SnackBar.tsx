@@ -5,7 +5,7 @@ import { Alert, Snackbar } from '@mui/material';
 import { hideNotification } from '../../slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 
-const GlobalSnackbar = () => {
+export const GlobalSnackbar = () => {
     const dispatch = useAppDispatch();
 
     const { open, message, severity } = useAppSelector(
@@ -44,5 +44,3 @@ const GlobalSnackbar = () => {
         </Snackbar>
     );
 };
-
-export default GlobalSnackbar;

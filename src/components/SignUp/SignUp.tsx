@@ -48,7 +48,7 @@ interface SignUpFormData {
     confirmPassword: string;
 }
 
-const SignUp = () => {
+export const SignUp = () => {
     const theme = useTheme();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -389,5 +389,3 @@ const SignUp = () => {
         </PageContainer>
     );
 };
-
-export default SignUp;

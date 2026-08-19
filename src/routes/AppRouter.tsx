@@ -1,10 +1,10 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import Login from '../components/Login/Login';
-import SignUp from '../components/SignUp/SignUp';
-import Restaurant from '../pages/Restuarant/Restaurant';
+import { Login } from '../components/Login/Login';
+import { SignUp } from '../components/SignUp/SignUp';
+import { Restaurant } from '../pages/Restuarant/Restaurant';
 
-export const appRouter = createBrowserRouter([
+export const AppRouter = createBrowserRouter([
     {
         path: '/',
         element: <Navigate to="/restaurant" replace />,

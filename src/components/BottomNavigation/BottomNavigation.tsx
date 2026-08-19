@@ -26,7 +26,7 @@ import { clearUser } from '../../slices/authSlice';
 import { showNotification } from '../../slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 
-const SimpleBottomNavigation = () => {
+export const BottomNavigationBar = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const location = useLocation();
@@ -157,5 +157,3 @@ const SimpleBottomNavigation = () => {
         </BottomNavigationContainer>
     );
 };
-
-export default SimpleBottomNavigation;

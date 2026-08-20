@@ -1,23 +1,26 @@
 import { useState } from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import {
-    Avatar,
-    Button,
-    IconButton,
-    Menu,
-    MenuItem,
-    Typography,
-} from '@mui/material';
+import { Typography } from '@mui/material';
 
 import {
+    BrandName,
+    LoginButton,
     Logo,
     LogoContainer,
+    LogoutMenuItem,
     NavbarActions,
     NavbarContainer,
+    NavIconButton,
+    NavLabel,
+    ProfileIconButton,
     ProfileInfo,
+    ProfileName,
+    StyledAvatar,
+    StyledMenu,
 } from './Navbar.styles';
 import LogoImage from '../../assets/images/logo.avif';
 import { logout } from '../../services/auth.service';
@@ -25,22 +28,14 @@ import { clearUser } from '../../slices/authSlice';
 import { showNotification } from '../../slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 
-interface NavigationPage {
-    name: string;
-    path: string;
-}
-
-const pages: NavigationPage[] = [{ name: 'Orders', path: '/orders' }];
-
 export const Navbar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth.user);
 
-    const isUserActive = !!user;
+    const isUserActive = Boolean(user);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
     const isMenuOpen = Boolean(anchorEl);
 
     const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -56,19 +51,14 @@ export const Navbar = () => {
 
         try {
             await logout();
-
             dispatch(clearUser());
-
             dispatch(
                 showNotification({
                     message: 'Successfully logged out!',
                     severity: 'success',
                 }),
             );
-
-            setTimeout(() => {
-                void navigate('/login');
-            }, 1000);
+            void navigate('/login');
         } catch (error) {
             dispatch(
                 showNotification({
@@ -92,54 +82,52 @@ export const Navbar = () => {
                         src={LogoImage}
                         height="100%"
                         width="100%"
-                        alt="Logo"
+                        alt="Khana Peena Logo"
                     />
                 </Logo>
 
-                <Typography variant="h6" fontWeight={700} color="primary.main">
-                    Khana Peena
-                </Typography>
+                <BrandName variant="h5">Khana Peena</BrandName>
             </LogoContainer>
-            <NavbarActions>
-                {isUserActive &&
-                    pages.map((item) => (
-                        <MenuItem
-                            component={Link}
-                            to={item.path}
-                            key={item.name}
-                        >
-                            {item.name}
-                        </MenuItem>
-                    ))}
 
+            <NavbarActions>
                 {isUserActive ? (
                     <>
-                        {user && user.role === 'USER' && (
-                            <IconButton
-                                aria-label="shopping cart"
-                                size="large"
-                                component={Link}
-                                to="/cart"
+                        <NavIconButton
+                            onClick={() => void navigate('/orders')}
+                            aria-label="orders"
+                        >
+                            <ReceiptLongOutlinedIcon fontSize="small" />
+                            <NavLabel>Orders</NavLabel>
+                        </NavIconButton>
+
+                        {user?.role === 'USER' && (
+                            <NavIconButton
+                                onClick={() => void navigate('/cart')}
+                                aria-label="cart"
                             >
-                                <ShoppingCartOutlinedIcon />
-                            </IconButton>
+                                <ShoppingCartOutlinedIcon fontSize="small" />
+                                <NavLabel>Cart</NavLabel>
+                            </NavIconButton>
                         )}
 
-                        <IconButton
+                        <ProfileIconButton
                             onClick={handleProfileClick}
-                            size="small"
-                            aria-label="profile"
+                            size="medium"
+                            aria-label="account settings"
                         >
-                            <Avatar>{userInitial}</Avatar>
-                        </IconButton>
+                            <StyledAvatar>{userInitial}</StyledAvatar>
+                        </ProfileIconButton>
                     </>
                 ) : (
-                    <Button href="/login" variant="outlined">
+                    <LoginButton
+                        onClick={() => void navigate('/login')}
+                        variant="outlined"
+                    >
                         Login
-                    </Button>
+                    </LoginButton>
                 )}
 
-                <Menu
+                <StyledMenu
                     anchorEl={anchorEl}
                     open={isMenuOpen}
                     onClose={handleCloseMenu}
@@ -153,23 +141,22 @@ export const Navbar = () => {
                     }}
                 >
                     <ProfileInfo>
-                        <Typography variant="body1" fontWeight={600}>
+                        <ProfileName variant="subtitle1">
                             {user?.fullName}
-                        </Typography>
-
+                        </ProfileName>
                         <Typography variant="body2" color="text.secondary">
                             {user?.email}
                         </Typography>
                     </ProfileInfo>
 
-                    <MenuItem
+                    <LogoutMenuItem
                         onClick={() => {
                             void handleLogout();
                         }}
                     >
                         Logout
-                    </MenuItem>
-                </Menu>
+                    </LogoutMenuItem>
+                </StyledMenu>
             </NavbarActions>
         </NavbarContainer>
     );

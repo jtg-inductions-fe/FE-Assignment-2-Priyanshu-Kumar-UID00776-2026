@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import {
     AccountCircle,
+    AddBox,
     Assignment,
     Home,
     ShoppingCart,
@@ -78,7 +79,7 @@ export const BottomNavigationBar = () => {
     };
 
     return (
-        <BottomNavigationContainer sx={{ width: 500 }}>
+        <BottomNavigationContainer>
             <NavigationBox showLabels value={location.pathname}>
                 <BottomNavigationAction
                     label="Home"
@@ -93,6 +94,16 @@ export const BottomNavigationBar = () => {
                         icon={<ShoppingCart />}
                         onClick={() => handleUserRoute('/cart', '/login')}
                         value="/cart"
+                    />
+                )}
+                {user?.role === 'RESTAURANT OWNER' && (
+                    <BottomNavigationAction
+                        label="Restaurant"
+                        icon={<AddBox />}
+                        onClick={() =>
+                            handleUserRoute('/add-restaurant', '/login')
+                        }
+                        value="/add-restaurant"
                     />
                 )}
                 <BottomNavigationAction

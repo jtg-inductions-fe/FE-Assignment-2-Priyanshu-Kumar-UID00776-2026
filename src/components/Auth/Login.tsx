@@ -7,6 +7,10 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment, Link, TextField } from '@mui/material';
 
+import { login } from '../../services/auth.service';
+import { setUser } from '../../slices/authSlice';
+import { showNotification } from '../../slices/notificationSlice';
+import { useAppDispatch } from '../../store/store';
 import {
     BrandTitle,
     FooterText,
@@ -19,11 +23,7 @@ import {
     SubmitPaperWrapper,
     SubtitleText,
     TitleText,
-} from './Login.styles';
-import { login } from '../../services/auth.service';
-import { setUser } from '../../slices/authSlice';
-import { showNotification } from '../../slices/notificationSlice';
-import { useAppDispatch } from '../../store/store';
+} from '../Auth/Auth.styles';
 
 interface LoginFormData {
     email: string;
@@ -74,9 +74,7 @@ export const Login = () => {
                 }),
             );
 
-            setTimeout(() => {
-                void navigate('/restaurant');
-            }, 1500);
+            void navigate('/restaurant');
         } catch (error) {
             dispatch(
                 showNotification({

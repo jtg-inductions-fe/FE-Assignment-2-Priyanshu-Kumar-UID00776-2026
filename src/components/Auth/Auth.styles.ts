@@ -1,6 +1,8 @@
 import { Box, Button, Container, Paper, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import burgerImage from '../../assets/images/burger.avif';
+
 export const PageContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -19,7 +21,7 @@ export const PageContainer = styled(Container)(({ theme }) => ({
 export const HeroSection = styled(Box)(({ theme }) => ({
     height: '32%',
     width: '100%',
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(../../src/assets/images/burger.avif)`,
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(${burgerImage})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -39,7 +41,7 @@ export const HeroSection = styled(Box)(({ theme }) => ({
 
 export const BrandTitle = styled(Typography)(({ theme }) => ({
     color: theme.palette.primary.main,
-    fontSize: theme.typography.pxToRem(22),
+    fontSize: theme.typography.pxToRem(20),
     fontWeight: 700,
     textAlign: 'center',
     marginBottom: theme.spacing(1),
@@ -55,13 +57,14 @@ export const FormSection = styled(Box)(({ theme }) => ({
     padding: theme.typography.pxToRem(20),
     borderTopLeftRadius: theme.typography.pxToRem(20),
     borderTopRightRadius: theme.typography.pxToRem(20),
-    height: '71%',
+    height: '74%',
     width: '100%',
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-evenly',
     flexDirection: 'column',
     boxSizing: 'border-box',
+    overflowY: 'auto',
     [theme.breakpoints.up('sm')]: {
         position: 'relative',
         height: '100%',
@@ -72,7 +75,6 @@ export const FormSection = styled(Box)(({ theme }) => ({
         justifyContent: 'center',
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
-        overflowY: 'auto',
     },
 }));
 
@@ -92,13 +94,14 @@ export const FormCard = styled('form')(({ theme }) => ({
         padding: theme.spacing(10),
         borderRadius: '16px',
         boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.06)',
-        gap: theme.spacing(8),
+        gap: theme.spacing(5),
         justifyContent: 'flex-start',
     },
 }));
 
 export const HeaderBox = styled(Box)(({ theme }) => ({
     marginBottom: theme.typography.pxToRem(10),
+    width: '100%',
     [theme.breakpoints.up('sm')]: {
         textAlign: 'center',
         marginBottom: theme.spacing(1),
@@ -106,7 +109,7 @@ export const HeaderBox = styled(Box)(({ theme }) => ({
 }));
 
 export const TitleText = styled(Typography)(({ theme }) => ({
-    fontSize: theme.typography.pxToRem(40),
+    fontSize: theme.typography.pxToRem(33),
     fontWeight: 700,
     [theme.breakpoints.up('sm')]: {
         fontSize: theme.typography.pxToRem(38),
@@ -115,7 +118,7 @@ export const TitleText = styled(Typography)(({ theme }) => ({
 
 export const SubtitleText = styled(Typography)(({ theme }) => ({
     color: theme.palette.primary.main,
-    fontSize: theme.typography.pxToRem(20),
+    fontSize: theme.typography.pxToRem(15),
     fontWeight: 400,
     [theme.breakpoints.up('sm')]: {
         fontSize: theme.typography.pxToRem(18),

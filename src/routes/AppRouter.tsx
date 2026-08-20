@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import { Login } from '../components/Login/Login';
-import { SignUp } from '../components/SignUp/SignUp';
+import { Login } from '../components/Auth/Login';
+import { SignUp } from '../components/Auth/SignUp';
 import { Restaurant } from '../pages/Restuarant/Restaurant';
 
 export const AppRouter = createBrowserRouter([

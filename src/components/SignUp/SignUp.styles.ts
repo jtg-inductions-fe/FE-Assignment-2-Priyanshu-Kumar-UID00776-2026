@@ -19,7 +19,7 @@ export const PageContainer = styled(Container)(({ theme }) => ({
 export const HeroSection = styled(Box)(({ theme }) => ({
     height: '32%',
     width: '100%',
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(../../src/assets/images/burger.webp)`,
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(../../src/assets/images/burger.avif)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',

@@ -8,9 +8,9 @@ import {
     MessageTitle,
     NotFoundContainer,
 } from './NotFoundPage.styles';
-import Navbar from '../Navbar/Navbar';
+import { Navbar } from '../Navbar/Navbar';
 
-const NotFoundPage = () => {
+export const NotFoundPage = () => {
     const navigate = useNavigate();
 
     return (
@@ -36,5 +36,3 @@ const NotFoundPage = () => {
         </ErrorPageContainer>
     );
 };
-
-export default NotFoundPage;

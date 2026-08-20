@@ -12,7 +12,7 @@ interface FoodVariantToggleProps {
     onFilterChange: (filter: FoodVariant) => void;
 }
 
-const FoodVariantToggle = ({
+export const FoodVariantToggle = ({
     foodVariant,
     onFilterChange,
 }: FoodVariantToggleProps) => (
@@ -42,5 +42,3 @@ const FoodVariantToggle = ({
         </NonVegFilterButton>
     </StyledButtonGroup>
 );
-
-export default FoodVariantToggle;

@@ -7,7 +7,7 @@ interface RestaurantSearchProps {
     placeholder?: string;
 }
 
-const RestaurantSearch = ({
+export const RestaurantSearch = ({
     value,
     onChange,
     placeholder = 'Search for restaurants',
@@ -30,5 +30,3 @@ const RestaurantSearch = ({
         }}
     />
 );
-
-export default RestaurantSearch;

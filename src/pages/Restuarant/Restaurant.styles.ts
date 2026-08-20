@@ -15,12 +15,12 @@ export const RestaurantContainer = styled(Box)(({ theme }) => ({
     height: '100vh',
     maxHeight: '100vh',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.secondary.light,
 }));
 
 export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
     padding: theme.spacing(3, 3, 0, 3),
-    maxWidth: '1200px',
+    maxWidth: theme.typography.pxToRem(1200),
     width: '100%',
     margin: '0 auto',
     flexShrink: 0,
@@ -29,17 +29,10 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
 export const ScrollableContent = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
-    padding: theme.spacing(0, 1, 15, 3),
-    maxWidth: '1200px',
+    padding: theme.spacing(0, 3, 15, 3),
+    maxWidth: theme.typography.pxToRem(1200),
     width: '100%',
     margin: '0 auto',
-    '&::-webkit-scrollbar': {
-        width: '6px',
-    },
-    '&::-webkit-scrollbar-thumb': {
-        backgroundColor: theme.palette.divider,
-        borderRadius: '4px',
-    },
 }));
 
 export const SubtitleTypography = styled(Typography)(({ theme }) => ({
@@ -56,13 +49,10 @@ export const ControlsWrapper = styled(Box)(({ theme }) => ({
 }));
 
 export const AddRestaurantButton = styled(Button)(({ theme }) => ({
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    padding: theme.spacing(1, 2),
     textTransform: 'none',
     fontWeight: 600,
-    borderRadius: theme.shape.borderRadius * 2,
+    borderRadius: '10px',
 }));
 
 export const RestaurantGrid = styled(Box)(({ theme }) => ({
@@ -85,25 +75,23 @@ export const ImageWrapper = styled(Box)({
     position: 'relative',
 });
 
-export const RatingBadge = styled(Box)({
+export const RatingBadge = styled(Box)(({ theme }) => ({
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 2.4,
-    paddingBottom: 2.4,
+    backgroundColor: theme.palette.secondary.main,
+    padding: theme.spacing(1, 2.4),
     borderRadius: 12,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 4,
     fontWeight: 700,
-    fontSize: '0.85rem',
-});
+    fontSize: '1.05rem',
+}));
 
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({
-    padding: theme.spacing(2),
+    padding: theme.spacing(5),
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -135,8 +123,13 @@ export const OwnerActionButton = styled(Button)({
     textTransform: 'none',
 });
 
-export const FormStack = styled(Stack)(({ theme }) => ({
+export const FormStack = styled('form')(({ theme }) => ({
     marginTop: theme.spacing(1),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: theme.spacing(5),
 }));
 
 export const StyledDialogActions = styled(DialogActions)(({ theme }) => ({

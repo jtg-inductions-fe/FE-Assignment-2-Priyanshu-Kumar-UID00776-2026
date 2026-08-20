@@ -19,7 +19,7 @@ import {
     NavbarContainer,
     ProfileInfo,
 } from './Navbar.styles';
-import LogoImage from '../../assets/images/logo.webp';
+import LogoImage from '../../assets/images/logo.avif';
 import { logout } from '../../services/auth.service';
 import { clearUser } from '../../slices/authSlice';
 import { showNotification } from '../../slices/notificationSlice';
@@ -32,7 +32,7 @@ interface NavigationPage {
 
 const pages: NavigationPage[] = [{ name: 'Orders', path: '/orders' }];
 
-const Navbar = () => {
+export const Navbar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth.user);
@@ -174,5 +174,3 @@ const Navbar = () => {
         </NavbarContainer>
     );
 };
-
-export default Navbar;

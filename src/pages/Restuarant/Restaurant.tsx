@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+import { Controller, useForm } from 'react-hook-form';
 
 import {
     AccessTime as AccessTimeIcon,
@@ -12,10 +14,10 @@ import {
     Box,
     Button,
     CardMedia,
-    Chip,
     Dialog,
     DialogContent,
     DialogTitle,
+    MenuItem as SelectMenuItem,
     Stack,
     TextField,
     Typography,
@@ -41,89 +43,100 @@ import {
     StyledDialogActions,
     SubtitleTypography,
 } from './Restaurant.styles';
-import BottomNavigation from '../../components/BottomNavigation/BottomNavigation';
-import DietFilterToggle, {
+import { BottomNavigationBar } from '../../components/BottomNavigation/BottomNavigation';
+import {
     FoodVariant,
+    FoodVariantToggle,
 } from '../../components/FilterToggleButton/FilterToggleButton';
-import Navbar from '../../components/Navbar/Navbar';
-import RestaurantSearch from '../../components/SearchBar/SearchBar';
+import { Navbar } from '../../components/Navbar/Navbar';
+import { RestaurantSearch } from '../../components/SearchBar/SearchBar';
 import { useDebounce } from '../../hooks/useDebounce';
-import { useAppSelector } from '../../store/store';
-import RestaurantItemTypes from '../../types/restaurant.types';
+import {
+    addRestaurant,
+    deleteRestaurant,
+    editRestaurant,
+    fetchRestaurants,
+} from '../../services/restaurant.service';
+import { showNotification } from '../../slices/notificationSlice';
+import {
+    addRestaurantSuccess,
+    deleteRestaurantSuccess,
+    editRestaurantSuccess,
+    setRestaurants,
+} from '../../slices/restaurantSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import {
+    RestaurantFormData,
+    RestaurantItemTypes,
+} from '../../types/restaurant.types';
 
-const Restaurant = () => {
+export const Restaurant = () => {
+    const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.auth.user);
     const isOwner = user?.role === 'RESTAURANT OWNER';
+    const allRestaurants = useAppSelector(
+        (state) => state.restaurant.restaurants,
+    );
 
     const [searchTerm, setSearchTerm] = useState('');
     const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingRestaurant, setEditingRestaurant] =
+        useState<RestaurantItemTypes | null>(null);
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
-    const [formData, setFormData] = useState({
-        name: '',
-        cuisines: '',
-        location: '',
-        priceRange: '',
-        dietType: '',
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm<RestaurantFormData>({
+        defaultValues: {
+            name: '',
+            location: '',
+            dietType: 'BOTH',
+            rating: 4.5,
+            deliveryTime: '',
+            openingTime: '',
+        },
+        mode: 'onTouched',
     });
 
-    const [restaurants, setRestaurants] = useState<RestaurantItemTypes[]>([
-        {
-            id: '1',
-            name: 'Trattoria Bella',
-            image: '../../src/assets/images/restaurantPizza.jpeg',
-            rating: 4.8,
-            priceRange: '$5',
-            cuisines: ['Authentic Italian', 'Wood-fired Pizza'],
-            location: 'Downtown (1.2 m)',
-            deliveryTime: '25-35 min',
-            dietType: 'BOTH',
-            ownerId: 'owner_1',
-        },
-        {
-            id: '2',
-            name: "Ocean's Catch Sushi",
-            image: '../../src/assets/images/restaurantItalian.jpeg',
-            rating: 4.9,
-            priceRange: '$10',
-            cuisines: ['Japanese', 'Sushi', 'Seafood'],
-            location: 'Westside (2.5 m)',
-            deliveryTime: '40-50 min',
-            dietType: 'NON_VEG',
-            ownerId: 'owner_2',
-        },
-        {
-            id: '3',
-            name: 'The Green Sprout',
-            image: '../../src/assets/images/restaurantSalad.jpeg',
-            rating: 4.6,
-            priceRange: '$2.5',
-            cuisines: ['Healthy', 'Vegan', 'Salads'],
-            location: 'North Park (0.8 m)',
-            deliveryTime: '15-25 min',
-            dietType: 'VEG',
-            ownerId: 'owner_1',
-        },
-        {
-            id: '4',
-            name: 'Italiano Pizza',
-            image: '../../src/assets/images/restaurantPizza.jpeg',
-            rating: 4.0,
-            priceRange: '$12.5',
-            cuisines: ['Cheesy', 'Crust', 'Spicy'],
-            location: 'South Park (4.8 m)',
-            deliveryTime: '25-40 min',
-            dietType: 'VEG',
-            ownerId: 'owner_1',
-        },
-    ]);
+    useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                const data = await fetchRestaurants();
+                dispatch(setRestaurants(data));
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to fetch restaurants';
+                dispatch(
+                    showNotification({
+                        message,
+                        severity: 'error',
+                    }),
+                );
+            }
+        };
+        void loadInitialData();
+    }, [dispatch]);
 
     const debouncedValue = useDebounce<string>(searchTerm);
 
     const filteredRestaurants = useMemo(
         () =>
-            restaurants.filter((restaurant) => {
+            allRestaurants.filter((restaurant) => {
+                if (
+                    isOwner &&
+                    restaurant.ownerId.toLowerCase() !==
+                        user?.email.toLowerCase()
+                ) {
+                    return false;
+                }
+
                 const matchesSearch = restaurant.name
                     .toLowerCase()
                     .includes(debouncedValue.toLowerCase());
@@ -144,36 +157,127 @@ const Restaurant = () => {
 
                 return true;
             }),
-        [restaurants, isOwner, debouncedValue, dietFilter],
+        [allRestaurants, isOwner, user?.email, debouncedValue, dietFilter],
     );
 
-    const handleDelete = (id: string) => {
-        setRestaurants((prev) => prev.filter((r) => r.id !== id));
-        setDeleteTargetId(null);
+    const handleOpenAddModal = () => {
+        setEditingRestaurant(null);
+        reset({
+            name: '',
+            location: '',
+            dietType: 'BOTH',
+            rating: 4.5,
+            deliveryTime: '',
+            openingTime: '',
+        });
+        setIsModalOpen(true);
     };
 
-    const handleSaveRestaurant = () => {
-        const newRestaurant: RestaurantItemTypes = {
-            id: Date.now().toString(),
-            name: formData.name,
-            image: '../../src/assets/images/restaurnatItaliano',
-            rating: 5.0,
-            priceRange: formData.priceRange,
-            cuisines: formData.cuisines.split(',').map((c) => c.trim()),
-            location: formData.location,
-            deliveryTime: '20-30 min',
-            dietType: formData.dietType as never,
-            ownerId: user?.email || 'owner_1',
-        };
-        setRestaurants([newRestaurant, ...restaurants]);
-        setIsAddModalOpen(false);
-        setFormData({
-            name: '',
-            cuisines: '',
-            location: '',
-            priceRange: '',
-            dietType: 'BOTH',
+    const handleOpenEditModal = (restaurant: RestaurantItemTypes) => {
+        setEditingRestaurant(restaurant);
+        reset({
+            name: restaurant.name,
+            location: restaurant.location,
+            dietType: restaurant.dietType,
+            rating: restaurant.rating,
+            deliveryTime: restaurant.deliveryTime,
+            openingTime: restaurant.openingTime,
         });
+        setIsModalOpen(true);
+    };
+
+    const onFormSubmit = async (data: RestaurantFormData) => {
+        if (!user?.email) {
+            dispatch(
+                showNotification({
+                    message: 'You must be logged in as an owner.',
+                    severity: 'error',
+                }),
+            );
+            return;
+        }
+
+        try {
+            if (editingRestaurant) {
+                const updated = await editRestaurant(
+                    editingRestaurant.id,
+                    data,
+                    user.email,
+                );
+                dispatch(editRestaurantSuccess(updated));
+                dispatch(
+                    showNotification({
+                        message: 'Restaurant updated successfully!',
+                        severity: 'success',
+                    }),
+                );
+            } else {
+                const created = await addRestaurant(data, user.email);
+                dispatch(addRestaurantSuccess(created));
+                dispatch(
+                    showNotification({
+                        message: 'Restaurant added successfully!',
+                        severity: 'success',
+                    }),
+                );
+            }
+            setIsModalOpen(false);
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'An error occurred while saving.';
+            dispatch(
+                showNotification({
+                    message,
+                    severity: 'error',
+                }),
+            );
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!user?.email) {
+            dispatch(
+                showNotification({
+                    message: 'Authentication required to delete.',
+                    severity: 'error',
+                }),
+            );
+            return;
+        }
+
+        try {
+            setIsDeleting(true);
+            await deleteRestaurant(id, user.email);
+            dispatch(deleteRestaurantSuccess(id));
+            dispatch(
+                showNotification({
+                    message: 'Restaurant deleted successfully!',
+                    severity: 'success',
+                }),
+            );
+            setDeleteTargetId(null);
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'Failed to delete restaurant.';
+            dispatch(
+                showNotification({
+                    message,
+                    severity: 'error',
+                }),
+            );
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    const formatDietType = (type: string) => {
+        if (type === 'NON_VEG') return 'Non-Veg';
+        if (type === 'VEG') return 'Pure Veg';
+        return 'Veg & Non-Veg';
     };
 
     return (
@@ -207,12 +311,12 @@ const Restaurant = () => {
                             variant="contained"
                             color="primary"
                             startIcon={<AddIcon />}
-                            onClick={() => setIsAddModalOpen(true)}
+                            onClick={handleOpenAddModal}
                         >
                             Add Restaurant
                         </AddRestaurantButton>
                     ) : (
-                        <DietFilterToggle
+                        <FoodVariantToggle
                             foodVariant={dietFilter}
                             onFilterChange={setDietFilter}
                         />
@@ -254,11 +358,6 @@ const Restaurant = () => {
                                         >
                                             {restaurant.name}
                                         </Typography>
-                                        <Chip
-                                            label={restaurant.priceRange}
-                                            size="small"
-                                            variant="outlined"
-                                        />
                                     </Stack>
 
                                     <CuisineTypography
@@ -266,7 +365,7 @@ const Restaurant = () => {
                                         color="text.secondary"
                                         noWrap
                                     >
-                                        {restaurant.cuisines.join(' • ')}
+                                        {formatDietType(restaurant.dietType)}
                                     </CuisineTypography>
 
                                     <MetaInfoStack direction="row" spacing={2}>
@@ -295,6 +394,9 @@ const Restaurant = () => {
                                             fullWidth
                                             startIcon={<EditIcon />}
                                             size="small"
+                                            onClick={() =>
+                                                handleOpenEditModal(restaurant)
+                                            }
                                         >
                                             Edit
                                         </OwnerActionButton>
@@ -317,66 +419,196 @@ const Restaurant = () => {
                     ))}
                 </RestaurantGrid>
             </ScrollableContent>
-            <BottomNavigation />
+
+            <BottomNavigationBar />
 
             <Dialog
-                open={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
+                open={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
                 maxWidth="sm"
                 fullWidth
             >
-                <DialogTitle fontWeight={700}>Add New Restaurant</DialogTitle>
-                <DialogContent dividers>
-                    <FormStack spacing={2}>
-                        <TextField
-                            label="Restaurant Name"
-                            fullWidth
-                            value={formData.name}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    name: e.target.value,
-                                })
-                            }
-                        />
-                        <TextField
-                            label="Cuisines (comma separated)"
-                            placeholder="e.g. Italian, Wood-fired Pizza"
-                            fullWidth
-                            value={formData.cuisines}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    cuisines: e.target.value,
-                                })
-                            }
-                        />
-                        <TextField
-                            label="Location"
-                            placeholder="e.g. 123 Main St, Downtown"
-                            fullWidth
-                            value={formData.location}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    location: e.target.value,
-                                })
-                            }
-                        />
-                    </FormStack>
-                </DialogContent>
-                <StyledDialogActions>
-                    <Button
-                        variant="contained"
-                        onClick={() => setIsAddModalOpen(false)}
-                        color="inherit"
-                    >
-                        Cancel
-                    </Button>
-                    <Button variant="contained" onClick={handleSaveRestaurant}>
-                        Save Restaurant
-                    </Button>
-                </StyledDialogActions>
+                <DialogTitle fontWeight={700}>
+                    {editingRestaurant
+                        ? 'Edit Restaurant'
+                        : 'Add New Restaurant'}
+                </DialogTitle>
+                <form
+                    onSubmit={(e) => {
+                        void handleSubmit(onFormSubmit)(e);
+                    }}
+                >
+                    <DialogContent dividers>
+                        <FormStack>
+                            <Controller
+                                name="name"
+                                control={control}
+                                rules={{
+                                    required: 'Restaurant name is required',
+                                    minLength: {
+                                        value: 3,
+                                        message:
+                                            'Name must be at least 3 characters',
+                                    },
+                                }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Restaurant Name"
+                                        variant="outlined"
+                                        fullWidth
+                                        error={!!errors.name}
+                                        helperText={errors.name?.message}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="location"
+                                control={control}
+                                rules={{ required: 'Location is required' }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Location"
+                                        variant="outlined"
+                                        fullWidth
+                                        error={!!errors.location}
+                                        helperText={errors.location?.message}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="dietType"
+                                control={control}
+                                rules={{ required: 'Diet type is required' }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        select
+                                        label="Diet Type"
+                                        variant="outlined"
+                                        fullWidth
+                                        error={!!errors.dietType}
+                                        helperText={errors.dietType?.message}
+                                    >
+                                        <SelectMenuItem value="VEG">
+                                            VEG
+                                        </SelectMenuItem>
+                                        <SelectMenuItem value="NON_VEG">
+                                            NON_VEG
+                                        </SelectMenuItem>
+                                        <SelectMenuItem value="BOTH">
+                                            BOTH
+                                        </SelectMenuItem>
+                                    </TextField>
+                                )}
+                            />
+
+                            <Controller
+                                name="rating"
+                                control={control}
+                                rules={{
+                                    required: 'Rating is required',
+                                    min: {
+                                        value: 1,
+                                        message: 'Minimum rating is 1',
+                                    },
+                                    max: {
+                                        value: 5,
+                                        message: 'Maximum rating is 5',
+                                    },
+                                }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        type="number"
+                                        label="Rating (1 - 5)"
+                                        variant="outlined"
+                                        fullWidth
+                                        inputProps={{
+                                            step: '0.1',
+                                            min: 1,
+                                            max: 5,
+                                        }}
+                                        error={!!errors.rating}
+                                        helperText={errors.rating?.message}
+                                        onChange={(e) =>
+                                            field.onChange(
+                                                parseFloat(e.target.value) || 0,
+                                            )
+                                        }
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="deliveryTime"
+                                control={control}
+                                rules={{
+                                    required: 'Delivery time is required',
+                                }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Delivery Time (e.g. 20-30 min)"
+                                        variant="outlined"
+                                        fullWidth
+                                        error={!!errors.deliveryTime}
+                                        helperText={
+                                            errors.deliveryTime?.message
+                                        }
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="openingTime"
+                                control={control}
+                                rules={{ required: 'Opening time is required' }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Opening Hours (e.g. 9:00 AM - 10:00 PM)"
+                                        variant="outlined"
+                                        fullWidth
+                                        error={!!errors.openingTime}
+                                        helperText={errors.openingTime?.message}
+                                    />
+                                )}
+                            />
+
+                            <TextField
+                                label="Owner Email"
+                                variant="outlined"
+                                fullWidth
+                                disabled
+                                value={user?.email || ''}
+                            />
+                        </FormStack>
+                    </DialogContent>
+                    <StyledDialogActions>
+                        <Button
+                            variant="contained"
+                            onClick={() => setIsModalOpen(false)}
+                            color="inherit"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting
+                                ? 'Saving...'
+                                : editingRestaurant
+                                  ? 'Save Changes'
+                                  : 'Add Restaurant'}
+                        </Button>
+                    </StyledDialogActions>
+                </form>
             </Dialog>
 
             <Dialog
@@ -403,16 +635,17 @@ const Restaurant = () => {
                     <Button
                         variant="contained"
                         color="error"
-                        onClick={() =>
-                            deleteTargetId && handleDelete(deleteTargetId)
-                        }
+                        disabled={isDeleting}
+                        onClick={() => {
+                            if (deleteTargetId) {
+                                void handleDelete(deleteTargetId);
+                            }
+                        }}
                     >
-                        Delete
+                        {isDeleting ? 'Deleting...' : 'Delete'}
                     </Button>
                 </StyledDialogActions>
             </Dialog>
         </RestaurantContainer>
     );
 };
-
-export default Restaurant;

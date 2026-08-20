@@ -1,12 +1,32 @@
-export default interface RestaurantItem {
+export interface MenuItem {
     id: string;
     name: string;
-    image: string;
-    rating: number;
-    priceRange: string;
-    cuisines: string[];
+    description: string;
+    price: number;
+    dietType: 'VEG' | 'NON_VEG';
+    image?: string;
+}
+
+export type DietType = 'VEG' | 'NON_VEG' | 'BOTH';
+
+export interface RestaurantItemTypes {
+    id: string;
+    name: string;
     location: string;
+    dietType: DietType;
+    rating: number;
     deliveryTime: string;
-    dietType: 'VEG' | 'NON_VEG' | 'BOTH';
+    openingTime: string;
+    image: string;
     ownerId: string;
+    menus: MenuItem[];
+}
+
+export interface RestaurantFormData {
+    name: string;
+    location: string;
+    dietType: DietType;
+    rating: number;
+    deliveryTime: string;
+    openingTime: string;
 }

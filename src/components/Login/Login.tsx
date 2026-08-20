@@ -29,7 +29,7 @@ interface LoginFormData {
     password: string;
 }
 
-const Login = () => {
+export const Login = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -203,5 +203,3 @@ const Login = () => {
         </PageContainer>
     );
 };
-
-export default Login;

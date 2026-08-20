@@ -1,6 +1,8 @@
 import { Box, Button, Container, Paper, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import burgerImage from '../../assets/images/burger.avif';
+
 export const PageContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -19,7 +21,7 @@ export const PageContainer = styled(Container)(({ theme }) => ({
 export const HeroSection = styled(Box)(({ theme }) => ({
     height: '32%',
     width: '100%',
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(../../src/assets/images/burger.avif)`,
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(${burgerImage})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -39,7 +41,7 @@ export const HeroSection = styled(Box)(({ theme }) => ({
 
 export const BrandTitle = styled(Typography)(({ theme }) => ({
     color: theme.palette.primary.main,
-    fontSize: theme.typography.pxToRem(22),
+    fontSize: theme.typography.pxToRem(25),
     fontWeight: 700,
     textAlign: 'center',
     marginBottom: theme.spacing(1),
@@ -99,6 +101,11 @@ export const FormCard = styled('form')(({ theme }) => ({
 
 export const HeaderBox = styled(Box)(({ theme }) => ({
     marginBottom: theme.typography.pxToRem(10),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
         textAlign: 'center',
         marginBottom: theme.spacing(1),
@@ -106,7 +113,7 @@ export const HeaderBox = styled(Box)(({ theme }) => ({
 }));
 
 export const TitleText = styled(Typography)(({ theme }) => ({
-    fontSize: theme.typography.pxToRem(40),
+    fontSize: theme.typography.pxToRem(35),
     fontWeight: 700,
     [theme.breakpoints.up('sm')]: {
         fontSize: theme.typography.pxToRem(38),
@@ -115,8 +122,10 @@ export const TitleText = styled(Typography)(({ theme }) => ({
 
 export const SubtitleText = styled(Typography)(({ theme }) => ({
     color: theme.palette.primary.main,
-    fontSize: theme.typography.pxToRem(20),
+    fontSize: theme.typography.pxToRem(18),
     fontWeight: 400,
+    width: '100%',
+    textAlign: 'left',
     [theme.breakpoints.up('sm')]: {
         fontSize: theme.typography.pxToRem(18),
         marginTop: theme.spacing(0.5),
@@ -137,10 +146,9 @@ export const SubmitPaperWrapper = styled(Paper)(({ theme }) => ({
     width: '100%',
     borderRadius: '60px',
     overflow: 'hidden',
-    elevation: 8,
+    boxShadow: theme.shadows[8],
     [theme.breakpoints.up('sm')]: {
         borderRadius: '8px',
-        elevation: 0,
         boxShadow: 'none',
     },
 }));

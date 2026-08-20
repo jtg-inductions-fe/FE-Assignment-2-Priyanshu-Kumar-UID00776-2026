@@ -5,7 +5,6 @@ export interface User {
     email: string;
     contactNo: string;
     role: UserRole;
-    password?: string;
 }
 
 export interface AuthState {

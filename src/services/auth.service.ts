@@ -17,6 +17,14 @@ export interface LoginData {
     password: string;
 }
 
+const hashPassword = async (password: string): Promise<string> => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('');
+};
+
 const getUsers = (): StoredUser[] => {
     const storedUsers = localStorage.getItem('users');
 
@@ -42,12 +50,14 @@ export const signup = async (data: SignupData): Promise<User> => {
         throw new Error('An account with this email already exists!');
     }
 
+    const hashedPassword = await hashPassword(data.password);
+
     const newUser: StoredUser = {
         fullName: data.fullName,
         email: data.email,
         contactNo: data.contactNo,
         role: data.role,
-        password: data.password,
+        password: hashedPassword,
     };
 
     localStorage.setItem('users', JSON.stringify([...users, newUser]));
@@ -69,10 +79,12 @@ export const login = async (data: LoginData): Promise<User> => {
 
     const users = getUsers();
 
+    const inputPasswordHash = await hashPassword(data.password);
+
     const user = users.find(
         (existingUser) =>
             existingUser.email.toLowerCase() === data.email.toLowerCase() &&
-            existingUser.password === data.password,
+            existingUser.password === inputPasswordHash,
     );
 
     if (!user) {

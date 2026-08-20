@@ -57,13 +57,14 @@ export const FormSection = styled(Box)(({ theme }) => ({
     padding: theme.typography.pxToRem(20),
     borderTopLeftRadius: theme.typography.pxToRem(20),
     borderTopRightRadius: theme.typography.pxToRem(20),
-    height: '80%',
+    height: '74%',
     width: '100%',
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-evenly',
     flexDirection: 'column',
     boxSizing: 'border-box',
+    overflowY: 'auto',
     [theme.breakpoints.up('sm')]: {
         position: 'relative',
         height: '100%',
@@ -74,7 +75,6 @@ export const FormSection = styled(Box)(({ theme }) => ({
         justifyContent: 'center',
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
-        overflowY: 'auto',
     },
 }));
 
@@ -86,6 +86,7 @@ export const FormCard = styled('form')(({ theme }) => ({
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     height: '100%',
+    boxSizing: 'border-box',
     [theme.breakpoints.up('sm')]: {
         maxWidth: '540px',
         height: 'auto',
@@ -100,6 +101,7 @@ export const FormCard = styled('form')(({ theme }) => ({
 
 export const HeaderBox = styled(Box)(({ theme }) => ({
     marginBottom: theme.typography.pxToRem(10),
+    width: '100%',
     [theme.breakpoints.up('sm')]: {
         textAlign: 'center',
         marginBottom: theme.spacing(1),
@@ -138,9 +140,10 @@ export const SubmitPaperWrapper = styled(Paper)(({ theme }) => ({
     width: '100%',
     borderRadius: '60px',
     overflow: 'hidden',
-    boxShadow: theme.shadows[8],
+    elevation: 8,
     [theme.breakpoints.up('sm')]: {
         borderRadius: '8px',
+        elevation: 0,
         boxShadow: 'none',
     },
 }));

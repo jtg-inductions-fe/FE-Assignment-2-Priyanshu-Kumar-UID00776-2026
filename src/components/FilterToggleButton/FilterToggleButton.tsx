@@ -3,7 +3,7 @@ import {
     NonVegFilterButton,
     StyledButtonGroup,
     VegFilterButton,
-} from './FilterToggleButton.styles';
+} from '@/components/FilterToggleButton/FilterToggleButton.styles';
 
 export type FoodVariant = 'ALL' | 'VEG' | 'NON_VEG';
 

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useAppSelector } from '../store/store';
+import { useAppSelector } from '@/store/store';
 
 export default function useActiveUserRoute() {
     const navigate = useNavigate();

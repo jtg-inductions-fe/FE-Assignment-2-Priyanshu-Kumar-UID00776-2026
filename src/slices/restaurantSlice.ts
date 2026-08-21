@@ -1,6 +1,5 @@
+import { RestaurantItemTypes } from '@/types/restaurant.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { RestaurantItemTypes } from '../types/restaurant.types';
 
 interface RestaurantState {
     restaurants: RestaurantItemTypes[];

@@ -1,6 +1,5 @@
+import { AuthState, User } from '@/types/auth.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { AuthState, User } from '../types/auth.types';
 
 const getStoredUser = (): User | null => {
     try {

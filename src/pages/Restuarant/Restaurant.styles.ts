@@ -5,7 +5,6 @@ import {
     CardContent,
     DialogActions,
     Stack,
-    Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -19,11 +18,17 @@ export const RestaurantContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
     padding: theme.spacing(3, 3, 0, 3),
     maxWidth: theme.typography.pxToRem(1200),
-    width: '100%',
     margin: '0 auto',
+    width: '100%',
     flexShrink: 0,
+    marginBottom: theme.typography.pxToRem(20),
 }));
 
 export const ScrollableContent = styled(Box)(({ theme }) => ({
@@ -35,15 +40,11 @@ export const ScrollableContent = styled(Box)(({ theme }) => ({
     margin: '0 auto',
 }));
 
-export const SubtitleTypography = styled(Typography)(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-}));
-
 export const ControlsWrapper = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.spacing(2),
+    gap: theme.spacing(5),
     margin: theme.spacing(2, 0),
     flexWrap: 'wrap',
 }));
@@ -57,7 +58,7 @@ export const AddRestaurantButton = styled(Button)(({ theme }) => ({
 
 export const RestaurantGrid = styled(Box)(({ theme }) => ({
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     gap: theme.spacing(3),
     paddingBottom: theme.spacing(2),
 }));
@@ -77,17 +78,17 @@ export const ImageWrapper = styled(Box)({
 
 export const RatingBadge = styled(Box)(({ theme }) => ({
     position: 'absolute',
-    top: 12,
-    right: 12,
+    top: theme.typography.pxToRem(12),
+    right: theme.typography.pxToRem(12),
     backgroundColor: theme.palette.secondary.main,
     padding: theme.spacing(1, 2.4),
-    borderRadius: 12,
+    borderRadius: 20,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
+    gap: theme.typography.pxToRem(4),
     fontWeight: 700,
-    fontSize: '1.05rem',
+    fontSize: theme.typography.pxToRem(12),
 }));
 
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({
@@ -98,22 +99,14 @@ export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-export const CuisineTypography = styled(Typography)(({ theme }) => ({
-    marginTop: theme.spacing(0.5),
-}));
-
-export const MetaInfoStack = styled(Stack)(({ theme }) => ({
-    marginTop: theme.spacing(1.5),
-    color: theme.palette.text.secondary,
-    fontSize: '0.80rem',
-}));
-
-export const MetaItem = styled(Box)({
+export const MetaItem = styled(Box)(({ theme }) => ({
     display: 'flex',
+    color: theme.palette.secondary.dark,
     alignItems: 'center',
-    gap: 4,
-    fontSize: '13px',
-});
+    gap: theme.typography.pxToRem(4),
+    marginTop: theme.typography.pxToRem(5),
+    fontSize: theme.typography.pxToRem(13),
+}));
 
 export const OwnerActionStack = styled(Stack)(({ theme }) => ({
     marginTop: theme.spacing(2),

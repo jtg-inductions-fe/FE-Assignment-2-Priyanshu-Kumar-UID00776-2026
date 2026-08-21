@@ -1,7 +1,7 @@
 import {
     RestaurantFormData,
     RestaurantItemTypes,
-} from '../types/restaurant.types';
+} from '@/types/restaurant.types';
 
 const getStoredRestaurants = (): RestaurantItemTypes[] => {
     try {
@@ -17,7 +17,7 @@ const saveRestaurants = (data: RestaurantItemTypes[]): void => {
 };
 
 export const fetchRestaurants = async (): Promise<RestaurantItemTypes[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     return getStoredRestaurants();
 };
 

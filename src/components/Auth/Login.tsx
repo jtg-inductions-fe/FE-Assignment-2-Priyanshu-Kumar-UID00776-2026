@@ -18,11 +18,11 @@ import {
     SubmitButton,
     SubmitPaperWrapper,
     TitleText,
-} from './Login.styles';
-import { login } from '../../services/auth.service';
-import { setUser } from '../../slices/authSlice';
-import { showNotification } from '../../slices/notificationSlice';
-import { useAppDispatch } from '../../store/store';
+} from '@/components/Auth/Auth.styles';
+import { login } from '@/services/auth.service';
+import { setUser } from '@/slices/authSlice';
+import { showNotification } from '@/slices/notificationSlice';
+import { useAppDispatch } from '@/store/store';
 
 interface LoginFormData {
     email: string;
@@ -73,9 +73,7 @@ export const Login = () => {
                 }),
             );
 
-            setTimeout(() => {
-                void navigate('/restaurant');
-            }, 1500);
+            void navigate('/restaurant');
         } catch (error) {
             dispatch(
                 showNotification({

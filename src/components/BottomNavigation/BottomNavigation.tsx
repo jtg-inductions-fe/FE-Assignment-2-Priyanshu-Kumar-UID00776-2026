@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import {
     AccountCircle,
+    AddBox,
     Assignment,
     Home,
     ShoppingCart,
@@ -19,12 +20,12 @@ import {
     BottomNavigationContainer,
     NavigationBox,
     ProfileInfo,
-} from './BottomNavigation.styles';
-import userSessionCheck from '../../hooks/activeUserRoutes';
-import { logout } from '../../services/auth.service';
-import { clearUser } from '../../slices/authSlice';
-import { showNotification } from '../../slices/notificationSlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+} from '@/components/BottomNavigation/BottomNavigation.styles';
+import userSessionCheck from '@/hooks/activeUserRoutes';
+import { logout } from '@/services/auth.service';
+import { clearUser } from '@/slices/authSlice';
+import { showNotification } from '@/slices/notificationSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 
 export const BottomNavigationBar = () => {
     const navigate = useNavigate();
@@ -78,7 +79,7 @@ export const BottomNavigationBar = () => {
     };
 
     return (
-        <BottomNavigationContainer sx={{ width: 500 }}>
+        <BottomNavigationContainer>
             <NavigationBox showLabels value={location.pathname}>
                 <BottomNavigationAction
                     label="Home"
@@ -93,6 +94,16 @@ export const BottomNavigationBar = () => {
                         icon={<ShoppingCart />}
                         onClick={() => handleUserRoute('/cart', '/login')}
                         value="/cart"
+                    />
+                )}
+                {user?.role === 'RESTAURANT OWNER' && (
+                    <BottomNavigationAction
+                        label="Restaurant"
+                        icon={<AddBox />}
+                        onClick={() =>
+                            handleUserRoute('/add-restaurant', '/login')
+                        }
+                        value="/add-restaurant"
                     />
                 )}
                 <BottomNavigationAction

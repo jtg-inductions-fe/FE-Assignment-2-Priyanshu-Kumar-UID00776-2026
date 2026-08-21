@@ -1,9 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import { Login } from '../components/Login/Login';
-import { NotFoundPage } from '../components/NotFoundPage/NotFoundPage';
-import { SignUp } from '../components/SignUp/SignUp';
-import { Restaurant } from '../pages/Restuarant/Restaurant';
+import { Login } from '@/components/Auth/Login';
+import { SignUp } from '@/components/Auth/SignUp';
+import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
+import { Restaurant } from '@/pages/Restuarant/Restaurant';
 
 export const AppRouter = createBrowserRouter([
     {

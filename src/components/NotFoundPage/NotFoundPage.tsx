@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
+import { Navbar } from '@/components/Navbar/Navbar';
 import {
     AccountButton,
     ErrorCode,
@@ -7,8 +8,7 @@ import {
     MessageSub,
     MessageTitle,
     NotFoundContainer,
-} from './NotFoundPage.styles';
-import { Navbar } from '../Navbar/Navbar';
+} from '@/components/NotFoundPage/NotFoundPage.styles';
 
 export const NotFoundPage = () => {
     const navigate = useNavigate();

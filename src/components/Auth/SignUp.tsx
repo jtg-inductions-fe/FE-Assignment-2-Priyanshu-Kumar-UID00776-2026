@@ -32,12 +32,12 @@ import {
     SubmitPaperWrapper,
     SubtitleText,
     TitleText,
-} from './SignUp.styles';
-import { signup } from '../../services/auth.service';
-import { setUser } from '../../slices/authSlice';
-import { showNotification } from '../../slices/notificationSlice';
-import { useAppDispatch } from '../../store/store';
-import { UserRole } from '../../types/auth.types';
+} from '@/components/Auth/Auth.styles';
+import { signup } from '@/services/auth.service';
+import { setUser } from '@/slices/authSlice';
+import { showNotification } from '@/slices/notificationSlice';
+import { useAppDispatch } from '@/store/store';
+import { UserRole } from '@/types/auth.types';
 
 interface SignUpFormData {
     fullName: string;
@@ -90,12 +90,15 @@ export const SignUp = () => {
     };
 
     const setUserData = async (data: SignUpFormData) => {
+        if (!data.role) {
+            return;
+        }
         try {
             const user = await signup({
                 fullName: data.fullName,
                 email: data.email,
                 contactNo: data.contactNo,
-                role: data.role as UserRole,
+                role: data.role,
                 password: data.password,
             });
 
@@ -108,9 +111,7 @@ export const SignUp = () => {
                 }),
             );
 
-            setTimeout(() => {
-                void navigate('/restaurant');
-            }, 1500);
+            void navigate('/restaurant');
         } catch (error) {
             dispatch(
                 showNotification({

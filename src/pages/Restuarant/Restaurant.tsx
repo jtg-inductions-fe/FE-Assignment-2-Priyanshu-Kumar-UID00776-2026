@@ -14,6 +14,7 @@ import {
     Box,
     Button,
     CardMedia,
+    Chip,
     Dialog,
     DialogContent,
     DialogTitle,
@@ -23,13 +24,19 @@ import {
     Typography,
 } from '@mui/material';
 
+import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
+import {
+    FoodVariant,
+    FoodVariantToggle,
+} from '@/components/FilterToggleButton/FilterToggleButton';
+import { Navbar } from '@/components/Navbar/Navbar';
+import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
+import { useDebounce } from '@/hooks/useDebounce';
 import {
     AddRestaurantButton,
     ControlsWrapper,
-    CuisineTypography,
     FormStack,
     ImageWrapper,
-    MetaInfoStack,
     MetaItem,
     OwnerActionButton,
     OwnerActionStack,
@@ -41,34 +48,25 @@ import {
     StyledCard,
     StyledCardContent,
     StyledDialogActions,
-    SubtitleTypography,
-} from './Restaurant.styles';
-import { BottomNavigationBar } from '../../components/BottomNavigation/BottomNavigation';
-import {
-    FoodVariant,
-    FoodVariantToggle,
-} from '../../components/FilterToggleButton/FilterToggleButton';
-import { Navbar } from '../../components/Navbar/Navbar';
-import { RestaurantSearch } from '../../components/SearchBar/SearchBar';
-import { useDebounce } from '../../hooks/useDebounce';
+} from '@/pages/Restuarant/Restaurant.styles';
 import {
     addRestaurant,
     deleteRestaurant,
     editRestaurant,
     fetchRestaurants,
-} from '../../services/restaurant.service';
-import { showNotification } from '../../slices/notificationSlice';
+} from '@/services/restaurant.service';
+import { showNotification } from '@/slices/notificationSlice';
 import {
     addRestaurantSuccess,
     deleteRestaurantSuccess,
     editRestaurantSuccess,
     setRestaurants,
-} from '../../slices/restaurantSlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+} from '@/slices/restaurantSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import {
     RestaurantFormData,
     RestaurantItemTypes,
-} from '../../types/restaurant.types';
+} from '@/types/restaurant.types';
 
 export const Restaurant = () => {
     const dispatch = useAppDispatch();
@@ -289,11 +287,11 @@ export const Restaurant = () => {
                     {isOwner ? 'My Restaurants' : 'Restaurants'}
                 </Typography>
 
-                <SubtitleTypography variant="body1" color="text.secondary">
+                <Typography variant="body1" color="text.secondary">
                     {isOwner
                         ? 'Manage your restaurants and update menu offerings.'
                         : 'Discover restaurants and explore their menus.'}
-                </SubtitleTypography>
+                </Typography>
 
                 <ControlsWrapper>
                     <RestaurantSearch
@@ -358,30 +356,33 @@ export const Restaurant = () => {
                                         >
                                             {restaurant.name}
                                         </Typography>
+                                        <Chip
+                                            label={`${formatDietType(restaurant.dietType)}`}
+                                            variant="outlined"
+                                            color={
+                                                restaurant.dietType === 'VEG'
+                                                    ? 'success'
+                                                    : restaurant.dietType ===
+                                                        'NON_VEG'
+                                                      ? 'error'
+                                                      : 'default'
+                                            }
+                                        />
                                     </Stack>
 
-                                    <CuisineTypography
-                                        variant="body2"
-                                        color="text.secondary"
-                                        noWrap
-                                    >
-                                        {formatDietType(restaurant.dietType)}
-                                    </CuisineTypography>
-
-                                    <MetaInfoStack direction="row" spacing={2}>
+                                    {!isOwner && (
                                         <MetaItem>
-                                            <LocationIcon fontSize="inherit" />
-                                            <span>{restaurant.location}</span>
+                                            <AccessTimeIcon fontSize="inherit" />
+                                            <span>
+                                                {restaurant.openingTime}
+                                            </span>
                                         </MetaItem>
-                                        {!isOwner && (
-                                            <MetaItem>
-                                                <AccessTimeIcon fontSize="inherit" />
-                                                <span>
-                                                    {restaurant.deliveryTime}
-                                                </span>
-                                            </MetaItem>
-                                        )}
-                                    </MetaInfoStack>
+                                    )}
+
+                                    <MetaItem>
+                                        <LocationIcon fontSize="inherit" />
+                                        <span>{restaurant.location}</span>
+                                    </MetaItem>
                                 </Box>
 
                                 {isOwner && (

@@ -6,11 +6,10 @@ import { RouterProvider } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
-import { theme } from '@theme';
-
-import { GlobalSnackbar } from './components/SnackBar/SnackBar';
-import { AppRouter } from './routes/AppRouter';
-import { store } from './store/store';
+import { GlobalSnackbar } from '@/components/SnackBar/SnackBar';
+import { AppRouter } from '@/routes/AppRouter';
+import { store } from '@/store/store';
+import { theme } from '@/theme';
 
 const rootElement = document.getElementById('root') as HTMLElement;
 

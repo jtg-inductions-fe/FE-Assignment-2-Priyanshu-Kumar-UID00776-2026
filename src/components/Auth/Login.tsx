@@ -7,10 +7,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment, Link, TextField } from '@mui/material';
 
-import { login } from '../../services/auth.service';
-import { setUser } from '../../slices/authSlice';
-import { showNotification } from '../../slices/notificationSlice';
-import { useAppDispatch } from '../../store/store';
 import {
     BrandTitle,
     FooterText,
@@ -23,12 +19,13 @@ import {
     SubmitPaperWrapper,
     SubtitleText,
     TitleText,
-} from '../Auth/Auth.styles';
-
-interface LoginFormData {
-    email: string;
-    password: string;
-}
+} from '@/components/Auth/Auth.styles';
+import { EMAIL_VALIDATION_REGEX } from '@/constant';
+import { login } from '@/services/auth.service';
+import { setUser } from '@/slices/authSlice';
+import { showNotification } from '@/slices/notificationSlice';
+import { useAppDispatch } from '@/store/store';
+import { LoginFormData } from '@/types/auth.types';
 
 export const Login = () => {
     const dispatch = useAppDispatch();
@@ -36,16 +33,19 @@ export const Login = () => {
 
     const [showPassword, setShowPassword] = useState(false);
 
+    // Toggle between showing and hiding the password text
     const handleClickShowPassword = () => {
         setShowPassword((prev) => !prev);
     };
 
+    // Keep focus inside the password input when clicking the eye icon
     const handleMouseDownPassword = (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault();
     };
 
+    // Set up form handling, empty initial inputs, and validation
     const {
         control,
         handleSubmit,
@@ -58,15 +58,19 @@ export const Login = () => {
         mode: 'onTouched',
     });
 
+    // Authenticate the user, update app state, show an alert, and redirect to the dashboard
     const handleLogin = async (data: LoginFormData) => {
         try {
+            // Attempt login with the submitted credentials
             const user = await login({
                 email: data.email,
                 password: data.password,
             });
 
+            // Save the logged in user into the global Redux store
             dispatch(setUser(user));
 
+            // Show a success banner to the user
             dispatch(
                 showNotification({
                     message: 'Successfully logged in!',
@@ -74,8 +78,10 @@ export const Login = () => {
                 }),
             );
 
+            // Redirect the user to the restaurant page
             void navigate('/restaurant');
         } catch (error) {
+            // Display the error message in a red popup if login fails
             dispatch(
                 showNotification({
                     message:
@@ -100,11 +106,13 @@ export const Login = () => {
                     }}
                 >
                     <HeaderBox>
-                        <BrandTitle>Khana Peena</BrandTitle>
+                        <BrandTitle variant="h2">Khana Peena</BrandTitle>
 
-                        <TitleText>Sign in to your account</TitleText>
+                        <TitleText variant="h1">
+                            Sign in to your account
+                        </TitleText>
 
-                        <SubtitleText>
+                        <SubtitleText variant="body1">
                             Enter your details to proceed
                         </SubtitleText>
                     </HeaderBox>
@@ -115,7 +123,7 @@ export const Login = () => {
                         rules={{
                             required: 'Email is required',
                             pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                value: EMAIL_VALIDATION_REGEX,
                                 message: 'Invalid email address',
                             },
                         }}
@@ -187,16 +195,12 @@ export const Login = () => {
                         </SubmitButton>
                     </SubmitPaperWrapper>
 
-                    <FooterText>
-                        Don&apos;t have an account?
+                    <FooterText variant="body1">
+                        Don&apos;t have an account?&nbsp;
                         <Link
                             component={RouterLink}
                             to="/signup"
                             underline="none"
-                            sx={{
-                                cursor: 'pointer',
-                                marginLeft: '4px',
-                            }}
                         >
                             Sign Up
                         </Link>

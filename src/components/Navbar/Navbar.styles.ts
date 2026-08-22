@@ -10,7 +10,7 @@ import {
 import { styled } from '@mui/material/styles';
 
 export const NavbarContainer = styled(Box)(({ theme }) => ({
-    height: '70px',
+    height: theme.typography.pxToRem(71),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -19,7 +19,6 @@ export const NavbarContainer = styled(Box)(({ theme }) => ({
     boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)',
     position: 'sticky',
     top: 0,
-    zIndex: 1100,
 }));
 
 export const LogoContainer = styled(Box)(({ theme }) => ({
@@ -27,12 +26,11 @@ export const LogoContainer = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     gap: theme.spacing(1.5),
     cursor: 'pointer',
-    userSelect: 'none',
 }));
 
-export const Logo = styled(Box)(() => ({
-    width: '40px',
-    height: '40px',
+export const Logo = styled(Box)(({ theme }) => ({
+    width: theme.typography.pxToRem(40),
+    height: theme.typography.pxToRem(40),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -41,7 +39,6 @@ export const Logo = styled(Box)(() => ({
 }));
 
 export const BrandName = styled(Typography)(({ theme }) => ({
-    fontWeight: 800,
     color: theme.palette.primary.main,
 }));
 
@@ -61,8 +58,6 @@ export const NavIconButton = styled(IconButton)(({ theme }) => ({
     alignItems: 'center',
     gap: theme.spacing(0.75),
     color: theme.palette.text.primary,
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: 600,
     transition: 'all 0.2s ease-in-out',
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
@@ -71,14 +66,11 @@ export const NavIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 export const NavLabel = styled(Typography)(() => ({
-    fontSize: 'inherit',
-    fontWeight: 'inherit',
     color: 'inherit',
 }));
 
 export const LoginButton = styled(Button)(({ theme }) => ({
     borderRadius: '10px',
-    fontWeight: 600,
     padding: theme.spacing(0.75, 2.5),
     textTransform: 'none',
 }));
@@ -89,8 +81,8 @@ export const ProfileIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 export const StyledAvatar = styled(Avatar)(({ theme }) => ({
-    width: 44,
-    height: 44,
+    width: theme.typography.pxToRem(44),
+    height: theme.typography.pxToRem(44),
     fontSize: theme.typography.pxToRem(18),
     fontWeight: 700,
     backgroundColor: theme.palette.primary.main,
@@ -108,24 +100,19 @@ export const StyledMenu = styled(Menu)(({ theme }) => ({
     '& .MuiPaper-root': {
         marginTop: theme.spacing(1.5),
         borderRadius: '12px',
-        minWidth: '200px',
+        minWidth: theme.typography.pxToRem(200),
         boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
     },
 }));
 
 export const ProfileInfo = styled(Box)(({ theme }) => ({
     padding: theme.spacing(1.5, 2),
-    minWidth: '180px',
+    minWidth: theme.typography.pxToRem(180),
     borderBottom: `1px solid ${theme.palette.divider}`,
-}));
-
-export const ProfileName = styled(Typography)(() => ({
-    fontWeight: 700,
 }));
 
 export const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
     color: theme.palette.error.main,
-    fontWeight: 600,
     margin: theme.spacing(0.5, 1),
     borderRadius: '8px',
 }));

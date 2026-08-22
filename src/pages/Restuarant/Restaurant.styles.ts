@@ -9,7 +9,12 @@ export const RestaurantContainer = styled(Box)(({ theme }) => ({
 
 export const RestaurantContent = styled(Box)(({ theme }) => ({
     width: '100%',
-    boxSizing: 'border-box',
-
     padding: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
+
+    [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(2),
+    },
 }));

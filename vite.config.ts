@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import type { UserConfig } from 'vite';
 import { defineConfig, loadEnv } from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
@@ -8,6 +9,30 @@ import react from '@vitejs/plugin-react';
 /* Common Config for both PROD and DEV mode */
 const commonConfig: UserConfig = {
     plugins: [react(), tsconfigPaths()],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
+            '@components': fileURLToPath(
+                new URL('./src/components', import.meta.url),
+            ),
+            '@constant': fileURLToPath(
+                new URL('./src/constant', import.meta.url),
+            ),
+            '@hooks': fileURLToPath(new URL('./src/hooks', import.meta.url)),
+            '@pages': fileURLToPath(
+                new URL('./src/pages / Restuarant', import.meta.url),
+            ),
+            '@routes': fileURLToPath(new URL('./src/routes', import.meta.url)),
+            '@services': fileURLToPath(
+                new URL('./src/services', import.meta.url),
+            ),
+            '@slices': fileURLToPath(new URL('./src/slices', import.meta.url)),
+            '@store': fileURLToPath(new URL('./src/store', import.meta.url)),
+            '@theme': fileURLToPath(new URL('./src/theme', import.meta.url)),
+            '@types': fileURLToPath(new URL('./src/types', import.meta.url)),
+        },
+    },
     /* Customizing build folder structure */
     build: {
         /* 

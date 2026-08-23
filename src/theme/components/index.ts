@@ -26,10 +26,10 @@ export const components: Components = {
         styleOverrides: {
             root: {
                 '&.MuiInputLabel-root': {
-                    fontSize: '1.4rem !important',
+                    fontSize: '1.4rem',
                 },
                 '&.MuiInputLabel-shrink': {
-                    fontSize: '1.2rem !important',
+                    fontSize: '1.2rem',
                 },
             },
         },
@@ -37,10 +37,10 @@ export const components: Components = {
     MuiOutlinedInput: {
         styleOverrides: {
             root: {
-                fontSize: '1.4rem !important',
+                fontSize: '1.4rem',
             },
             input: {
-                fontSize: '1.4rem !important',
+                fontSize: '1.4rem',
             },
         },
     },
@@ -48,7 +48,7 @@ export const components: Components = {
         styleOverrides: {
             root: {
                 '&.MuiFormHelperText-root': {
-                    fontSize: '1.2rem !important',
+                    fontSize: '1.2rem',
                 },
             },
         },

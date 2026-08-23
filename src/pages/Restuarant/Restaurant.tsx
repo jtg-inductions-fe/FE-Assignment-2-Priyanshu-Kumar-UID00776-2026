@@ -19,16 +19,14 @@ import {
     DialogContent,
     DialogTitle,
     MenuItem as SelectMenuItem,
+    Skeleton,
     Stack,
     TextField,
     Typography,
 } from '@mui/material';
 
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
-import {
-    FoodVariant,
-    FoodVariantToggle,
-} from '@/components/FilterToggleButton/FilterToggleButton';
+import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -63,6 +61,7 @@ import {
     setRestaurants,
 } from '@/slices/restaurantSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { FoodVariant } from '@/types/fIlterToggleButton.types';
 import {
     RestaurantFormData,
     RestaurantItemTypes,
@@ -77,6 +76,7 @@ export const Restaurant = () => {
     );
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRestaurant, setEditingRestaurant] =
@@ -101,32 +101,45 @@ export const Restaurant = () => {
         mode: 'onTouched',
     });
 
+    // Fetch all restaurants from the API when the component first renders
     useEffect(() => {
         const loadInitialData = async () => {
             try {
+                // Turn on the loading skeleton while waiting for data
+                setIsLoading(true);
+                // Call the API service to get restaurant records
                 const data = await fetchRestaurants();
+                // Save the loaded restaurants into the redux store
                 dispatch(setRestaurants(data));
             } catch (err: unknown) {
                 const message =
                     err instanceof Error
                         ? err.message
                         : 'Failed to fetch restaurants';
+                // Pop up an error toast if loading fails
                 dispatch(
                     showNotification({
                         message,
                         severity: 'error',
                     }),
                 );
+            } finally {
+                // Turn off the skeleton loader once the request finishes
+                setIsLoading(false);
             }
         };
+        // Run the initial data loader
         void loadInitialData();
     }, [dispatch]);
 
+    // Delay updating the search query until the user stops typing
     const debouncedValue = useDebounce<string>(searchTerm);
 
+    // Filter restaurants by owner permissions, search keywords, and veg/non-veg tags
     const filteredRestaurants = useMemo(
         () =>
             allRestaurants.filter((restaurant) => {
+                // If logged in as an owner, only show restaurants belonging to them
                 if (
                     isOwner &&
                     restaurant.ownerId.toLowerCase() !==
@@ -135,17 +148,22 @@ export const Restaurant = () => {
                     return false;
                 }
 
+                // Check if the restaurant name matches what the user typed
                 const matchesSearch = restaurant.name
                     .toLowerCase()
                     .includes(debouncedValue.toLowerCase());
+                // Skip restaurants that don't match the search text
                 if (!matchesSearch) return false;
 
+                // Apply food preference filters for regular customers
                 if (!isOwner && dietFilter !== 'ALL') {
+                    // Hide non-veg places when filtering for pure veg
                     if (
                         dietFilter === 'VEG' &&
                         restaurant.dietType === 'NON_VEG'
                     )
                         return false;
+                    // Hide pure veg places when filtering for non-veg
                     if (
                         dietFilter === 'NON_VEG' &&
                         restaurant.dietType === 'VEG'
@@ -153,11 +171,13 @@ export const Restaurant = () => {
                         return false;
                 }
 
+                // Include the restaurant if it passed all checks
                 return true;
             }),
         [allRestaurants, isOwner, user?.email, debouncedValue, dietFilter],
     );
 
+    // Open the creation dialog with clean default form fields
     const handleOpenAddModal = () => {
         setEditingRestaurant(null);
         reset({
@@ -171,6 +191,7 @@ export const Restaurant = () => {
         setIsModalOpen(true);
     };
 
+    // Open the dialog and pre-fill form fields with selected restaurant data
     const handleOpenEditModal = (restaurant: RestaurantItemTypes) => {
         setEditingRestaurant(restaurant);
         reset({
@@ -184,7 +205,9 @@ export const Restaurant = () => {
         setIsModalOpen(true);
     };
 
+    // Save changes for an existing restaurant or create a new one
     const onFormSubmit = async (data: RestaurantFormData) => {
+        // Prevent submission if the owner email is missing
         if (!user?.email) {
             dispatch(
                 showNotification({
@@ -196,13 +219,17 @@ export const Restaurant = () => {
         }
 
         try {
+            // Check whether we are editing an existing item or creating a new one
             if (editingRestaurant) {
+                // Send the updated data to the API
                 const updated = await editRestaurant(
                     editingRestaurant.id,
                     data,
                     user.email,
                 );
+                // Update the restaurant record in redux
                 dispatch(editRestaurantSuccess(updated));
+                // Show a confirmation banner
                 dispatch(
                     showNotification({
                         message: 'Restaurant updated successfully!',
@@ -210,8 +237,11 @@ export const Restaurant = () => {
                     }),
                 );
             } else {
+                // Call the API to create a brand new restaurant
                 const created = await addRestaurant(data, user.email);
+                // Add the new restaurant to the Redux store
                 dispatch(addRestaurantSuccess(created));
+                // Show a success banner
                 dispatch(
                     showNotification({
                         message: 'Restaurant added successfully!',
@@ -219,12 +249,14 @@ export const Restaurant = () => {
                     }),
                 );
             }
+            // Close the dialog after saving
             setIsModalOpen(false);
         } catch (error: unknown) {
             const message =
                 error instanceof Error
                     ? error.message
                     : 'An error occurred while saving.';
+            // Show a error banner if saving fails
             dispatch(
                 showNotification({
                     message,
@@ -234,8 +266,11 @@ export const Restaurant = () => {
         }
     };
 
+    // Permanently delete a restaurant
     const handleDelete = async (id: string) => {
+        // Ensure the owner is logged in before deleting
         if (!user?.email) {
+            // Show an authentication required alert
             dispatch(
                 showNotification({
                     message: 'Authentication required to delete.',
@@ -247,8 +282,11 @@ export const Restaurant = () => {
 
         try {
             setIsDeleting(true);
+            // Call the API service to remove the restaurant
             await deleteRestaurant(id, user.email);
+            // Remove the restaurant from the redux store
             dispatch(deleteRestaurantSuccess(id));
+            // Show a success banner confirming deletion
             dispatch(
                 showNotification({
                     message: 'Restaurant deleted successfully!',
@@ -261,6 +299,7 @@ export const Restaurant = () => {
                 error instanceof Error
                     ? error.message
                     : 'Failed to delete restaurant.';
+            // Show an error toast if deletion fails
             dispatch(
                 showNotification({
                     message,
@@ -272,6 +311,7 @@ export const Restaurant = () => {
         }
     };
 
+    // Convert diet enum codes into friendly display labels for badges
     const formatDietType = (type: string) => {
         if (type === 'NON_VEG') return 'Non-Veg';
         if (type === 'VEG') return 'Pure Veg';
@@ -283,7 +323,7 @@ export const Restaurant = () => {
             <Navbar />
 
             <RestaurantHeaderSection>
-                <Typography variant="h4" fontWeight={700}>
+                <Typography variant="h1" fontWeight={700}>
                     {isOwner ? 'My Restaurants' : 'Restaurants'}
                 </Typography>
 
@@ -321,103 +361,158 @@ export const Restaurant = () => {
                     )}
                 </ControlsWrapper>
             </RestaurantHeaderSection>
-
             <ScrollableContent>
                 <RestaurantGrid>
-                    {filteredRestaurants.map((restaurant) => (
-                        <StyledCard key={restaurant.id}>
-                            <ImageWrapper>
-                                <CardMedia
-                                    component="img"
-                                    height="180"
-                                    image={restaurant.image}
-                                    alt={restaurant.name}
+                    {isLoading ? (
+                        Array.from({ length: 6 }).map((_, index) => (
+                            <StyledCard key={index}>
+                                <Skeleton
+                                    variant="rectangular"
+                                    animation="wave"
+                                    height={180}
                                 />
-                                <RatingBadge>
-                                    <StarIcon
-                                        fontSize="inherit"
-                                        color="warning"
-                                    />
-                                    {restaurant.rating}
-                                </RatingBadge>
-                            </ImageWrapper>
-
-                            <StyledCardContent>
-                                <Box>
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                    >
-                                        <Typography
-                                            variant="h6"
-                                            fontWeight={700}
-                                            noWrap
+                                <StyledCardContent>
+                                    <Box>
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                            mb={1}
                                         >
-                                            {restaurant.name}
-                                        </Typography>
-                                        <Chip
-                                            label={`${formatDietType(restaurant.dietType)}`}
-                                            variant="outlined"
-                                            color={
-                                                restaurant.dietType === 'VEG'
-                                                    ? 'success'
-                                                    : restaurant.dietType ===
-                                                        'NON_VEG'
-                                                      ? 'error'
-                                                      : 'default'
-                                            }
+                                            <Skeleton
+                                                variant="text"
+                                                animation="pulse"
+                                                width="55%"
+                                                height={30}
+                                            />
+                                            <Skeleton
+                                                variant="rounded"
+                                                animation="pulse"
+                                                width={75}
+                                                height={24}
+                                            />
+                                        </Stack>
+                                        <Skeleton
+                                            variant="text"
+                                            animation="pulse"
+                                            width="40%"
+                                            height={20}
                                         />
-                                    </Stack>
+                                        <Skeleton
+                                            variant="text"
+                                            animation="pulse"
+                                            width="70%"
+                                            height={20}
+                                        />
+                                    </Box>
+                                </StyledCardContent>
+                            </StyledCard>
+                        ))
+                    ) : filteredRestaurants.length === 0 ? (
+                        <Box textAlign="center" py={6} gridColumn="1 / -1">
+                            <Typography variant="h6" color="text.secondary">
+                                No restaurants found.
+                            </Typography>
+                        </Box>
+                    ) : (
+                        filteredRestaurants.map((restaurant) => (
+                            <StyledCard key={restaurant.id}>
+                                <ImageWrapper>
+                                    <CardMedia
+                                        component="img"
+                                        height="180"
+                                        image={restaurant.image}
+                                        alt={restaurant.name}
+                                    />
+                                    <RatingBadge variant="body2">
+                                        <StarIcon
+                                            fontSize="inherit"
+                                            color="warning"
+                                        />
+                                        {restaurant.rating}
+                                    </RatingBadge>
+                                </ImageWrapper>
 
-                                    {!isOwner && (
-                                        <MetaItem>
+                                <StyledCardContent>
+                                    <Box>
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                        >
+                                            <Typography
+                                                variant="h3"
+                                                fontWeight={700}
+                                                noWrap
+                                            >
+                                                {restaurant.name}
+                                            </Typography>
+                                            <Chip
+                                                label={`${formatDietType(restaurant.dietType)}`}
+                                                variant="outlined"
+                                                color={
+                                                    restaurant.dietType ===
+                                                    'VEG'
+                                                        ? 'success'
+                                                        : restaurant.dietType ===
+                                                            'NON_VEG'
+                                                          ? 'error'
+                                                          : 'default'
+                                                }
+                                            />
+                                        </Stack>
+
+                                        <MetaItem variant="body2">
                                             <AccessTimeIcon fontSize="inherit" />
                                             <span>
                                                 {restaurant.openingTime}
                                             </span>
                                         </MetaItem>
+
+                                        <MetaItem variant="body2">
+                                            <LocationIcon fontSize="inherit" />
+                                            <span>{restaurant.location}</span>
+                                        </MetaItem>
+                                    </Box>
+
+                                    {isOwner && (
+                                        <OwnerActionStack
+                                            direction="row"
+                                            spacing={1.5}
+                                        >
+                                            <OwnerActionButton
+                                                variant="outlined"
+                                                fullWidth
+                                                startIcon={<EditIcon />}
+                                                size="small"
+                                                onClick={() =>
+                                                    handleOpenEditModal(
+                                                        restaurant,
+                                                    )
+                                                }
+                                            >
+                                                Edit
+                                            </OwnerActionButton>
+                                            <OwnerActionButton
+                                                variant="contained"
+                                                color="error"
+                                                fullWidth
+                                                startIcon={<DeleteIcon />}
+                                                size="small"
+                                                onClick={() =>
+                                                    setDeleteTargetId(
+                                                        restaurant.id,
+                                                    )
+                                                }
+                                            >
+                                                Delete
+                                            </OwnerActionButton>
+                                        </OwnerActionStack>
                                     )}
-
-                                    <MetaItem>
-                                        <LocationIcon fontSize="inherit" />
-                                        <span>{restaurant.location}</span>
-                                    </MetaItem>
-                                </Box>
-
-                                {isOwner && (
-                                    <OwnerActionStack
-                                        direction="row"
-                                        spacing={1.5}
-                                    >
-                                        <OwnerActionButton
-                                            variant="outlined"
-                                            fullWidth
-                                            startIcon={<EditIcon />}
-                                            size="small"
-                                            onClick={() =>
-                                                handleOpenEditModal(restaurant)
-                                            }
-                                        >
-                                            Edit
-                                        </OwnerActionButton>
-                                        <OwnerActionButton
-                                            variant="contained"
-                                            color="error"
-                                            fullWidth
-                                            startIcon={<DeleteIcon />}
-                                            size="small"
-                                            onClick={() =>
-                                                setDeleteTargetId(restaurant.id)
-                                            }
-                                        >
-                                            Delete
-                                        </OwnerActionButton>
-                                    </OwnerActionStack>
-                                )}
-                            </StyledCardContent>
-                        </StyledCard>
-                    ))}
+                                </StyledCardContent>
+                            </StyledCard>
+                        ))
+                    )}
                 </RestaurantGrid>
             </ScrollableContent>
 

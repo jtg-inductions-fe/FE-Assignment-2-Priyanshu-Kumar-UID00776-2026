@@ -1,3 +1,7 @@
+// Allowed food categories for filtering and tags
+export type DietType = 'VEG' | 'NON_VEG' | 'BOTH';
+
+// Individual dish details in a restaurant's menu
 export interface MenuItem {
     id: string;
     name: string;
@@ -7,8 +11,7 @@ export interface MenuItem {
     image?: string;
 }
 
-export type DietType = 'VEG' | 'NON_VEG' | 'BOTH';
-
+// Complete restaurant entity stored in the database and state
 export interface RestaurantItemTypes {
     id: string;
     name: string;
@@ -22,6 +25,7 @@ export interface RestaurantItemTypes {
     menus: MenuItem[];
 }
 
+// Editable fields submitted in the Add/Edit restaurant form
 export interface RestaurantFormData {
     name: string;
     location: string;
@@ -30,3 +34,8 @@ export interface RestaurantFormData {
     deliveryTime: string;
     openingTime: string;
 }
+
+// Redux store slice state holding the full restaurant list
+export type RestaurantState = {
+    restaurants: RestaurantItemTypes[];
+};

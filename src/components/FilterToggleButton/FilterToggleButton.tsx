@@ -4,13 +4,7 @@ import {
     StyledButtonGroup,
     VegFilterButton,
 } from '@/components/FilterToggleButton/FilterToggleButton.styles';
-
-export type FoodVariant = 'ALL' | 'VEG' | 'NON_VEG';
-
-interface FoodVariantToggleProps {
-    foodVariant: FoodVariant;
-    onFilterChange: (filter: FoodVariant) => void;
-}
+import { FoodVariantToggleProps } from '@/types/fIlterToggleButton.types';
 
 export const FoodVariantToggle = ({
     foodVariant,

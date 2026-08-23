@@ -16,7 +16,6 @@ import {
     Radio,
     RadioGroup,
     TextField,
-    useTheme,
 } from '@mui/material';
 
 import {
@@ -33,29 +32,25 @@ import {
     SubtitleText,
     TitleText,
 } from '@/components/Auth/Auth.styles';
+import {
+    EMAIL_VALIDATION_REGEX,
+    NUMBER_VALIDATION_REGEX,
+    PASSWORD_VALIDATION_REGEX,
+} from '@/constant';
 import { signup } from '@/services/auth.service';
 import { setUser } from '@/slices/authSlice';
 import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch } from '@/store/store';
-import { UserRole } from '@/types/auth.types';
-
-interface SignUpFormData {
-    fullName: string;
-    email: string;
-    contactNo: string;
-    role: UserRole | '';
-    password: string;
-    confirmPassword: string;
-}
+import { SignUpFormData } from '@/types/auth.types';
 
 export const SignUp = () => {
-    const theme = useTheme();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    // Set up form state and validation triggers with empty initial fields
     const {
         control,
         handleSubmit,
@@ -73,27 +68,34 @@ export const SignUp = () => {
         mode: 'onTouched',
     });
 
+    // Track the current password value in real time to validate password matching
     const passwordValue = watch('password');
 
+    // Toggle password visibility on and off
     const handleClickShowPassword = () => {
         setShowPassword((prev) => !prev);
     };
 
+    // Toggle confirm password visibility on and off
     const handleClickShowConfirmPassword = () => {
         setShowConfirmPassword((prev) => !prev);
     };
 
+    // Keep focus inside the input field when clicking the eye icon
     const handleMouseDownPassword = (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault();
     };
 
+    // Register the new user, update global state, show a success banner, and redirect
     const setUserData = async (data: SignUpFormData) => {
+        // Prevent form submission if a user role hasn't been selected
         if (!data.role) {
             return;
         }
         try {
+            // Create the user account with the submitted details
             const user = await signup({
                 fullName: data.fullName,
                 email: data.email,
@@ -102,8 +104,10 @@ export const SignUp = () => {
                 password: data.password,
             });
 
+            // Store the newly created user in redux
             dispatch(setUser(user));
 
+            // Show a success banner
             dispatch(
                 showNotification({
                     message: 'Successfully signed up!',
@@ -111,8 +115,10 @@ export const SignUp = () => {
                 }),
             );
 
+            // Navigate to the restaurant dashboard
             void navigate('/restaurant');
         } catch (error) {
+            // Display an error alert if signup fails
             dispatch(
                 showNotification({
                     message:
@@ -137,11 +143,11 @@ export const SignUp = () => {
                     }}
                 >
                     <HeaderBox>
-                        <BrandTitle>Khanna Peena</BrandTitle>
+                        <BrandTitle variant="h2">Khana Peena</BrandTitle>
 
-                        <TitleText>Create an Account</TitleText>
+                        <TitleText variant="h1">Create an Account</TitleText>
 
-                        <SubtitleText>
+                        <SubtitleText variant="body1">
                             Start your journey with us today
                         </SubtitleText>
                     </HeaderBox>
@@ -150,7 +156,7 @@ export const SignUp = () => {
                         name="fullName"
                         control={control}
                         rules={{
-                            required: 'This field is required',
+                            required: 'Full name is required',
                             minLength: {
                                 value: 3,
                                 message:
@@ -176,7 +182,7 @@ export const SignUp = () => {
                         rules={{
                             required: 'Email is required',
                             pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                value: EMAIL_VALIDATION_REGEX,
                                 message: 'Invalid email address',
                             },
                         }}
@@ -200,7 +206,7 @@ export const SignUp = () => {
                         rules={{
                             required: 'Contact number is required',
                             pattern: {
-                                value: /^[0-9]{10}$/,
+                                value: NUMBER_VALIDATION_REGEX,
                                 message:
                                     'Please enter a valid 10-digit phone number',
                             },
@@ -233,9 +239,6 @@ export const SignUp = () => {
                                         {...field}
                                         row
                                         aria-labelledby="i-am-label"
-                                        sx={{
-                                            gap: theme.typography.pxToRem(20),
-                                        }}
                                     >
                                         <FormControlLabel
                                             value="USER"
@@ -271,7 +274,7 @@ export const SignUp = () => {
                                     'Password must be at least 8 characters',
                             },
                             pattern: {
-                                value: /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9_])[^_]+$/,
+                                value: PASSWORD_VALIDATION_REGEX,
                                 message:
                                     'Must include an uppercase letter, a digit, a special character, and no underscores',
                             },
@@ -371,16 +374,12 @@ export const SignUp = () => {
                         </SubmitButton>
                     </SubmitPaperWrapper>
 
-                    <FooterText>
-                        Already have an account?
+                    <FooterText variant="body1">
+                        Already have an account?&nbsp;
                         <Link
                             component={RouterLink}
                             to="/login"
                             underline="none"
-                            sx={{
-                                cursor: 'pointer',
-                                marginLeft: '4px',
-                            }}
                         >
                             Login
                         </Link>

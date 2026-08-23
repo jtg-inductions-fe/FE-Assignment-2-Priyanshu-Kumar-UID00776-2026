@@ -18,32 +18,24 @@ export const NotFoundContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const ErrorCode = styled(Typography)(({ theme }) => ({
-    fontSize: '10rem',
-    fontWeight: 800,
-    color: theme.palette.primary.main || '#1976d2',
-    lineHeight: 1,
+    color: theme.palette.primary.main,
     marginBottom: theme.spacing(1),
-    [theme.breakpoints.down('sm')]: {
-        fontSize: '6rem',
-    },
 }));
 
 export const MessageTitle = styled(Typography)(({ theme }) => ({
-    fontWeight: 600,
     marginBottom: theme.spacing(2),
-    color: theme.palette.text.primary || '#333',
+    color: theme.palette.text.primary,
 }));
 
 export const MessageSub = styled(Typography)(({ theme }) => ({
-    color: theme.palette.text.secondary || '#666',
+    color: theme.palette.text.secondary,
     marginBottom: theme.spacing(4),
-    maxWidth: '480px',
+    maxWidth: theme.typography.pxToRem(480),
 }));
 
 export const AccountButton = styled(Button)(({ theme }) => ({
     padding: theme.spacing(1.5, 4),
-    fontWeight: 600,
-    borderRadius: theme.shape.borderRadius || 8,
+    borderRadius: '10px',
     textTransform: 'none',
     boxShadow: theme.shadows[2],
 }));

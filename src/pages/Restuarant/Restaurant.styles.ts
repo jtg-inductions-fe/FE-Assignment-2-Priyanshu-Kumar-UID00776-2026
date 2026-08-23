@@ -5,6 +5,7 @@ import {
     CardContent,
     DialogActions,
     Stack,
+    Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -52,7 +53,6 @@ export const ControlsWrapper = styled(Box)(({ theme }) => ({
 export const AddRestaurantButton = styled(Button)(({ theme }) => ({
     padding: theme.spacing(1, 2),
     textTransform: 'none',
-    fontWeight: 600,
     borderRadius: '10px',
 }));
 
@@ -76,19 +76,17 @@ export const ImageWrapper = styled(Box)({
     position: 'relative',
 });
 
-export const RatingBadge = styled(Box)(({ theme }) => ({
+export const RatingBadge = styled(Typography)(({ theme }) => ({
     position: 'absolute',
     top: theme.typography.pxToRem(12),
     right: theme.typography.pxToRem(12),
     backgroundColor: theme.palette.secondary.main,
     padding: theme.spacing(1, 2.4),
-    borderRadius: 20,
+    borderRadius: '20px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.typography.pxToRem(4),
-    fontWeight: 700,
-    fontSize: theme.typography.pxToRem(12),
 }));
 
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({
@@ -99,13 +97,12 @@ export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-export const MetaItem = styled(Box)(({ theme }) => ({
+export const MetaItem = styled(Typography)(({ theme }) => ({
     display: 'flex',
     color: theme.palette.secondary.dark,
     alignItems: 'center',
     gap: theme.typography.pxToRem(4),
     marginTop: theme.typography.pxToRem(5),
-    fontSize: theme.typography.pxToRem(13),
 }));
 
 export const OwnerActionStack = styled(Stack)(({ theme }) => ({

@@ -19,9 +19,9 @@ export const NavigationBox = styled(BottomNavigation)(({ theme }) => ({
 }));
 
 export const ProfileInfo = styled(Box)(({ theme }) => ({
-    minWidth: '200px',
-    padding: theme.spacing(1, 2),
     display: 'flex',
     flexDirection: 'column',
+    minWidth: theme.typography.pxToRem(200),
+    padding: theme.spacing(1, 2),
     gap: theme.spacing(0.5),
 }));

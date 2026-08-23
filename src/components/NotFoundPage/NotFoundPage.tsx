@@ -19,10 +19,10 @@ export const NotFoundPage = () => {
             <NotFoundContainer>
                 <ErrorCode variant="h1">404</ErrorCode>
                 <MessageTitle variant="h4">Page Not Found</MessageTitle>
-                <MessageSub variant="body1">
+                <MessageSub variant="body2">
                     The page you are looking for is unavailable
                 </MessageSub>
-                <MessageSub>
+                <MessageSub variant="body2">
                     Create your account today and try out Khanna Penna
                 </MessageSub>
                 <AccountButton

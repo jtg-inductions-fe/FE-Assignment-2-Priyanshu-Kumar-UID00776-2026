@@ -1,24 +1,20 @@
 import { Search as SearchIcon } from '@mui/icons-material';
-import { InputAdornment, TextField } from '@mui/material';
+import { InputAdornment } from '@mui/material';
 
-interface RestaurantSearchProps {
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    placeholder?: string;
-}
+import { SearchBar } from '@/components/SearchBar/SearchBar.styles';
+import { RestaurantSearchProps } from '@/types/serachBar.types';
 
 export const RestaurantSearch = ({
     value,
     onChange,
     placeholder = 'Search for restaurants',
 }: RestaurantSearchProps) => (
-    <TextField
+    <SearchBar
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        size="small"
+        size="medium"
         fullWidth
-        sx={{ maxWidth: 500 }}
         slotProps={{
             input: {
                 startAdornment: (

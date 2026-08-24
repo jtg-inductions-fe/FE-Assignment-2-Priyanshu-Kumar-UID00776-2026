@@ -24,6 +24,8 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
@@ -34,6 +36,7 @@ import {
     AddRestaurantButton,
     ControlsWrapper,
     FormStack,
+    HeaderButtonWrapper,
     ImageWrapper,
     MetaItem,
     OwnerActionButton,
@@ -69,12 +72,14 @@ import {
 
 export const Restaurant = () => {
     const dispatch = useAppDispatch();
+    const theme = useTheme();
     const user = useAppSelector((state) => state.auth.user);
     const isOwner = user?.role === 'RESTAURANT OWNER';
     const allRestaurants = useAppSelector(
         (state) => state.restaurant.restaurants,
     );
 
+    const isMobile = Boolean(useMediaQuery(theme.breakpoints.down('sm')));
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
@@ -323,9 +328,27 @@ export const Restaurant = () => {
             <Navbar />
 
             <RestaurantHeaderSection>
-                <Typography variant="h1" fontWeight={700}>
-                    {isOwner ? 'My Restaurants' : 'Restaurants'}
-                </Typography>
+                <HeaderButtonWrapper>
+                    <Typography variant="h1">
+                        {isOwner ? 'My Restaurants' : 'Restaurants'}
+                    </Typography>
+                    {!isMobile &&
+                        (isOwner ? (
+                            <AddRestaurantButton
+                                variant="contained"
+                                color="primary"
+                                startIcon={<AddIcon />}
+                                onClick={handleOpenAddModal}
+                            >
+                                Add Restaurant
+                            </AddRestaurantButton>
+                        ) : (
+                            <FoodVariantToggle
+                                foodVariant={dietFilter}
+                                onFilterChange={setDietFilter}
+                            />
+                        ))}
+                </HeaderButtonWrapper>
 
                 <Typography variant="body1" color="text.secondary">
                     {isOwner
@@ -343,8 +366,9 @@ export const Restaurant = () => {
                                 : 'Search for restaurants'
                         }
                     />
-
-                    {isOwner ? (
+                </ControlsWrapper>
+                {isMobile &&
+                    (isOwner ? (
                         <AddRestaurantButton
                             variant="contained"
                             color="primary"
@@ -358,8 +382,7 @@ export const Restaurant = () => {
                             foodVariant={dietFilter}
                             onFilterChange={setDietFilter}
                         />
-                    )}
-                </ControlsWrapper>
+                    ))}
             </RestaurantHeaderSection>
             <ScrollableContent>
                 <RestaurantGrid>

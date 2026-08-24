@@ -18,6 +18,20 @@ export const RestaurantContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.light,
 }));
 
+export const ContentArea = styled(Box)({
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    overflow: 'hidden',
+});
+
+export const MainContentLayout = styled(Box)({
+    display: 'flex',
+    flex: 1,
+    overflow: 'hidden',
+    width: '100%',
+});
+
 export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'flex-start',

@@ -106,7 +106,9 @@ export const Login = () => {
                     }}
                 >
                     <HeaderBox>
-                        <BrandTitle variant="h2">Khana Peena</BrandTitle>
+                        <BrandTitle variant="h2" color="">
+                            Khana Peena
+                        </BrandTitle>
 
                         <TitleText variant="h1">
                             Sign in to your account

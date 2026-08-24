@@ -20,13 +20,13 @@ export const NavbarContainer = styled(Box)(({ theme }) => ({
 export const LogoContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(1.2),
+    gap: theme.typography.pxToRem(5),
 }));
 
 export const NavbarActions = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(1),
+    gap: theme.typography.pxToRem(4),
 }));
 
 export const ProfileInfo = styled(Box)(({ theme }) => ({
@@ -34,5 +34,5 @@ export const ProfileInfo = styled(Box)(({ theme }) => ({
     padding: theme.spacing(1, 2),
     display: 'flex',
     flexDirection: 'column',
-    gap: theme.spacing(0.5),
+    gap: theme.typography.pxToRem(2),
 }));

@@ -146,7 +146,7 @@ export const BottomNavigationBar = () => {
                     {isUserActive ? (
                         <>
                             <ProfileInfo>
-                                <Typography variant="body1" fontWeight={600}>
+                                <Typography variant="body1">
                                     {user?.fullName}
                                 </Typography>
 

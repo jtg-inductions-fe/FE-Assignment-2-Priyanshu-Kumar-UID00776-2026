@@ -1,4 +1,4 @@
-import { Box, Button, Container, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import burgerImage from '@/assets/images/burger.avif';
@@ -23,30 +23,24 @@ export const HeroSection = styled(Box)(({ theme }) => ({
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     display: 'flex',
-    padding: theme.spacing(5),
+    padding: theme.typography.pxToRem(20),
     alignItems: 'flex-end',
     justifyContent: 'center',
     textAlign: 'center',
     [theme.breakpoints.up('sm')]: {
         height: '100%',
         width: '60%',
-        padding: theme.spacing(6),
+        padding: theme.typography.pxToRem(24),
         alignItems: 'flex-end',
         justifyContent: 'flex-start',
     },
-}));
-
-export const BrandTitle = styled(Typography)(({ theme }) => ({
-    color: theme.palette.primary.main,
-    textAlign: 'center',
-    [theme.breakpoints.up('sm')]: {},
 }));
 
 export const FormSection = styled(Box)(({ theme }) => ({
     position: 'absolute',
     bottom: 0,
     backgroundColor: theme.palette.secondary.main,
-    padding: theme.spacing(5),
+    padding: theme.typography.pxToRem(20),
     borderTopLeftRadius: '20px',
     borderTopRightRadius: '20px',
     height: '74%',
@@ -61,7 +55,7 @@ export const FormSection = styled(Box)(({ theme }) => ({
         height: '100%',
         width: '50%',
         backgroundColor: 'transparent',
-        padding: theme.spacing(4),
+        padding: theme.typography.pxToRem(16),
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -79,10 +73,10 @@ export const FormCard = styled('form')(({ theme }) => ({
         maxWidth: theme.typography.pxToRem(540),
         height: 'auto',
         backgroundColor: theme.palette.secondary.light,
-        padding: theme.spacing(10),
+        padding: theme.typography.pxToRem(40),
         borderRadius: '16px',
         boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.06)',
-        gap: theme.spacing(5),
+        gap: theme.typography.pxToRem(20),
         justifyContent: 'flex-start',
     },
 }));
@@ -93,38 +87,17 @@ export const HeaderBox = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    gap: theme.spacing(5),
+    gap: theme.typography.pxToRem(20),
     [theme.breakpoints.up('sm')]: {
         textAlign: 'center',
-        marginBottom: theme.spacing(1),
-    },
-}));
-
-export const TitleText = styled(Typography)(({ theme }) => ({
-    width: '100%',
-    textAlign: 'left',
-    [theme.breakpoints.up('sm')]: {
-        textAlign: 'center',
-    },
-}));
-
-export const SubtitleText = styled(Typography)(({ theme }) => ({
-    color: theme.palette.primary.main,
-    width: '100%',
-    textAlign: 'left',
-    [theme.breakpoints.up('sm')]: {
-        marginTop: theme.spacing(0.5),
-        textAlign: 'center',
+        marginBottom: theme.typography.pxToRem(4),
     },
 }));
 
 export const StyledRadioBox = styled(Box)(({ theme }) => ({
-    padding: theme.spacing(2),
+    padding: theme.typography.pxToRem(8),
     borderRadius: '4px',
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(0.5, 0),
-    },
 }));
 
 export const SubmitPaperWrapper = styled(Paper)({
@@ -141,7 +114,7 @@ export const SubmitButton = styled(Button)(({ theme }) => ({
     color: theme.palette.secondary.light,
     [theme.breakpoints.up('sm')]: {
         fontSize: theme.typography.pxToRem(16),
-        padding: theme.spacing(2),
+        padding: theme.typography.pxToRem(8),
         backgroundColor: theme.palette.primary.main,
         borderRadius: '30px',
         fontWeight: theme.typography.fontWeightMedium,
@@ -150,8 +123,3 @@ export const SubmitButton = styled(Button)(({ theme }) => ({
         },
     },
 }));
-
-export const FooterText = styled(Typography)({
-    width: '100%',
-    textAlign: 'center',
-});

@@ -16,11 +16,11 @@ import {
     Radio,
     RadioGroup,
     TextField,
+    Typography,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import {
-    BrandTitle,
-    FooterText,
     FormCard,
     FormSection,
     HeaderBox,
@@ -29,8 +29,6 @@ import {
     StyledRadioBox,
     SubmitButton,
     SubmitPaperWrapper,
-    SubtitleText,
-    TitleText,
 } from '@/components/Auth/Auth.styles';
 import {
     EMAIL_VALIDATION_REGEX,
@@ -46,6 +44,7 @@ import { SignUpFormData } from '@/types/auth.types';
 export const SignUp = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -143,13 +142,25 @@ export const SignUp = () => {
                     }}
                 >
                     <HeaderBox>
-                        <BrandTitle variant="h2">Khana Peena</BrandTitle>
+                        <Typography
+                            variant="h2"
+                            color={theme.palette.primary.main}
+                            textAlign="center"
+                        >
+                            Khana Peena
+                        </Typography>
 
-                        <TitleText variant="h1">Create an Account</TitleText>
+                        <Typography variant="h1" textAlign="center">
+                            Create an Account
+                        </Typography>
 
-                        <SubtitleText variant="body1">
+                        <Typography
+                            variant="body1"
+                            color={theme.palette.primary.main}
+                            textAlign="center"
+                        >
                             Start your journey with us today
-                        </SubtitleText>
+                        </Typography>
                     </HeaderBox>
 
                     <Controller
@@ -374,7 +385,7 @@ export const SignUp = () => {
                         </SubmitButton>
                     </SubmitPaperWrapper>
 
-                    <FooterText variant="body1">
+                    <Typography textAlign="center" variant="body1">
                         Already have an account?&nbsp;
                         <Link
                             component={RouterLink}
@@ -383,7 +394,7 @@ export const SignUp = () => {
                         >
                             Login
                         </Link>
-                    </FooterText>
+                    </Typography>
                 </FormCard>
             </FormSection>
         </PageContainer>

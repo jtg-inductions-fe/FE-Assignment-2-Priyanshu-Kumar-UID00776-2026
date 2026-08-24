@@ -24,7 +24,7 @@ export const NavbarContainer = styled(Box)(({ theme }) => ({
 export const LogoContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(1.5),
+    gap: theme.typography.pxToRem(6),
     cursor: 'pointer',
 }));
 
@@ -45,7 +45,7 @@ export const BrandName = styled(Typography)(({ theme }) => ({
 export const NavbarActions = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(2),
+    gap: theme.typography.pxToRem(8),
     [theme.breakpoints.down('sm')]: {
         display: 'none',
     },
@@ -56,7 +56,7 @@ export const NavIconButton = styled(IconButton)(({ theme }) => ({
     padding: theme.spacing(1, 1.5),
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(0.75),
+    gap: theme.typography.pxToRem(4),
     color: theme.palette.text.primary,
     transition: 'all 0.2s ease-in-out',
     '&:hover': {
@@ -76,15 +76,13 @@ export const LoginButton = styled(Button)(({ theme }) => ({
 }));
 
 export const ProfileIconButton = styled(IconButton)(({ theme }) => ({
-    padding: theme.spacing(0.5),
-    marginLeft: theme.spacing(1),
+    padding: theme.typography.pxToRem(2),
+    marginLeft: theme.typography.pxToRem(4),
 }));
 
 export const StyledAvatar = styled(Avatar)(({ theme }) => ({
     width: theme.typography.pxToRem(44),
     height: theme.typography.pxToRem(44),
-    fontSize: theme.typography.pxToRem(18),
-    fontWeight: 700,
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     cursor: 'pointer',
@@ -98,7 +96,7 @@ export const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
 export const StyledMenu = styled(Menu)(({ theme }) => ({
     '& .MuiPaper-root': {
-        marginTop: theme.spacing(1.5),
+        marginTop: theme.typography.pxToRem(6),
         borderRadius: '12px',
         minWidth: theme.typography.pxToRem(200),
         boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',

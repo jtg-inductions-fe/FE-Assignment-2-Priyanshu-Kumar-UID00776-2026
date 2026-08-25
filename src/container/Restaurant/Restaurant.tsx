@@ -28,12 +28,11 @@ import {
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
 import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
+import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
 import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
-import { useDebounce } from '@/hooks/useDebounce';
 import {
     AddRestaurantButton,
     ContentArea,
@@ -55,7 +54,8 @@ import {
     StyledCard,
     StyledCardContent,
     StyledDialogActions,
-} from '@/pages/Restuarant/Restaurant.styles';
+} from '@/container/Restaurant/Restaurant.styles';
+import { useDebounce } from '@/hooks/useDebounce';
 import {
     addRestaurant,
     deleteRestaurant,
@@ -631,7 +631,7 @@ export const Restaurant = () => {
                 </ContentArea>
             </MainContentLayout>
 
-            <BottomNavigationBar />
+            <BottomNavigationBarContainer />
 
             <Dialog
                 open={isModalOpen}

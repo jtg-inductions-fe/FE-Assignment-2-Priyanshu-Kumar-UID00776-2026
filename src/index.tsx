@@ -6,7 +6,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
-import { GlobalSnackbar } from '@/components/SnackBar/SnackBar';
+import { GlobalSnackbar } from '@/container/SnackBar/SnackBarContainer';
 import { AppRouter } from '@/routes/AppRouter';
 import { store } from '@/store/store';
 import { theme } from '@/theme';

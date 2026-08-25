@@ -17,11 +17,3 @@ export const NavigationBox = styled(BottomNavigation)(({ theme }) => ({
         width: '100%',
     },
 }));
-
-export const ProfileInfo = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    minWidth: theme.typography.pxToRem(200),
-    padding: theme.spacing(1, 2),
-    gap: theme.typography.pxToRem(2),
-}));

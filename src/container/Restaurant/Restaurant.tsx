@@ -27,11 +27,10 @@ import {
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
-import { Navbar } from '@/components/Navbar/Navbar';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
-import { useDebounce } from '@/hooks/useDebounce';
+import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
+import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import {
     AddRestaurantButton,
     ControlsWrapper,
@@ -49,7 +48,8 @@ import {
     StyledCard,
     StyledCardContent,
     StyledDialogActions,
-} from '@/pages/Restuarant/Restaurant.styles';
+} from '@/container/Restaurant/Restaurant.styles';
+import { useDebounce } from '@/hooks/useDebounce';
 import {
     addRestaurant,
     deleteRestaurant,
@@ -325,7 +325,7 @@ export const Restaurant = () => {
 
     return (
         <RestaurantContainer>
-            <Navbar />
+            <NavbarContainer />
 
             <RestaurantHeaderSection>
                 <HeaderButtonWrapper>
@@ -539,7 +539,7 @@ export const Restaurant = () => {
                 </RestaurantGrid>
             </ScrollableContent>
 
-            <BottomNavigationBar />
+            <BottomNavigationBarContainer />
 
             <Dialog
                 open={isModalOpen}

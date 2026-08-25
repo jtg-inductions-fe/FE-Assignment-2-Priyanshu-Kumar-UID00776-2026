@@ -3,19 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import {
-    AccessTime as AccessTimeIcon,
     Add as AddIcon,
-    Delete as DeleteIcon,
-    Edit as EditIcon,
     FilterList as FilterListIcon,
-    LocationOnOutlined as LocationIcon,
-    Star as StarIcon,
 } from '@mui/icons-material';
 import {
     Box,
     Button,
-    CardMedia,
-    Chip,
     Dialog,
     DialogContent,
     DialogTitle,
@@ -29,6 +22,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
+import { RestaurantCard } from '@/components/RestaurantCard/RestaurantCard';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
 import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
 import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
@@ -41,12 +35,7 @@ import {
     FilterButtonStack,
     FormStack,
     HeaderButtonWrapper,
-    ImageWrapper,
     MainContentLayout,
-    MetaItem,
-    OwnerActionButton,
-    OwnerActionStack,
-    RatingBadge,
     RestaurantContainer,
     RestaurantGrid,
     RestaurantHeaderSection,
@@ -346,13 +335,6 @@ export const Restaurant = () => {
         }
     };
 
-    // Convert diet enum codes into friendly display labels for badges
-    const formatDietType = (type: string) => {
-        if (type === 'NON_VEG') return 'Non-Veg';
-        if (type === 'VEG') return 'Pure Veg';
-        return 'Veg & Non-Veg';
-    };
-
     return (
         <RestaurantContainer>
             <NavbarContainer />
@@ -525,105 +507,13 @@ export const Restaurant = () => {
                                 </Box>
                             ) : (
                                 filteredRestaurants.map((restaurant) => (
-                                    <StyledCard key={restaurant.id}>
-                                        <ImageWrapper>
-                                            <CardMedia
-                                                component="img"
-                                                height="180"
-                                                image={restaurant.image}
-                                                alt={restaurant.name}
-                                            />
-                                            <RatingBadge variant="body2">
-                                                <StarIcon
-                                                    fontSize="inherit"
-                                                    color="warning"
-                                                />
-                                                {restaurant.rating}
-                                            </RatingBadge>
-                                        </ImageWrapper>
-
-                                        <StyledCardContent>
-                                            <Box>
-                                                <Stack
-                                                    direction="row"
-                                                    justifyContent="space-between"
-                                                    alignItems="center"
-                                                >
-                                                    <Typography
-                                                        variant="h3"
-                                                        fontWeight={700}
-                                                        noWrap
-                                                    >
-                                                        {restaurant.name}
-                                                    </Typography>
-                                                    <Chip
-                                                        label={`${formatDietType(restaurant.dietType)}`}
-                                                        variant="outlined"
-                                                        color={
-                                                            restaurant.dietType ===
-                                                            'VEG'
-                                                                ? 'success'
-                                                                : restaurant.dietType ===
-                                                                    'NON_VEG'
-                                                                  ? 'error'
-                                                                  : 'default'
-                                                        }
-                                                    />
-                                                </Stack>
-
-                                                <MetaItem variant="body2">
-                                                    <AccessTimeIcon fontSize="inherit" />
-                                                    <span>
-                                                        {restaurant.openingTime}
-                                                    </span>
-                                                </MetaItem>
-
-                                                <MetaItem variant="body2">
-                                                    <LocationIcon fontSize="inherit" />
-                                                    <span>
-                                                        {restaurant.location}
-                                                    </span>
-                                                </MetaItem>
-                                            </Box>
-
-                                            {isOwner && (
-                                                <OwnerActionStack
-                                                    direction="row"
-                                                    spacing={1.5}
-                                                >
-                                                    <OwnerActionButton
-                                                        variant="outlined"
-                                                        fullWidth
-                                                        startIcon={<EditIcon />}
-                                                        size="small"
-                                                        onClick={() =>
-                                                            handleOpenEditModal(
-                                                                restaurant,
-                                                            )
-                                                        }
-                                                    >
-                                                        Edit
-                                                    </OwnerActionButton>
-                                                    <OwnerActionButton
-                                                        variant="contained"
-                                                        color="error"
-                                                        fullWidth
-                                                        startIcon={
-                                                            <DeleteIcon />
-                                                        }
-                                                        size="small"
-                                                        onClick={() =>
-                                                            setDeleteTargetId(
-                                                                restaurant.id,
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </OwnerActionButton>
-                                                </OwnerActionStack>
-                                            )}
-                                        </StyledCardContent>
-                                    </StyledCard>
+                                    <RestaurantCard
+                                        key={restaurant.id}
+                                        restaurant={restaurant}
+                                        isOwner={isOwner}
+                                        onEdit={handleOpenEditModal}
+                                        onDelete={setDeleteTargetId}
+                                    />
                                 ))
                             )}
                         </RestaurantGrid>

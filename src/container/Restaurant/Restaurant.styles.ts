@@ -5,7 +5,6 @@ import {
     CardContent,
     DialogActions,
     Stack,
-    Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -109,23 +108,6 @@ export const HeaderButtonWrapper = styled(Box)({
     justifyContent: 'space-between',
 });
 
-export const ImageWrapper = styled(Box)({
-    position: 'relative',
-});
-
-export const RatingBadge = styled(Typography)(({ theme }) => ({
-    position: 'absolute',
-    top: theme.typography.pxToRem(12),
-    right: theme.typography.pxToRem(12),
-    backgroundColor: theme.palette.secondary.main,
-    padding: theme.spacing(1, 2.4),
-    borderRadius: '20px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: theme.typography.pxToRem(4),
-}));
-
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     padding: theme.typography.pxToRem(20),
     flex: 1,
@@ -133,22 +115,6 @@ export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
 }));
-
-export const MetaItem = styled(Typography)(({ theme }) => ({
-    display: 'flex',
-    color: theme.palette.secondary.dark,
-    alignItems: 'center',
-    gap: theme.typography.pxToRem(4),
-    marginTop: theme.typography.pxToRem(5),
-}));
-
-export const OwnerActionStack = styled(Stack)(({ theme }) => ({
-    marginTop: theme.typography.pxToRem(8),
-}));
-
-export const OwnerActionButton = styled(Button)({
-    textTransform: 'none',
-});
 
 export const FormStack = styled('form')(({ theme }) => ({
     marginTop: theme.typography.pxToRem(4),

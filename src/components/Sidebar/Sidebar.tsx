@@ -1,87 +1,77 @@
-import StarIcon from '@mui/icons-material/Star';
-import { RadioGroup, Typography } from '@mui/material';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 import {
+    CloseDrawerIconButton,
+    DrawerContentContainer,
+    DrawerHeader,
     FilterItemLabel,
-    FilterSection,
-    FilterTitle,
-    RatingLabelStack,
-    SidebarContainer,
+    MobileDragHandle,
     StyledCheckbox,
-    StyledRadio,
+    StyledDrawer,
 } from '@/components/Sidebar/Sidebar.styles';
-
-export type TimeSlot = 'ALL' | 'MORNING' | 'AFTERNOON' | 'EVENING';
-
-export type RestaurantSidebarProps = {
-    selectedRatings: number[];
-    onRatingToggle: (rating: number) => void;
-    selectedTimeSlot: TimeSlot;
-    onTimeSlotChange: (timeSlot: TimeSlot) => void;
-};
-
-const RATING_OPTIONS = [5.0, 4.0, 3.0, 2.0, 1.0];
-
-const TIME_SLOT_OPTIONS: { label: string; value: TimeSlot }[] = [
-    { label: 'All Day', value: 'ALL' },
-    { label: 'Morning (Before 12 PM)', value: 'MORNING' },
-    { label: 'Afternoon (12 PM - 4 PM)', value: 'AFTERNOON' },
-    { label: 'Evening (After 4 PM)', value: 'EVENING' },
-];
+import { RATING_OPTIONS } from '@/constant/ratingConstants';
+import { RestaurantSidebarProps } from '@/types/sidebarFilter.types';
 
 export const RestaurantSidebar = ({
+    open,
+    onClose,
     selectedRatings,
     onRatingToggle,
-    selectedTimeSlot,
-    onTimeSlotChange,
-}: RestaurantSidebarProps) => (
-    <SidebarContainer>
-        <Typography variant="h6">Filters</Typography>
+}: RestaurantSidebarProps) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-        <FilterSection>
-            <FilterTitle variant="subtitle2">Rating</FilterTitle>
-            {RATING_OPTIONS.map((rating) => (
-                <FilterItemLabel
-                    key={rating}
-                    control={
-                        <StyledCheckbox
-                            checked={selectedRatings.includes(rating)}
-                            onChange={() => onRatingToggle(rating)}
-                        />
-                    }
-                    label={
-                        <RatingLabelStack>
-                            <Typography variant="body2">
-                                {rating.toFixed(1)} & above
-                            </Typography>
-                            <StarIcon fontSize="small" color="warning" />
-                        </RatingLabelStack>
-                    }
-                    labelPlacement="start"
-                />
-            ))}
-        </FilterSection>
+    return (
+        <StyledDrawer
+            variant="temporary"
+            anchor={isMobile ? 'bottom' : 'left'}
+            open={open}
+            onClose={onClose}
+        >
+            <DrawerContentContainer>
+                <MobileDragHandle />
 
-        <FilterSection>
-            <FilterTitle variant="subtitle2">Opening Hours</FilterTitle>
-            <RadioGroup
-                value={selectedTimeSlot}
-                onChange={(e) => onTimeSlotChange(e.target.value as TimeSlot)}
-            >
-                {TIME_SLOT_OPTIONS.map((slot) => (
-                    <FilterItemLabel
-                        key={slot.value}
-                        value={slot.value}
-                        control={<StyledRadio />}
-                        label={
-                            <Typography variant="body2">
-                                {slot.label}
-                            </Typography>
-                        }
-                        labelPlacement="start"
-                    />
-                ))}
-            </RadioGroup>
-        </FilterSection>
-    </SidebarContainer>
-);
+                <DrawerHeader>
+                    <Typography variant="h5">Filters</Typography>
+
+                    <CloseDrawerIconButton size="small" onClick={onClose}>
+                        <CloseRoundedIcon fontSize="small" />
+                    </CloseDrawerIconButton>
+                </DrawerHeader>
+
+                <Stack gap="4px">
+                    <Typography
+                        color={theme.palette.secondary.dark}
+                        variant="h6"
+                    >
+                        Customer Rating
+                    </Typography>
+                    {RATING_OPTIONS.map((rating) => {
+                        const isSelected = selectedRatings.includes(rating);
+                        return (
+                            <FilterItemLabel
+                                key={rating}
+                                isSelected={isSelected}
+                                control={
+                                    <StyledCheckbox
+                                        checked={isSelected}
+                                        onChange={() => onRatingToggle(rating)}
+                                    />
+                                }
+                                label={
+                                    <Stack direction="row" gap="4px">
+                                        <Typography variant="body2">
+                                            {rating.toFixed(1)} & above
+                                        </Typography>
+                                    </Stack>
+                                }
+                                labelPlacement="start"
+                            />
+                        );
+                    })}
+                </Stack>
+            </DrawerContentContainer>
+        </StyledDrawer>
+    );
+};

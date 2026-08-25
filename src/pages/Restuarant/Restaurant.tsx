@@ -7,6 +7,7 @@ import {
     Add as AddIcon,
     Delete as DeleteIcon,
     Edit as EditIcon,
+    FilterList as FilterListIcon,
     LocationOnOutlined as LocationIcon,
     Star as StarIcon,
 } from '@mui/icons-material';
@@ -24,18 +25,23 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
-import { RestaurantSidebar, TimeSlot } from '@/components/Sidebar/Sidebar';
+import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
     AddRestaurantButton,
     ContentArea,
     ControlsWrapper,
+    FilterButton,
+    FilterButtonStack,
     FormStack,
+    HeaderButtonWrapper,
     ImageWrapper,
     MainContentLayout,
     MetaItem,
@@ -72,12 +78,15 @@ import {
 
 export const Restaurant = () => {
     const dispatch = useAppDispatch();
+    const theme = useTheme();
     const user = useAppSelector((state) => state.auth.user);
     const isOwner = user?.role === 'RESTAURANT OWNER';
     const allRestaurants = useAppSelector(
         (state) => state.restaurant.restaurants,
     );
 
+    const isMobile = Boolean(useMediaQuery(theme.breakpoints.down('sm')));
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
@@ -85,7 +94,6 @@ export const Restaurant = () => {
     const [editingRestaurant, setEditingRestaurant] =
         useState<RestaurantItemTypes | null>(null);
     const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-    const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot>('ALL');
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -148,27 +156,6 @@ export const Restaurant = () => {
         );
     };
 
-    const matchesTimeSlot = (openingTime: string, slot: TimeSlot): boolean => {
-        if (slot === 'ALL') return true;
-        const openHour = parseOpeningHour(openingTime);
-
-        if (slot === 'MORNING') return openHour < 12;
-        if (slot === 'AFTERNOON') return openHour >= 12 && openHour < 16;
-        if (slot === 'EVENING') return openHour >= 16;
-        return true;
-    };
-
-    const parseOpeningHour = (timeString: string): number => {
-        const startPart = timeString.split('-')[0].trim().toUpperCase();
-        const isPM = startPart.includes('PM');
-        const isAM = startPart.includes('AM');
-        const hour = parseInt(startPart.replace(/[^0-9]/g, ''), 10) || 0;
-
-        if (isPM && hour < 12) return hour + 12;
-        if (isAM && hour === 12) return 0;
-        return hour;
-    };
-
     // Filter restaurants by owner permissions, search keywords, and veg/non-veg tags
     const filteredRestaurants = useMemo(
         () =>
@@ -212,12 +199,6 @@ export const Restaurant = () => {
                     if (!meetsAnyRating) return false;
                 }
 
-                if (
-                    !matchesTimeSlot(restaurant.openingTime, selectedTimeSlot)
-                ) {
-                    return false;
-                }
-
                 // Include the restaurant if it passed all checks
                 return true;
             }),
@@ -228,8 +209,6 @@ export const Restaurant = () => {
             debouncedValue,
             dietFilter,
             selectedRatings,
-            selectedTimeSlot,
-            matchesTimeSlot,
         ],
     );
 
@@ -380,16 +359,54 @@ export const Restaurant = () => {
 
             <MainContentLayout>
                 <RestaurantSidebar
+                    open={isDrawerOpen}
+                    onClose={() => setIsDrawerOpen(false)}
                     selectedRatings={selectedRatings}
                     onRatingToggle={handleRatingToggle}
-                    selectedTimeSlot={selectedTimeSlot}
-                    onTimeSlotChange={setSelectedTimeSlot}
                 />
                 <ContentArea>
                     <RestaurantHeaderSection>
-                        <Typography variant="h1" fontWeight={700}>
-                            {isOwner ? 'My Restaurants' : 'Restaurants'}
-                        </Typography>
+                        <HeaderButtonWrapper>
+                            <Typography variant="h1">
+                                {isOwner ? 'My Restaurants' : 'Restaurants'}
+                            </Typography>
+                            {!isMobile && (
+                                <Stack
+                                    direction="row"
+                                    spacing={1.5}
+                                    alignItems="center"
+                                >
+                                    {isOwner ? (
+                                        <AddRestaurantButton
+                                            variant="contained"
+                                            color="primary"
+                                            startIcon={<AddIcon />}
+                                            onClick={handleOpenAddModal}
+                                        >
+                                            Add Restaurant
+                                        </AddRestaurantButton>
+                                    ) : (
+                                        <>
+                                            <FoodVariantToggle
+                                                foodVariant={dietFilter}
+                                                onFilterChange={setDietFilter}
+                                            />
+                                            <FilterButton
+                                                variant="outlined"
+                                                startIcon={<FilterListIcon />}
+                                                onClick={() =>
+                                                    setIsDrawerOpen(
+                                                        (prev) => !prev,
+                                                    )
+                                                }
+                                            >
+                                                Filters
+                                            </FilterButton>
+                                        </>
+                                    )}
+                                </Stack>
+                            )}
+                        </HeaderButtonWrapper>
 
                         <Typography variant="body1" color="text.secondary">
                             {isOwner
@@ -408,20 +425,41 @@ export const Restaurant = () => {
                                 }
                             />
 
-                            {isOwner ? (
-                                <AddRestaurantButton
-                                    variant="contained"
-                                    color="primary"
-                                    startIcon={<AddIcon />}
-                                    onClick={handleOpenAddModal}
+                            {isMobile && (
+                                <Stack
+                                    direction="row"
+                                    spacing={1.5}
+                                    alignItems="center"
+                                    sx={{ width: '100%' }}
                                 >
-                                    Add Restaurant
-                                </AddRestaurantButton>
-                            ) : (
-                                <FoodVariantToggle
-                                    foodVariant={dietFilter}
-                                    onFilterChange={setDietFilter}
-                                />
+                                    {isOwner ? (
+                                        <AddRestaurantButton
+                                            variant="contained"
+                                            color="primary"
+                                            fullWidth
+                                            startIcon={<AddIcon />}
+                                            onClick={handleOpenAddModal}
+                                        >
+                                            Add Restaurant
+                                        </AddRestaurantButton>
+                                    ) : (
+                                        <FilterButtonStack>
+                                            <FoodVariantToggle
+                                                foodVariant={dietFilter}
+                                                onFilterChange={setDietFilter}
+                                            />
+                                            <FilterButton
+                                                variant="outlined"
+                                                startIcon={<FilterListIcon />}
+                                                onClick={() =>
+                                                    setIsDrawerOpen(true)
+                                                }
+                                            >
+                                                Filters
+                                            </FilterButton>
+                                        </FilterButtonStack>
+                                    )}
+                                </Stack>
                             )}
                         </ControlsWrapper>
                     </RestaurantHeaderSection>

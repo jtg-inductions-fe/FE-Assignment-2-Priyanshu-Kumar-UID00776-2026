@@ -52,7 +52,7 @@ const typographyStyle = (theme: Theme): TypographyOptions => ({
         fontWeight: 600,
         lineHeight: typographyUtil.pxToRem(30),
         [theme.breakpoints.up('md')]: {
-            fontSize: typographyUtil.pxToRem(30),
+            fontSize: typographyUtil.pxToRem(25),
             lineHeight: typographyUtil.pxToRem(40),
         },
     },

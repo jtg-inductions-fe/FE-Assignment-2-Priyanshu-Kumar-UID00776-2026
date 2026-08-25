@@ -14,22 +14,22 @@ export const NotFoundContainer = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
     height: '100%',
     textAlign: 'center',
-    padding: theme.spacing(4),
+    padding: theme.typography.pxToRem(16),
 }));
 
 export const ErrorCode = styled(Typography)(({ theme }) => ({
     color: theme.palette.primary.main,
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.typography.pxToRem(4),
 }));
 
 export const MessageTitle = styled(Typography)(({ theme }) => ({
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.typography.pxToRem(8),
     color: theme.palette.text.primary,
 }));
 
 export const MessageSub = styled(Typography)(({ theme }) => ({
     color: theme.palette.text.secondary,
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.typography.pxToRem(16),
     maxWidth: theme.typography.pxToRem(480),
 }));
 

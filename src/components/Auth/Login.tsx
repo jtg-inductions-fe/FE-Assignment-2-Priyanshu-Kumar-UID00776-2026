@@ -5,11 +5,16 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { IconButton, InputAdornment, Link, TextField } from '@mui/material';
+import {
+    IconButton,
+    InputAdornment,
+    Link,
+    TextField,
+    Typography,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import {
-    BrandTitle,
-    FooterText,
     FormCard,
     FormSection,
     HeaderBox,
@@ -17,8 +22,6 @@ import {
     PageContainer,
     SubmitButton,
     SubmitPaperWrapper,
-    SubtitleText,
-    TitleText,
 } from '@/components/Auth/Auth.styles';
 import { EMAIL_VALIDATION_REGEX } from '@/constant';
 import { login } from '@/services/auth.service';
@@ -30,6 +33,7 @@ import { LoginFormData } from '@/types/auth.types';
 export const Login = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -106,17 +110,25 @@ export const Login = () => {
                     }}
                 >
                     <HeaderBox>
-                        <BrandTitle variant="h2" color="">
+                        <Typography
+                            variant="h2"
+                            color={theme.palette.primary.main}
+                            textAlign="center"
+                        >
                             Khana Peena
-                        </BrandTitle>
+                        </Typography>
 
-                        <TitleText variant="h1">
+                        <Typography variant="h1" textAlign="center">
                             Sign in to your account
-                        </TitleText>
+                        </Typography>
 
-                        <SubtitleText variant="body1">
+                        <Typography
+                            variant="body1"
+                            color={theme.palette.primary.main}
+                            textAlign="center"
+                        >
                             Enter your details to proceed
-                        </SubtitleText>
+                        </Typography>
                     </HeaderBox>
 
                     <Controller
@@ -197,7 +209,7 @@ export const Login = () => {
                         </SubmitButton>
                     </SubmitPaperWrapper>
 
-                    <FooterText variant="body1">
+                    <Typography textAlign="center" variant="body1">
                         Don&apos;t have an account?&nbsp;
                         <Link
                             component={RouterLink}
@@ -206,7 +218,7 @@ export const Login = () => {
                         >
                             Sign Up
                         </Link>
-                    </FooterText>
+                    </Typography>
                 </FormCard>
             </FormSection>
         </PageContainer>

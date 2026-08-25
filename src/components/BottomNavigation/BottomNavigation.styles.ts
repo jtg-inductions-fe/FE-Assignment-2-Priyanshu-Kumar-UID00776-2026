@@ -23,5 +23,5 @@ export const ProfileInfo = styled(Box)(({ theme }) => ({
     flexDirection: 'column',
     minWidth: theme.typography.pxToRem(200),
     padding: theme.spacing(1, 2),
-    gap: theme.spacing(0.5),
+    gap: theme.typography.pxToRem(2),
 }));

@@ -30,9 +30,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
-import { Navbar } from '@/components/Navbar/Navbar';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
 import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
+import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
     AddRestaurantButton,
@@ -355,7 +355,7 @@ export const Restaurant = () => {
 
     return (
         <RestaurantContainer>
-            <Navbar />
+            <NavbarContainer />
 
             <MainContentLayout>
                 <RestaurantSidebar

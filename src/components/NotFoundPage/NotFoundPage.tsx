@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Navbar } from '@/components/Navbar/Navbar';
 import {
     AccountButton,
     ErrorCode,
@@ -9,13 +8,14 @@ import {
     MessageTitle,
     NotFoundContainer,
 } from '@/components/NotFoundPage/NotFoundPage.styles';
+import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 
 export const NotFoundPage = () => {
     const navigate = useNavigate();
 
     return (
         <ErrorPageContainer>
-            <Navbar />
+            <NavbarContainer />
             <NotFoundContainer>
                 <ErrorCode variant="h1">404</ErrorCode>
                 <MessageTitle variant="h4">Page Not Found</MessageTitle>

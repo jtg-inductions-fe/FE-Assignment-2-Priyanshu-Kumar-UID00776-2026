@@ -32,7 +32,7 @@ export const restaurantSlice = createSlice({
         ) => {
             // Locate the item index in our state array
             const index = state.restaurants.findIndex(
-                (r) => r.id === action.payload.id,
+                (restaurant) => restaurant.id === action.payload.id,
             );
             // If found overwrite it with the updated restaurant object
             if (index !== -1) {
@@ -42,7 +42,7 @@ export const restaurantSlice = createSlice({
         // Remove a restaurant from the list using its unique ID
         deleteRestaurantSuccess: (state, action: PayloadAction<string>) => {
             state.restaurants = state.restaurants.filter(
-                (r) => r.id !== action.payload,
+                (restaurant) => restaurant.id !== action.payload,
             );
         },
     },

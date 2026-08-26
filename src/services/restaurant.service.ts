@@ -1,3 +1,4 @@
+import CardImage from '@/assets/images/pizza.avif';
 import {
     RestaurantFormData,
     RestaurantItemTypes,
@@ -39,9 +40,9 @@ export const addRestaurant = async (
     // Build the new restaurant object with unique ID, image, and owner email
     const newRestaurant: RestaurantItemTypes = {
         ...data,
-        id: `rest_${Date.now()}`,
+        id: `rest_${crypto.randomUUID()}`,
         ownerId: ownerEmail.toLowerCase(),
-        image: '../../src/assets/images/pizza.avif',
+        image: CardImage,
         menus: [],
     };
 

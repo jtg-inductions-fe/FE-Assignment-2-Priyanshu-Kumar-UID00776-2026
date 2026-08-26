@@ -58,7 +58,7 @@ export const RestaurantCard = ({
                         </Typography>
                         <Chip
                             label={`${formatDietType(restaurant.dietType)}`}
-                            variant="outlined"
+                            variant="filled"
                             color={
                                 restaurant.dietType === 'VEG'
                                     ? 'success'

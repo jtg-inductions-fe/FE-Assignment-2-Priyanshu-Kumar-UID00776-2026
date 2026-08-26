@@ -8,6 +8,7 @@ import {
     MessageTitle,
     NotFoundContainer,
 } from '@/components/NotFoundPage/NotFoundPage.styles';
+import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
 import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 
 export const NotFoundPage = () => {
@@ -33,6 +34,7 @@ export const NotFoundPage = () => {
                     Create Account
                 </AccountButton>
             </NotFoundContainer>
+            <BottomNavigationBarContainer />
         </ErrorPageContainer>
     );
 };

@@ -1,10 +1,19 @@
 {
     "compilerOptions": {
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "paths": {
-            "@assets/*": ["assets/*"],
-            "@constant": ["constant/index"],
-            "@theme": ["theme/index"]
+            "@/*": ["./src/*"],
+            "@assets/*": ["./src/assets/*"],
+            "@components/*": ["./src/components/*"],
+            "@constant/*": ["./src/constant/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@pages/*": ["./src/pages / Restuarant/*"],
+            "@routes/*": ["./src/routes/*"],
+            "@services/*": ["./src/services/*"],
+            "@slices/*": ["./src/slices/*"],
+            "@store/*": ["./src/store/*"],
+            "@theme/*": ["./src/theme/*"],
+            "@types/*": ["./src/types/*"]
         }
     }
 }

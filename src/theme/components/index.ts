@@ -13,12 +13,44 @@ export const components: Components = {
                 font-style: normal;
                 font-weight: 500;
                 src: url(${InterRegularWOFF2}) format('woff2'), 
-                url(${InterRegularTTF}) format('truetype');
+                     url(${InterRegularTTF}) format('truetype');
+            }
+
+            html {
+                font-size: 62.5%;
+                font-family: 'Inter', sans-serif;
+            }
+        `,
+    },
+    MuiInputLabel: {
+        styleOverrides: {
+            root: {
+                '&.MuiInputLabel-root': {
+                    fontSize: '1.4rem',
+                },
+                '&.MuiInputLabel-shrink': {
+                    fontSize: '1.2rem',
+                },
             },
-            html: {
-                fontSize: '62.5%',
-                font-family: Inter, sans-serif,
+        },
+    },
+    MuiOutlinedInput: {
+        styleOverrides: {
+            root: {
+                fontSize: '1.4rem',
             },
-            `,
+            input: {
+                fontSize: '1.4rem',
+            },
+        },
+    },
+    MuiFormHelperText: {
+        styleOverrides: {
+            root: {
+                '&.MuiFormHelperText-root': {
+                    fontSize: '1.2rem',
+                },
+            },
+        },
     },
 };

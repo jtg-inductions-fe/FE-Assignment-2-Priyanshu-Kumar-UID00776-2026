@@ -60,7 +60,7 @@ import {
     setRestaurants,
 } from '@/slices/restaurantSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { FoodVariant } from '@/types/fIlterToggleButton.types';
+import { FoodVariant } from '@/types/filterToggleButton.types';
 import {
     RestaurantFormData,
     RestaurantItemTypes,
@@ -87,6 +87,14 @@ export const Restaurant = () => {
     const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const EMPTY_RESTAURANT_FORM: RestaurantFormData = {
+        name: '',
+        location: '',
+        dietType: 'BOTH',
+        rating: 4.5,
+        deliveryTime: '',
+        openingTime: '',
+    };
 
     const {
         control,
@@ -94,14 +102,7 @@ export const Restaurant = () => {
         reset,
         formState: { errors, isSubmitting },
     } = useForm<RestaurantFormData>({
-        defaultValues: {
-            name: '',
-            location: '',
-            dietType: 'BOTH',
-            rating: 4.5,
-            deliveryTime: '',
-            openingTime: '',
-        },
+        defaultValues: EMPTY_RESTAURANT_FORM,
         mode: 'onTouched',
     });
 
@@ -206,14 +207,7 @@ export const Restaurant = () => {
     // Open the creation dialog with clean default form fields
     const handleOpenAddModal = () => {
         setEditingRestaurant(null);
-        reset({
-            name: '',
-            location: '',
-            dietType: 'BOTH',
-            rating: 4.5,
-            deliveryTime: '',
-            openingTime: '',
-        });
+        reset(EMPTY_RESTAURANT_FORM);
         setIsModalOpen(true);
     };
 
@@ -633,10 +627,12 @@ export const Restaurant = () => {
                                         label="Rating (1 - 5)"
                                         variant="outlined"
                                         fullWidth
-                                        inputProps={{
-                                            step: '0.1',
-                                            min: 1,
-                                            max: 5,
+                                        slotProps={{
+                                            htmlInput: {
+                                                step: '0.1',
+                                                min: 1,
+                                                max: 5,
+                                            },
                                         }}
                                         error={!!errors.rating}
                                         helperText={errors.rating?.message}

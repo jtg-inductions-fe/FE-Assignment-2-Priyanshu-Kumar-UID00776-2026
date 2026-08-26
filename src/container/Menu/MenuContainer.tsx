@@ -4,9 +4,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import {
+    AccessTime as Clock,
     Add as AddIcon,
     ArrowBack as ArrowBackIcon,
     FilterList as FilterListIcon,
+    Place as Location,
 } from '@mui/icons-material';
 import {
     Box,
@@ -45,7 +47,17 @@ import {
     StyledDialogActions,
 } from '@/container/Restaurant/Restaurant.styles';
 import { useDebounce } from '@/hooks/useDebounce';
+import {
+    addMenuItem,
+    deleteMenuItem,
+    editMenuItem,
+} from '@/services/restaurant.service';
 import { showNotification } from '@/slices/notificationSlice';
+import {
+    addMenuItemSuccess,
+    deleteMenuItemSuccess,
+    editMenuItemSuccess,
+} from '@/slices/restaurantSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { FoodVariant } from '@/types/filterToggleButton.types';
 import type { MenuFormData, MenuItem } from '@/types/restaurant.types';
@@ -60,11 +72,14 @@ export const MenuContainer = () => {
     const isOwner = user?.role === 'RESTAURANT OWNER';
 
     const selectedRestaurant = useAppSelector((state) =>
-        state.restaurant.restaurants.find((r) => r.id === restaurantId),
+        state.restaurant.restaurants.find(
+            (restaurant) => restaurant.id === restaurantId,
+        ),
     );
 
     const isMobile = Boolean(useMediaQuery(theme.breakpoints.down('sm')));
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
     const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
@@ -86,14 +101,24 @@ export const MenuContainer = () => {
             name: '',
             description: '',
             price: 0,
+            rating: 0,
+            stock: 0,
             dietType: 'VEG',
             category: '',
         },
         mode: 'onTouched',
     });
 
+    // Debounce search input to prevent unnecessary re-renders on every keystroke
     const debouncedSearch = useDebounce<string>(searchTerm);
 
+    // Calculate total number of items currently in the cart
+    const totalCartCount = useMemo(
+        () => Object.values(cartQuantities).reduce((acc, qty) => acc + qty, 0),
+        [cartQuantities],
+    );
+
+    // Toggle star rating filters in the sidebar
     const handleRatingToggle = (rating: number) => {
         setSelectedRatings((prev) =>
             prev.includes(rating)
@@ -102,15 +127,20 @@ export const MenuContainer = () => {
         );
     };
 
+    // Filter menu items by search query, diet type, and minimum rating
     const filteredMenuItems = useMemo(() => {
+        // Return an empty list if the restaurant has no menus
         if (!selectedRestaurant?.menus) return [];
 
         return selectedRestaurant.menus.filter((item: MenuItem) => {
+            // Check if the item name includes the searched text
             const matchesSearch = item.name
                 .toLowerCase()
                 .includes(debouncedSearch.toLowerCase());
+            // Return fasle if it doesn't match the search term
             if (!matchesSearch) return false;
 
+            // Apply veg, non-veg filter if one is selected
             if (dietFilter !== 'ALL') {
                 if (dietFilter === 'VEG' && item.dietType !== 'VEG')
                     return false;
@@ -118,6 +148,7 @@ export const MenuContainer = () => {
                     return false;
             }
 
+            // Check if the item matches any of the active rating filters
             if (selectedRatings.length > 0 && item.rating) {
                 const passes = selectedRatings.some((r) => item.rating >= r);
                 if (!passes) return false;
@@ -132,20 +163,30 @@ export const MenuContainer = () => {
         selectedRatings,
     ]);
 
+    // Add first unit of an item to the cart if it has stock available
     const handleAddToCart = (item: MenuItem) => {
-        setCartQuantities((prev) => ({ ...prev, [item.id]: 1 }));
+        if ((item.stock ?? 0) > 0) {
+            setCartQuantities((prev) => ({ ...prev, [item.id]: 1 }));
+        }
     };
 
+    // Increment item count in cart without exceeding available stock
     const handleIncrement = (item: MenuItem) => {
-        setCartQuantities((prev) => ({
-            ...prev,
-            [item.id]: (prev[item.id] || 0) + 1,
-        }));
+        setCartQuantities((prev) => {
+            const current = prev[item.id] || 0;
+            // Only increment if we have enough stock left
+            if (current < item.stock) {
+                return { ...prev, [item.id]: current + 1 };
+            }
+            return prev;
+        });
     };
 
+    // Decrement item quantity or remove it entirely from cart if it reaches 0
     const handleDecrement = (item: MenuItem) => {
         setCartQuantities((prev) => {
             const next = { ...prev };
+            // Decrease quantity if more than 1 item is in cart
             if (next[item.id] > 1) {
                 next[item.id] -= 1;
             } else {
@@ -155,31 +196,39 @@ export const MenuContainer = () => {
         });
     };
 
+    // Open the modal with empty fields to add a brand new menu item
     const handleOpenAddModal = () => {
         setEditingItem(null);
         reset({
             name: '',
             description: '',
             price: 0,
+            stock: 0,
+            rating: 0,
             dietType: 'VEG',
             category: '',
         });
         setIsModalOpen(true);
     };
 
+    // Open the modal pre-filled with an existing item's data to edit it
     const handleOpenEditModal = (item: MenuItem) => {
         setEditingItem(item);
         reset({
             name: item.name,
             description: item.description,
             price: item.price,
+            stock: item.stock || 0,
+            rating: item.rating || 0,
             dietType: item.dietType,
         });
         setIsModalOpen(true);
     };
 
-    const onFormSubmit = () => {
-        if (!user?.email) {
+    // Save added or edited menu item data to the restaurant store
+    const onFormSubmit = async (data: MenuFormData) => {
+        // Return error if user is not authenticated or restaurant ID is missing
+        if (!user?.email || !restaurantId) {
             dispatch(
                 showNotification({
                     message: 'You must be logged in as an owner.',
@@ -188,23 +237,108 @@ export const MenuContainer = () => {
             );
             return;
         }
+        // Attempt to create or update the menu item
         try {
-            dispatch(
-                showNotification({
-                    message: editingItem
-                        ? 'Menu item updated!'
-                        : 'Menu item added!',
-                    severity: 'success',
-                }),
-            );
+            // Update the existing item if edit mode is active
+            if (editingItem) {
+                const updated = await editMenuItem(
+                    restaurantId,
+                    editingItem.id,
+                    data,
+                    user.email,
+                );
+
+                dispatch(editMenuItemSuccess(updated));
+
+                dispatch(
+                    showNotification({
+                        message: 'Menu item updated',
+                        severity: 'success',
+                    }),
+                );
+            }
+            // Otherwise create and append a new menu item
+            else {
+                const created = await addMenuItem(
+                    restaurantId,
+                    data,
+                    user.email,
+                );
+
+                dispatch(addMenuItemSuccess(created));
+
+                dispatch(
+                    showNotification({
+                        message: 'Menu item added',
+                        severity: 'success',
+                    }),
+                );
+            }
+            // Close the modal dialog upon successful save
             setIsModalOpen(false);
-        } catch {
+        } catch (error: unknown) {
+            // Handle edit or add failures
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'An error occurred while saving.';
+            // Show a error banner if saving fails
             dispatch(
                 showNotification({
-                    message: 'Operation failed',
+                    message,
                     severity: 'error',
                 }),
             );
+        }
+    };
+
+    // Delete a menu item by ID from the restaurant
+    const handleDelete = async (id: string) => {
+        // Verify user authentication before allowing deletion
+        if (!user?.email || !restaurantId) {
+            dispatch(
+                showNotification({
+                    message: 'Authentication required',
+                    severity: 'error',
+                }),
+            );
+            return;
+        }
+
+        // Execute menu item deletion request
+        try {
+            setIsDeleting(true);
+            await deleteMenuItem(restaurantId, id, user.email);
+
+            dispatch(
+                deleteMenuItemSuccess({
+                    restaurantId: restaurantId,
+                    menuId: id,
+                }),
+            );
+
+            dispatch(
+                showNotification({
+                    message: 'Menu item deleted succesfully',
+                    severity: 'success',
+                }),
+            );
+            setDeleteTargetId(null);
+        } catch (error: unknown) {
+            // Show error alert if deletion fails
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'Failed to delete menu item';
+            dispatch(
+                showNotification({
+                    message,
+                    severity: 'error',
+                }),
+            );
+        } finally {
+            // Reset deleting loading state regardless of outcome
+            setIsDeleting(false);
         }
     };
 
@@ -230,7 +364,7 @@ export const MenuContainer = () => {
 
     return (
         <RestaurantContainer>
-            <NavbarContainer />
+            <NavbarContainer cartCount={totalCartCount} />
 
             <MainContentLayout>
                 <RestaurantSidebar
@@ -253,11 +387,10 @@ export const MenuContainer = () => {
                                 >
                                     <ArrowBackIcon />
                                 </IconButton>
-                                <Box>
-                                    <Typography variant="h1">
-                                        {selectedRestaurant.name} - Menu
-                                    </Typography>
-                                </Box>
+
+                                <Typography variant="h1">
+                                    {selectedRestaurant.name}
+                                </Typography>
                             </Stack>
 
                             {!isMobile && (
@@ -297,11 +430,22 @@ export const MenuContainer = () => {
                                 </Stack>
                             )}
                         </HeaderButtonWrapper>
-
-                        <Typography variant="body1" color="text.secondary">
-                            {selectedRestaurant.location} •{' '}
-                            {selectedRestaurant.deliveryTime}
-                        </Typography>
+                        {user?.role === 'USER' && (
+                            <>
+                                <Stack direction="row" spacing={1}>
+                                    <Clock color="primary" />
+                                    <Typography variant="body1">
+                                        {selectedRestaurant.location}
+                                    </Typography>
+                                </Stack>
+                                <Stack direction="row" spacing={1}>
+                                    <Location color="primary" />
+                                    <Typography variant="body1">
+                                        {selectedRestaurant.deliveryTime}
+                                    </Typography>
+                                </Stack>
+                            </>
+                        )}
 
                         <ControlsWrapper>
                             <RestaurantSearch
@@ -352,8 +496,10 @@ export const MenuContainer = () => {
                     <ScrollableContent>
                         <RestaurantGrid
                             sx={{
-                                gridTemplateColumns:
-                                    'repeat(auto-fill, minmax(360px, 1fr))',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 2,
+                                width: '100%',
                             }}
                         >
                             {filteredMenuItems.length === 0 ? (
@@ -389,7 +535,7 @@ export const MenuContainer = () => {
                 </ContentArea>
             </MainContentLayout>
 
-            <BottomNavigationBarContainer />
+            <BottomNavigationBarContainer cartCount={totalCartCount} />
 
             {/* Add / Edit Menu Item Dialog */}
             <Dialog
@@ -442,14 +588,61 @@ export const MenuContainer = () => {
                                     <TextField
                                         {...field}
                                         type="number"
-                                        label="Price ($)"
+                                        label="Price (₹)"
                                         fullWidth
-                                        inputProps={{ step: '0.01' }}
                                         error={!!errors.price}
                                         helperText={errors.price?.message}
                                         onChange={(e) =>
                                             field.onChange(
-                                                parseFloat(e.target.value) || 0,
+                                                parseFloat(e.target.value),
+                                            )
+                                        }
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="stock"
+                                control={control}
+                                rules={{
+                                    required: 'Stock is required',
+                                    min: 0,
+                                }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        type="number"
+                                        label="Stock Quantity"
+                                        fullWidth
+                                        error={!!errors.stock}
+                                        helperText={errors.stock?.message}
+                                        onChange={(e) =>
+                                            field.onChange(
+                                                parseInt(e.target.value, 10),
+                                            )
+                                        }
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="rating"
+                                control={control}
+                                rules={{ min: 0, max: 5 }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        type="number"
+                                        slotProps={{
+                                            htmlInput: {
+                                                step: 0.1,
+                                                min: 0,
+                                                max: 5,
+                                            },
+                                        }}
+                                        label="Rating (0.0 - 5.0)"
+                                        fullWidth
+                                        onChange={(e) =>
+                                            field.onChange(
+                                                parseFloat(e.target.value),
                                             )
                                         }
                                     />
@@ -534,17 +727,14 @@ export const MenuContainer = () => {
                     <Button
                         variant="contained"
                         color="error"
+                        disabled={isDeleting}
                         onClick={() => {
-                            setDeleteTargetId(null);
-                            dispatch(
-                                showNotification({
-                                    message: 'Item deleted!',
-                                    severity: 'success',
-                                }),
-                            );
+                            if (deleteTargetId) {
+                                void handleDelete(deleteTargetId);
+                            }
                         }}
                     >
-                        Delete
+                        {isDeleting ? 'Deleting...' : 'Delete'}
                     </Button>
                 </StyledDialogActions>
             </Dialog>

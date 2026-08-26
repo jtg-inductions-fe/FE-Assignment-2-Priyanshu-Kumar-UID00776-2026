@@ -1,16 +1,13 @@
 import type React from 'react';
 
-export type User = {
-    fullName?: string;
-    email?: string;
-    role?: string;
-};
+import { User } from '@/types/auth.types';
 
 export type NavbarProps = {
     user: User | null;
     isUserActive: boolean;
     userInitial: string;
     anchorEl: null | HTMLElement;
+    cartCount: number;
     isMenuOpen: boolean;
     onLogoClick: () => void;
     onOrdersClick: () => void;

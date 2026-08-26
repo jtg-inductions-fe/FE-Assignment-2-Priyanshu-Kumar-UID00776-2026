@@ -1,5 +1,6 @@
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Badge } from '@mui/material';
 
 import LogoImage from '@/assets/images/logo.avif';
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
@@ -24,6 +25,7 @@ export const Navbar = ({
     userInitial,
     anchorEl,
     isMenuOpen,
+    cartCount,
     onLogoClick,
     onOrdersClick,
     onCartClick,
@@ -56,7 +58,9 @@ export const Navbar = ({
 
                     {user?.role === 'USER' && (
                         <NavIconButton onClick={onCartClick} aria-label="cart">
-                            <ShoppingCartOutlinedIcon fontSize="small" />
+                            <Badge badgeContent={cartCount} color="error">
+                                <ShoppingCartIcon />
+                            </Badge>
                             <NavLabel variant="body1">Cart</NavLabel>
                         </NavIconButton>
                     )}

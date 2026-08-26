@@ -8,7 +8,7 @@ import { clearUser } from '@/slices/authSlice';
 import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
-export const NavbarContainer = () => {
+export const NavbarContainer = ({ cartCount = 0 }: { cartCount?: number }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -80,6 +80,7 @@ export const NavbarContainer = () => {
             userInitial={userInitial}
             anchorEl={anchorEl}
             isMenuOpen={isMenuOpen}
+            cartCount={cartCount}
             onLogoClick={() => void navigate('/')}
             onOrdersClick={() => void navigate('/orders')}
             onCartClick={() => void navigate('/cart')}

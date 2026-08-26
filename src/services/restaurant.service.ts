@@ -1,5 +1,7 @@
 import CardImage from '@/assets/images/pizza.avif';
 import {
+    MenuFormData,
+    MenuItem,
     RestaurantFormData,
     RestaurantItemTypes,
 } from '@/types/restaurant.types';
@@ -108,4 +110,119 @@ export const deleteRestaurant = async (
     // Save the pruned list back to storage
     saveRestaurants(filtered);
     return id;
+};
+
+// Add a menu item directly to a restaurant's existing menus
+export const addMenuItem = async (
+    restaurantId: string,
+    menuData: MenuFormData,
+    ownerEmail: string,
+): Promise<{ restaurantId: string; menuItem: MenuItem }> => {
+    // Simulate network delay for the request
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Retrieve all restaurants from local storage
+    const restaurants = getStoredRestaurants();
+    // Locate the specific restaurant by its ID
+    const target = restaurants.find(
+        (restaurant) => restaurant.id === restaurantId,
+    );
+
+    // Stop execution if the restaurant does not exist
+    if (!target) throw new Error('Restaurant not found');
+    // Ensure only the restaurant owner can add menu items
+    if (target.ownerId.toLowerCase() !== ownerEmail.toLowerCase()) {
+        throw new Error('Owner can add there own menu');
+    }
+
+    // Create the new menu item with a generated ID and default rating
+    const newMenuItem: MenuItem = {
+        ...menuData,
+        id: `menu_${crypto.randomUUID()}`,
+        rating: 0,
+    };
+
+    // Append to existing restaurant menu array
+    target.menus = [...(target.menus || []), newMenuItem];
+
+    // Persist the updated restaurants array to storage
+    saveRestaurants(restaurants);
+    // Return the restaurant ID along with the newly added item
+    return { restaurantId, menuItem: newMenuItem };
+};
+
+// Edit an existing menu item inside the target restaurant
+export const editMenuItem = async (
+    restaurantId: string,
+    menuId: string,
+    menuData: MenuFormData,
+    ownerEmail: string,
+): Promise<{ restaurantId: string; menuItem: MenuItem }> => {
+    // Simulate network latency for editing
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Retrieve all restaurants from storage
+    const restaurants = getStoredRestaurants();
+    // Find the target restaurant by its ID
+    const target = restaurants.find(
+        (restaurant) => restaurant.id === restaurantId,
+    );
+
+    // Stop execution if the restaurant does not exist
+    if (!target) throw new Error('Restaurant not found');
+    // Check if the current user owns this restaurant
+    if (target.ownerId.toLowerCase() !== ownerEmail.toLowerCase()) {
+        throw new Error('Owner can edit their own menu');
+    }
+
+    // Find the index of the specific menu item to be edited
+    const menuIndex = target.menus.findIndex((menu) => menu.id === menuId);
+    // Throw an error if the menu item is not found
+    if (menuIndex === -1) throw new Error('Menu item not found');
+
+    // Merge previous item details with incoming changes
+    const updatedMenuItem: MenuItem = {
+        ...target.menus[menuIndex],
+        ...menuData,
+    };
+
+    // Update the item in the restaurant's menu array
+    target.menus[menuIndex] = updatedMenuItem;
+
+    // Save changes back to storage
+    saveRestaurants(restaurants);
+    // Return the restaurant ID and the updated menu item
+    return { restaurantId, menuItem: updatedMenuItem };
+};
+
+// Delete a menu item from the restaurant's menus array
+export const deleteMenuItem = async (
+    restaurantId: string,
+    menuId: string,
+    ownerEmail: string,
+): Promise<{ restaurantId: string; menuId: string }> => {
+    // Simulate network latency for deletion
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Retrieve the list of restaurants from storage
+    const restaurants = getStoredRestaurants();
+    // Find the matching restaurant by its ID
+    const target = restaurants.find(
+        (restaurant) => restaurant.id === restaurantId,
+    );
+
+    // Ensure the target restaurant exists
+    if (!target) throw new Error('Restaurant not found');
+    // Prevent unauthorized users from deleting items
+    if (target.ownerId.toLowerCase() !== ownerEmail.toLowerCase()) {
+        throw new Error('Owner can delete their own menu only');
+    }
+
+    // Filter out the menu item with the matching ID
+    target.menus = target.menus.filter((menu) => menu.id !== menuId);
+
+    // Save the data back to storage
+    saveRestaurants(restaurants);
+    // Return the restaurant and deleted menu ID
+    return { restaurantId, menuId };
 };

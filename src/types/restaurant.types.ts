@@ -8,6 +8,7 @@ export type MenuItem = {
     description: string;
     rating: number;
     price: number;
+    stock: number;
     dietType: 'VEG' | 'NON_VEG';
     image?: string;
 };
@@ -41,6 +42,7 @@ export type RestaurantState = {
     restaurants: RestaurantItemTypes[];
 };
 
+// Local slice state holding a selected restaurant's menu
 export type MenuState = {
     menu: MenuItem[];
 };
@@ -50,6 +52,20 @@ export type MenuFormData = {
     name: string;
     description: string;
     price: number;
+    stock: number;
+    rating: number;
     dietType: 'VEG' | 'NON_VEG';
     category?: string;
+};
+
+// Component props passed into the MenuItemCard
+export type MenuItemCardProps = {
+    item: MenuItem;
+    isOwner?: boolean;
+    quantity?: number;
+    onAddToCart?: (item: MenuItem) => void;
+    onIncrement?: (item: MenuItem) => void;
+    onDecrement?: (item: MenuItem) => void;
+    onEdit?: (item: MenuItem) => void;
+    onDelete?: (id: string) => void;
 };

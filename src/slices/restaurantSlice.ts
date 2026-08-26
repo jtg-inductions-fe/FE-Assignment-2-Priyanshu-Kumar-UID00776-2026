@@ -49,40 +49,49 @@ export const restaurantSlice = createSlice({
                 (restaurant) => restaurant.id !== action.payload,
             );
         },
-        addMenuItem: (
+        addMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
         ) => {
+            // Find the restaurant in state that matches the payload restaurant ID
             const restaurants = state.restaurants.find(
                 (restaurant) => restaurant.id === action.payload.restaurantId,
             );
+            // Push the new menu item to the restaurant if found
             if (restaurants) {
                 restaurants.menus.push(action.payload.menuItem);
             }
         },
-        editMenuItem: (
+        editMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
         ) => {
+            // Locate the target restaurant by its ID
             const restaurants = state.restaurants.find(
                 (restaurant) => restaurant.id === action.payload.restaurantId,
             );
+            // Proceed only if the restaurant exists in state
             if (restaurants) {
+                // Find the index of the specific menu item to update
                 const itemIndex = restaurants.menus.findIndex(
                     (menu) => menu.id === action.payload.menuItem.id,
                 );
+                // Replace the menu item if it exists in the array
                 if (itemIndex !== -1) {
                     restaurants.menus[itemIndex] = action.payload.menuItem;
                 }
             }
         },
-        deleteMenuItem: (
+        // Remove a menu item from the matching restaurant's menu list
+        deleteMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuId: string }>,
         ) => {
+            // Locate the target restaurant by its ID
             const restaurants = state.restaurants.find(
                 (restaurant) => restaurant.id === action.payload.restaurantId,
             );
+            // Filter out the deleted menu item if the restaurant is found
             if (restaurants) {
                 restaurants.menus = restaurants.menus.filter(
                     (menu) => menu.id !== action.payload.menuId,
@@ -98,9 +107,9 @@ export const {
     addRestaurantSuccess,
     editRestaurantSuccess,
     deleteRestaurantSuccess,
-    addMenuItem,
-    editMenuItem,
-    deleteMenuItem,
+    addMenuItemSuccess,
+    editMenuItemSuccess,
+    deleteMenuItemSuccess,
 } = restaurantSlice.actions;
 
 // Export the reducer to register in the global redux store

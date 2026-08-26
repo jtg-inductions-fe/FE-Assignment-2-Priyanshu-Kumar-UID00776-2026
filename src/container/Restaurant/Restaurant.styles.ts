@@ -39,7 +39,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
     flexDirection: 'column',
     gap: theme.typography.pxToRem(8),
-    padding: theme.spacing(3, 3, 0, 3),
+    padding: theme.typography.pxToRem(12),
     maxWidth: theme.typography.pxToRem(1200),
     margin: '0 auto',
     width: '100%',
@@ -50,7 +50,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
 export const ScrollableContent = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
-    padding: theme.spacing(0, 3, 15, 3),
+    padding: theme.typography.pxToRem(10),
     maxWidth: theme.typography.pxToRem(1200),
     width: '100%',
     margin: '0 auto',
@@ -61,7 +61,7 @@ export const ControlsWrapper = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: theme.typography.pxToRem(20),
-    margin: theme.spacing(2, 0),
+    margin: theme.typography.pxToRem(2),
     flexWrap: 'wrap',
     width: '100%',
 }));

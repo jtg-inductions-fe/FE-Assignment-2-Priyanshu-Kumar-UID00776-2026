@@ -9,7 +9,11 @@ import { clearUser } from '@/slices/authSlice';
 import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
-export const BottomNavigationBarContainer = () => {
+export const BottomNavigationBarContainer = ({
+    cartCount = 0,
+}: {
+    cartCount?: number;
+}) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const location = useLocation();
@@ -78,6 +82,7 @@ export const BottomNavigationBarContainer = () => {
             isUserActive={isUserActive}
             pathname={location.pathname}
             anchorEl={anchorEl}
+            cartCount={cartCount}
             isMenuOpen={isMenuOpen}
             onHomeClick={() => handleUserRoute('/', 'login')}
             onCartClick={() => handleUserRoute('/cart', '/login')}

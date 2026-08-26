@@ -1,15 +1,12 @@
 import type React from 'react';
 
-export type User = {
-    fullName?: string;
-    email?: string;
-    role?: string;
-};
+import { User } from '@/types/auth.types';
 
 export type BottomNavigationBarProps = {
     user: User | null;
     isUserActive: boolean;
     pathname: string;
+    cartCount?: number;
     anchorEl: null | HTMLElement;
     isMenuOpen: boolean;
     onHomeClick: () => void;

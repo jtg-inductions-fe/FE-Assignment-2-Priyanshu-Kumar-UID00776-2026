@@ -5,7 +5,7 @@ import {
     Home,
     ShoppingCart,
 } from '@mui/icons-material';
-import { BottomNavigationAction } from '@mui/material';
+import { Badge, BottomNavigationAction } from '@mui/material';
 
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
 import type { BottomNavigationBarProps } from '@/types/bottomNavigation.types';
@@ -21,6 +21,7 @@ export const BottomNavigationBar = ({
     pathname,
     anchorEl,
     isMenuOpen,
+    cartCount = 0,
     onHomeClick,
     onCartClick,
     onAddRestaurantClick,
@@ -40,7 +41,11 @@ export const BottomNavigationBar = ({
         },
         {
             label: 'Cart',
-            icon: <ShoppingCart />,
+            icon: (
+                <Badge badgeContent={cartCount} color="error">
+                    <ShoppingCart />
+                </Badge>
+            ),
             onClick: onCartClick,
             value: '/cart',
             isVisible: user?.role === 'USER' || !isUserActive,

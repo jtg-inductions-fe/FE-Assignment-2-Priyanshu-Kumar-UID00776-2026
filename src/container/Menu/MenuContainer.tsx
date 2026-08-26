@@ -47,7 +47,7 @@ import {
 import { useDebounce } from '@/hooks/useDebounce';
 import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { FoodVariant } from '@/types/fIlterToggleButton.types';
+import { FoodVariant } from '@/types/filterToggleButton.types';
 import type { MenuFormData, MenuItem } from '@/types/restaurant.types';
 
 export const MenuContainer = () => {

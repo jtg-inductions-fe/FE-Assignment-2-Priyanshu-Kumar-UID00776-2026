@@ -1,4 +1,8 @@
-import { RestaurantItemTypes, RestaurantState } from '@/types/restaurant.types';
+import {
+    MenuItem,
+    RestaurantItemTypes,
+    RestaurantState,
+} from '@/types/restaurant.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Set up the default starting state with an empty list
@@ -45,6 +49,46 @@ export const restaurantSlice = createSlice({
                 (r) => r.id !== action.payload,
             );
         },
+        addMenuItem: (
+            state,
+            action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
+        ) => {
+            const restaurants = state.restaurants.find(
+                (restaurant) => restaurant.id === action.payload.restaurantId,
+            );
+            if (restaurants) {
+                restaurants.menus.push(action.payload.menuItem);
+            }
+        },
+        editMenuItem: (
+            state,
+            action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
+        ) => {
+            const restaurants = state.restaurants.find(
+                (restaurant) => restaurant.id === action.payload.restaurantId,
+            );
+            if (restaurants) {
+                const itemIndex = restaurants.menus.findIndex(
+                    (menu) => menu.id === action.payload.menuItem.id,
+                );
+                if (itemIndex !== -1) {
+                    restaurants.menus[itemIndex] = action.payload.menuItem;
+                }
+            }
+        },
+        deleteMenuItem: (
+            state,
+            action: PayloadAction<{ restaurantId: string; menuId: string }>,
+        ) => {
+            const restaurants = state.restaurants.find(
+                (restaurant) => restaurant.id === action.payload.restaurantId,
+            );
+            if (restaurants) {
+                restaurants.menus = restaurants.menus.filter(
+                    (menu) => menu.id !== action.payload.menuId,
+                );
+            }
+        },
     },
 });
 
@@ -54,6 +98,9 @@ export const {
     addRestaurantSuccess,
     editRestaurantSuccess,
     deleteRestaurantSuccess,
+    addMenuItem,
+    editMenuItem,
+    deleteMenuItem,
 } = restaurantSlice.actions;
 
 // Export the reducer to register in the global redux store

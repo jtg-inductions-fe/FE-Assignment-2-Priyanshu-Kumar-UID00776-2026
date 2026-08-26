@@ -41,6 +41,10 @@ export type RestaurantState = {
     restaurants: RestaurantItemTypes[];
 };
 
+export type MenuState = {
+    menu: MenuItem[];
+};
+
 // Modal for the menu form
 export type MenuFormData = {
     name: string;

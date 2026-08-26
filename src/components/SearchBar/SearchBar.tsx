@@ -11,6 +11,8 @@ export const RestaurantSearch = ({
 }: RestaurantSearchProps) => (
     <SearchBar
         placeholder={placeholder}
+        aria-label={placeholder}
+        type="search"
         value={value}
         onChange={onChange}
         size="medium"

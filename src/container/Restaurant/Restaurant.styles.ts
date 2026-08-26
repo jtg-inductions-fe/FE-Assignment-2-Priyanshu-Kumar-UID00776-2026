@@ -80,7 +80,7 @@ export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-export const FormStack = styled('form')(({ theme }) => ({
+export const FormStack = styled(Box)(({ theme }) => ({
     marginTop: theme.typography.pxToRem(4),
     display: 'flex',
     alignItems: 'center',

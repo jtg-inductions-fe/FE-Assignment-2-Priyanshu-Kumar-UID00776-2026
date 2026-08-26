@@ -179,6 +179,15 @@ export const MenuContainer = () => {
     };
 
     const onFormSubmit = () => {
+        if (!user?.email) {
+            dispatch(
+                showNotification({
+                    message: 'You must be logged in as an owner.',
+                    severity: 'error',
+                }),
+            );
+            return;
+        }
         try {
             dispatch(
                 showNotification({

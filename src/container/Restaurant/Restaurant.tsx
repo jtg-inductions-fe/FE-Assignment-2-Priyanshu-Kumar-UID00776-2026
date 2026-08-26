@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import {
     Add as AddIcon,
@@ -67,6 +68,7 @@ import {
 
 export const Restaurant = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const theme = useTheme();
     const user = useAppSelector((state) => state.auth.user);
     const isOwner = user?.role === 'RESTAURANT OWNER';
@@ -511,6 +513,9 @@ export const Restaurant = () => {
                                         key={restaurant.id}
                                         restaurant={restaurant}
                                         isOwner={isOwner}
+                                        onCardClick={(id) =>
+                                            void navigate(`/restaurant/${id}`)
+                                        }
                                         onEdit={handleOpenEditModal}
                                         onDelete={setDeleteTargetId}
                                     />

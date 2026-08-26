@@ -21,6 +21,7 @@ import type { RestaurantCardProps } from '@/types/restaurantCard.types';
 export const RestaurantCard = ({
     restaurant,
     isOwner = false,
+    onCardClick,
     onEdit,
     onDelete,
 }: RestaurantCardProps) => {
@@ -32,7 +33,7 @@ export const RestaurantCard = ({
     };
 
     return (
-        <StyledCard>
+        <StyledCard onClick={() => onCardClick?.(restaurant.id)}>
             <ImageWrapper>
                 <CardMedia
                     component="img"

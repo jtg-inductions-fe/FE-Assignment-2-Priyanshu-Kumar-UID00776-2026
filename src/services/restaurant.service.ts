@@ -67,7 +67,7 @@ export const editRestaurant = async (
     if (!target) throw new Error('Restaurant not found');
     // Reject edit if the current user is not the owner
     if (target.ownerId.toLowerCase() !== ownerEmail.toLowerCase()) {
-        throw new Error('Forbidden: You can only edit your own restaurants');
+        throw new Error('Owner can edit their own restuarant only');
     }
 
     // Merge old restaurant data with the updated fields
@@ -100,7 +100,7 @@ export const deleteRestaurant = async (
     if (!target) throw new Error('Restaurant not found');
     // Block the action if the user does not own this restaurant
     if (target.ownerId.toLowerCase() !== ownerEmail.toLowerCase()) {
-        throw new Error('Forbidden: You can only delete your own restaurants');
+        throw new Error('Owner can delete their own restuarant only');
     }
 
     // Filter out the restaurant with the matching ID

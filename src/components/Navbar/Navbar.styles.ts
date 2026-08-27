@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, IconButton, Typography } from '@mui/material';
+import { Avatar, Box, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const NavbarContainer = styled(Box)(({ theme }) => ({
@@ -30,10 +30,6 @@ export const Logo = styled(Box)(({ theme }) => ({
     borderRadius: '8px',
 }));
 
-export const BrandName = styled(Typography)(({ theme }) => ({
-    color: theme.palette.primary.main,
-}));
-
 export const NavbarActions = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -55,10 +51,6 @@ export const NavIconButton = styled(IconButton)(({ theme }) => ({
         backgroundColor: theme.palette.action.hover,
         color: theme.palette.primary.main,
     },
-}));
-
-export const NavLabel = styled(Typography)(() => ({
-    color: 'inherit',
 }));
 
 export const LoginButton = styled(Button)(({ theme }) => ({

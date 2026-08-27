@@ -1,4 +1,4 @@
-import { Cart } from '@/types/cart.types';
+import { CartItem } from '@/types/cart.types';
 
 // Allowed user roles
 export type UserRole = 'USER' | 'RESTAURANT OWNER';
@@ -9,7 +9,7 @@ export type User = {
     email: string;
     contactNo: string;
     role: UserRole;
-    cart: Cart[];
+    cart: CartItem[];
 };
 
 // Global auth status tracking the active user and login state

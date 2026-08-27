@@ -1,6 +1,6 @@
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import { Typography } from '@mui/material';
+import { Badge, Typography } from '@mui/material';
 
 import LogoImage from '@/assets/images/logo.avif';
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
@@ -23,6 +23,7 @@ export const Navbar = ({
     userInitial,
     anchorEl,
     isMenuOpen,
+    cartCount = 0,
     onClickAction,
 }: NavbarProps) => (
     <NavbarContainer>
@@ -57,7 +58,9 @@ export const Navbar = ({
                             onClick={() => onClickAction('cart')}
                             aria-label="cart"
                         >
-                            <ShoppingCartOutlinedIcon fontSize="small" />
+                            <Badge badgeContent={cartCount} color="error">
+                                <ShoppingCartOutlinedIcon fontSize="small" />
+                            </Badge>
                             <Typography variant="body1">Cart</Typography>
                         </NavIconButton>
                     )}

@@ -46,18 +46,23 @@ import {
     ScrollableContent,
     StyledDialogActions,
 } from '@/container/Restaurant/Restaurant.styles';
+import {
+    addItemToCart,
+    decrementCartItem,
+    incrementCartItem,
+} from '@/features/cartSlice';
+import { showNotification } from '@/features/notificationSlice';
+import {
+    addMenuItemSuccess,
+    deleteMenuItemSuccess,
+    editMenuItemSuccess,
+} from '@/features/restaurantSlice';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
     addMenuItem,
     deleteMenuItem,
     editMenuItem,
 } from '@/services/restaurant.service';
-import { showNotification } from '@/slices/notificationSlice';
-import {
-    addMenuItemSuccess,
-    deleteMenuItemSuccess,
-    editMenuItemSuccess,
-} from '@/slices/restaurantSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { FoodVariant } from '@/types/filterToggleButton.types';
 import type { MenuFormData, MenuItem } from '@/types/restaurant.types';
@@ -77,15 +82,14 @@ export const MenuContainer = () => {
         ),
     );
 
+    const cartItems = useAppSelector((state) => state.cart.items);
+
     const isMobile = Boolean(useMediaQuery(theme.breakpoints.down('sm')));
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
     const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-    const [cartQuantities, setCartQuantities] = useState<
-        Record<string, number>
-    >({});
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
@@ -112,10 +116,14 @@ export const MenuContainer = () => {
     // Debounce search input to prevent unnecessary re-renders on every keystroke
     const debouncedSearch = useDebounce<string>(searchTerm);
 
-    // Calculate total number of items currently in the cart
-    const totalCartCount = useMemo(
-        () => Object.values(cartQuantities).reduce((acc, qty) => acc + qty, 0),
-        [cartQuantities],
+    // Cart quantity from Redux cart
+    const cartQuantities = useMemo(
+        () =>
+            cartItems.reduce<Record<string, number>>((acc, item) => {
+                acc[item.menuItem.id] = item.quantity;
+                return acc;
+            }, {}),
+        [cartItems],
     );
 
     // Toggle star rating filters in the sidebar
@@ -163,37 +171,59 @@ export const MenuContainer = () => {
         selectedRatings,
     ]);
 
-    // Add first unit of an item to the cart if it has stock available
+    // Dispatch adding an item to the user cart in redux and localStorage
     const handleAddToCart = (item: MenuItem) => {
-        if ((item.stock ?? 0) > 0) {
-            setCartQuantities((prev) => ({ ...prev, [item.id]: 1 }));
+        if (!user) {
+            dispatch(
+                showNotification({
+                    message: 'Please login to add items to cart.',
+                    severity: 'warning',
+                }),
+            );
+            void navigate('/login');
+            return;
         }
+
+        if (isOwner) {
+            dispatch(
+                showNotification({
+                    message: 'Restaurant owners cannot place orders.',
+                    severity: 'error',
+                }),
+            );
+            return;
+        }
+
+        dispatch(
+            addItemToCart({
+                userEmail: user.email,
+                restaurantId: selectedRestaurant?.id || '',
+                restaurantName: selectedRestaurant?.name || '',
+                menuItem: item,
+            }),
+        );
     };
 
-    // Increment item count in cart without exceeding available stock
+    // Increment item count in cart
     const handleIncrement = (item: MenuItem) => {
-        setCartQuantities((prev) => {
-            const current = prev[item.id] || 0;
-            // Only increment if we have enough stock left
-            if (current < item.stock) {
-                return { ...prev, [item.id]: current + 1 };
-            }
-            return prev;
-        });
+        if (!user) return;
+        dispatch(
+            incrementCartItem({
+                userEmail: user.email,
+                menuItemId: item.id,
+            }),
+        );
     };
 
-    // Decrement item quantity or remove it entirely from cart if it reaches 0
+    // Decrement item quantity or remove from cart
     const handleDecrement = (item: MenuItem) => {
-        setCartQuantities((prev) => {
-            const next = { ...prev };
-            // Decrease quantity if more than 1 item is in cart
-            if (next[item.id] > 1) {
-                next[item.id] -= 1;
-            } else {
-                delete next[item.id];
-            }
-            return next;
-        });
+        if (!user) return;
+        dispatch(
+            decrementCartItem({
+                userEmail: user.email,
+                menuItemId: item.id,
+            }),
+        );
     };
 
     // Open the modal with empty fields to add a brand new menu item
@@ -364,7 +394,7 @@ export const MenuContainer = () => {
 
     return (
         <RestaurantContainer>
-            <NavbarContainer cartCount={totalCartCount} />
+            <NavbarContainer />
 
             <MainContentLayout>
                 <RestaurantSidebar
@@ -396,7 +426,7 @@ export const MenuContainer = () => {
                             {!isMobile && (
                                 <Stack
                                     direction="row"
-                                    spacing={1.5}
+                                    spacing={2}
                                     alignItems="center"
                                 >
                                     {isOwner ? (
@@ -535,9 +565,8 @@ export const MenuContainer = () => {
                 </ContentArea>
             </MainContentLayout>
 
-            <BottomNavigationBarContainer cartCount={totalCartCount} />
+            <BottomNavigationBarContainer />
 
-            {/* Add / Edit Menu Item Dialog */}
             <Dialog
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
@@ -703,7 +732,6 @@ export const MenuContainer = () => {
                 </form>
             </Dialog>
 
-            {/* Delete Confirmation Dialog */}
             <Dialog
                 open={Boolean(deleteTargetId)}
                 onClose={() => setDeleteTargetId(null)}

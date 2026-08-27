@@ -2,9 +2,10 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 // Import slice reducers
-import authReducer from '@/slices/authSlice';
-import notificationReducer from '@/slices/notificationSlice';
-import restaurantReducer from '@/slices/restaurantSlice';
+import authReducer from '@/features/authSlice';
+import cartReducer from '@/features/cartSlice';
+import notificationReducer from '@/features/notificationSlice';
+import restaurantReducer from '@/features/restaurantSlice';
 // Import Redux Toolkit store configurator.
 import { configureStore } from '@reduxjs/toolkit';
 
@@ -14,6 +15,7 @@ export const store = configureStore({
         auth: authReducer,
         notification: notificationReducer,
         restaurant: restaurantReducer,
+        cart: cartReducer,
     },
 });
 

@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { Login } from '@/components/Auth/Login';
 import { SignUp } from '@/components/Auth/SignUp';
 import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
+import { CartPage } from '@/pages/Cart/Cart';
 import { MenuPage } from '@/pages/Menu/Menu';
 import { RestaurantPage } from '@/pages/Restaurant/Restaurant';
 
@@ -27,6 +28,11 @@ export const AppRouter = createBrowserRouter([
     {
         path: '/restaurant',
         element: <RestaurantPage />,
+    },
+    // Render the cart page
+    {
+        path: '/cart',
+        element: <CartPage />,
     },
     // Dynamic route for the menu related to particular restaurant
     {

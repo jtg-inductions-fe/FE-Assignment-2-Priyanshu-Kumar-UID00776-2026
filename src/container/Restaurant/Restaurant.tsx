@@ -45,6 +45,13 @@ import {
     StyledCardContent,
     StyledDialogActions,
 } from '@/container/Restaurant/Restaurant.styles';
+import { showNotification } from '@/features/notificationSlice';
+import {
+    addRestaurantSuccess,
+    deleteRestaurantSuccess,
+    editRestaurantSuccess,
+    setRestaurants,
+} from '@/features/restaurantSlice';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
     addRestaurant,
@@ -52,13 +59,6 @@ import {
     editRestaurant,
     fetchRestaurants,
 } from '@/services/restaurant.service';
-import { showNotification } from '@/slices/notificationSlice';
-import {
-    addRestaurantSuccess,
-    deleteRestaurantSuccess,
-    editRestaurantSuccess,
-    setRestaurants,
-} from '@/slices/restaurantSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { FoodVariant } from '@/types/filterToggleButton.types';
 import {

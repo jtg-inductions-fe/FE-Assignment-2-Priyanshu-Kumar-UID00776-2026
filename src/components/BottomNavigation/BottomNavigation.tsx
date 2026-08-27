@@ -1,4 +1,4 @@
-import { BottomNavigationAction } from '@mui/material';
+import { Badge, BottomNavigationAction } from '@mui/material';
 
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
 import type { BottomNavigationBarProps } from '@/types/bottomNavigation.types';
@@ -25,7 +25,14 @@ export const BottomNavigationBar = ({
                     <BottomNavigationAction
                         key={item.value}
                         label={item.label}
-                        icon={item.icon}
+                        icon={
+                            <Badge
+                                badgeContent={item.badgeContent}
+                                color="error"
+                            >
+                                {item.icon}
+                            </Badge>
+                        }
                         onClick={(event) => onClickAction(item.action, event)}
                         value={item.value}
                     />

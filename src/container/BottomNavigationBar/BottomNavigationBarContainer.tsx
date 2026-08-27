@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -11,24 +11,24 @@ import {
 } from '@mui/icons-material';
 
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
+import { clearUser } from '@/features/authSlice';
+import { setUserCart } from '@/features/cartSlice';
+import { showNotification } from '@/features/notificationSlice';
 import { useActiveUserRoute } from '@/hooks/activeUserRoutes';
 import { logout } from '@/services/auth.service';
-import { clearUser } from '@/slices/authSlice';
-import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { NavbarAction, NavItemConfig } from '@/types/bottomNavigation.types';
 
-export const BottomNavigationBarContainer = ({
-    cartCount = 0,
-}: {
-    cartCount?: number;
-}) => {
+export const BottomNavigationBarContainer = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const location = useLocation();
 
     // Read the active user details from the redux store
     const user = useAppSelector((state) => state.auth.user);
+
+    // Read the user cart items
+    const cartItems = useAppSelector((state) => state.cart.items);
 
     // Convert user presence into a simple true/false login flag
     const isUserActive = Boolean(user);
@@ -40,6 +40,15 @@ export const BottomNavigationBarContainer = ({
 
     // Pull in our custom helper to navigate users based on auth status
     const { handleUserRoute } = useActiveUserRoute();
+
+    // Calculate cart total count from Redux state
+    const totalCartCount = useMemo(
+        () =>
+            user?.role === 'USER'
+                ? cartItems.reduce((acc, item) => acc + item.quantity, 0)
+                : 0,
+        [cartItems, user],
+    );
 
     // Close the dropdown menu by resetting the anchor element
     const handleCloseMenu = () => {
@@ -53,6 +62,10 @@ export const BottomNavigationBarContainer = ({
         try {
             // Trigger the logout API call
             await logout();
+
+            // Clears the user cart redux state
+            dispatch(clearUser());
+            dispatch(setUserCart([]));
 
             // Clear the user from global state and browser storage
             dispatch(clearUser());
@@ -129,6 +142,7 @@ export const BottomNavigationBarContainer = ({
             icon: <ShoppingCart />,
             action: 'cart',
             value: '/cart',
+            badgeContent: totalCartCount,
             isVisible: user?.role === 'USER' || !isUserActive,
         },
         {
@@ -160,7 +174,7 @@ export const BottomNavigationBarContainer = ({
             isUserActive={isUserActive}
             pathname={location.pathname}
             anchorEl={anchorEl}
-            cartCount={cartCount}
+            cartCount={totalCartCount}
             isMenuOpen={isMenuOpen}
             navItems={navItemsConfig}
             onClickAction={handleNavbarAction}

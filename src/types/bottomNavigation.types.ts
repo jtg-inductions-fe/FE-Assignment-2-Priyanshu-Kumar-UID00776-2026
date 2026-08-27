@@ -1,23 +1,37 @@
-import type React from 'react';
+import React, { ReactNode } from 'react';
 
-export type User = {
-    fullName?: string;
-    email?: string;
-    role?: string;
+import { User } from '@/types/auth.types';
+
+// Navbar action types for the clicks
+export type NavbarAction =
+    | 'home'
+    | 'cart'
+    | 'addRestaurant'
+    | 'orders'
+    | 'profile'
+    | 'closeMenu'
+    | 'logout'
+    | 'login';
+
+// Containes the item config for the Bottom navigation
+export type NavItemConfig = {
+    label: string;
+    icon: ReactNode;
+    action: NavbarAction;
+    value: string;
+    isVisible: boolean;
 };
 
+// Bottom navigation props passes to the component
 export type BottomNavigationBarProps = {
     user: User | null;
     isUserActive: boolean;
     pathname: string;
     anchorEl: null | HTMLElement;
     isMenuOpen: boolean;
-    onHomeClick: () => void;
-    onCartClick: () => void;
-    onAddRestaurantClick: () => void;
-    onOrdersClick: () => void;
-    onProfileClick: (event: React.MouseEvent<HTMLElement>) => void;
-    onCloseMenu: () => void;
-    onLogoutClick: () => void;
-    onLoginClick: () => void;
+    navItems: NavItemConfig[];
+    onClickAction: (
+        action: NavbarAction,
+        event?: React.MouseEvent<HTMLElement>,
+    ) => void;
 };

@@ -1,20 +1,18 @@
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Badge } from '@mui/material';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { Typography } from '@mui/material';
 
 import LogoImage from '@/assets/images/logo.avif';
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
 import type { NavbarProps } from '@/types/navbar.types';
 
 import {
-    BrandName,
     LoginButton,
     Logo,
     LogoContainer,
     NavbarActions,
     NavbarContainer,
     NavIconButton,
-    NavLabel,
     ProfileIconButton,
     StyledAvatar,
 } from './Navbar.styles';
@@ -25,17 +23,10 @@ export const Navbar = ({
     userInitial,
     anchorEl,
     isMenuOpen,
-    cartCount,
-    onLogoClick,
-    onOrdersClick,
-    onCartClick,
-    onProfileClick,
-    onLoginClick,
-    onCloseMenu,
-    onLogoutClick,
+    onClickAction,
 }: NavbarProps) => (
     <NavbarContainer>
-        <LogoContainer onClick={onLogoClick}>
+        <LogoContainer onClick={() => onClickAction('logo')}>
             <Logo>
                 <img
                     src={LogoImage}
@@ -45,28 +36,34 @@ export const Navbar = ({
                 />
             </Logo>
 
-            <BrandName variant="h5">Khana Peena</BrandName>
+            <Typography color="primary.main" variant="h5">
+                Khana Peena
+            </Typography>
         </LogoContainer>
 
         <NavbarActions>
             {isUserActive ? (
                 <>
-                    <NavIconButton onClick={onOrdersClick} aria-label="orders">
+                    <NavIconButton
+                        onClick={() => onClickAction('orders')}
+                        aria-label="orders"
+                    >
                         <ReceiptLongOutlinedIcon fontSize="small" />
-                        <NavLabel>Orders</NavLabel>
+                        <Typography variant="body1">Orders</Typography>
                     </NavIconButton>
 
                     {user?.role === 'USER' && (
-                        <NavIconButton onClick={onCartClick} aria-label="cart">
-                            <Badge badgeContent={cartCount} color="error">
-                                <ShoppingCartIcon />
-                            </Badge>
-                            <NavLabel variant="body1">Cart</NavLabel>
+                        <NavIconButton
+                            onClick={() => onClickAction('cart')}
+                            aria-label="cart"
+                        >
+                            <ShoppingCartOutlinedIcon fontSize="small" />
+                            <Typography variant="body1">Cart</Typography>
                         </NavIconButton>
                     )}
 
                     <ProfileIconButton
-                        onClick={onProfileClick}
+                        onClick={(event) => onClickAction('profile', event)}
                         size="medium"
                         aria-label="account settings"
                     >
@@ -74,7 +71,10 @@ export const Navbar = ({
                     </ProfileIconButton>
                 </>
             ) : (
-                <LoginButton onClick={onLoginClick} variant="outlined">
+                <LoginButton
+                    onClick={() => onClickAction('login')}
+                    variant="outlined"
+                >
                     Login
                 </LoginButton>
             )}
@@ -84,9 +84,9 @@ export const Navbar = ({
                 isUserActive={isUserActive}
                 anchorEl={anchorEl}
                 isMenuOpen={isMenuOpen}
-                onCloseMenu={onCloseMenu}
-                onLogoutClick={onLogoutClick}
-                onLoginClick={onLoginClick}
+                onCloseMenu={() => onClickAction('closeMenu')}
+                onLogoutClick={() => onClickAction('logout')}
+                onLoginClick={() => onClickAction('login')}
             />
         </NavbarActions>
     </NavbarContainer>

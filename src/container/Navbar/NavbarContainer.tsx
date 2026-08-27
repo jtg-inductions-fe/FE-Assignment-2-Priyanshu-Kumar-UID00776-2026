@@ -7,8 +7,9 @@ import { logout } from '@/services/auth.service';
 import { clearUser } from '@/slices/authSlice';
 import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { NavbarAction } from '@/types/navbar.types';
 
-export const NavbarContainer = ({ cartCount = 0 }: { cartCount?: number }) => {
+export const NavbarContainer = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -23,11 +24,6 @@ export const NavbarContainer = ({ cartCount = 0 }: { cartCount?: number }) => {
 
     // Check if the dropdown menu is currently visible
     const isMenuOpen = Boolean(anchorEl);
-
-    // Open the dropdown menu anchored to the clicked profile element
-    const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     // Close the dropdown menu by clearing the anchor element.
     const handleCloseMenu = () => {
@@ -70,6 +66,38 @@ export const NavbarContainer = ({ cartCount = 0 }: { cartCount?: number }) => {
         }
     };
 
+    // The single handling for all navbar interactions
+    const handleNavbarAction = (
+        action: NavbarAction,
+        event?: React.MouseEvent<HTMLElement>,
+    ) => {
+        switch (action) {
+            case 'logo':
+                void navigate('/');
+                break;
+            case 'orders':
+                void navigate('/orders');
+                break;
+            case 'cart':
+                void navigate('/cart');
+                break;
+            case 'profile':
+                if (event) setAnchorEl(event.currentTarget);
+                break;
+            case 'closeMenu':
+                handleCloseMenu();
+                break;
+            case 'logout':
+                void handleLogout();
+                break;
+            case 'login':
+                void navigate('/login');
+                break;
+            default:
+                break;
+        }
+    };
+
     // Get the capitalized first letter of the user's name for the avatar, defaulting to 'U'
     const userInitial = user?.fullName?.charAt(0).toUpperCase() || 'U';
 
@@ -80,14 +108,7 @@ export const NavbarContainer = ({ cartCount = 0 }: { cartCount?: number }) => {
             userInitial={userInitial}
             anchorEl={anchorEl}
             isMenuOpen={isMenuOpen}
-            cartCount={cartCount}
-            onLogoClick={() => void navigate('/')}
-            onOrdersClick={() => void navigate('/orders')}
-            onCartClick={() => void navigate('/cart')}
-            onProfileClick={handleProfileClick}
-            onLoginClick={() => void navigate('/login')}
-            onCloseMenu={handleCloseMenu}
-            onLogoutClick={() => void handleLogout()}
+            onClickAction={handleNavbarAction}
         />
     );
 };

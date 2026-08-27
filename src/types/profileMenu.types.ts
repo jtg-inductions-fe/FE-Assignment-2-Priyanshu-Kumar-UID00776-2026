@@ -1,8 +1,4 @@
-type User = {
-    fullName?: string;
-    email?: string;
-    role?: string;
-};
+import { User } from '@/types/auth.types';
 
 export type ProfileMenuProps = {
     user: User | null;

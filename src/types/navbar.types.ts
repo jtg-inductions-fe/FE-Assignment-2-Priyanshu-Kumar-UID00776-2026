@@ -1,22 +1,26 @@
 import type React from 'react';
 
-export type User = {
-    fullName?: string;
-    email?: string;
-    role?: string;
-};
+import { User } from '@/types/auth.types';
 
+// Navbar all items actions
+export type NavbarAction =
+    | 'logo'
+    | 'orders'
+    | 'cart'
+    | 'profile'
+    | 'login'
+    | 'closeMenu'
+    | 'logout';
+
+// Navbar props passed to the component
 export type NavbarProps = {
     user: User | null;
     isUserActive: boolean;
     userInitial: string;
     anchorEl: null | HTMLElement;
     isMenuOpen: boolean;
-    onLogoClick: () => void;
-    onOrdersClick: () => void;
-    onCartClick: () => void;
-    onProfileClick: (event: React.MouseEvent<HTMLElement>) => void;
-    onLoginClick: () => void;
-    onCloseMenu: () => void;
-    onLogoutClick: () => void;
+    onClickAction: (
+        action: NavbarAction,
+        event?: React.MouseEvent<HTMLElement>,
+    ) => void;
 };

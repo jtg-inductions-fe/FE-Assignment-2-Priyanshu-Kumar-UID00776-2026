@@ -2,12 +2,21 @@ import { useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import {
+    AccountCircle,
+    AddBox,
+    Assignment,
+    Home,
+    ShoppingCart,
+} from '@mui/icons-material';
+
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
 import { useActiveUserRoute } from '@/hooks/activeUserRoutes';
 import { logout } from '@/services/auth.service';
 import { clearUser } from '@/slices/authSlice';
 import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { NavbarAction, NavItemConfig } from '@/types/bottomNavigation.types';
 
 export const BottomNavigationBarContainer = () => {
     const navigate = useNavigate();
@@ -27,11 +36,6 @@ export const BottomNavigationBarContainer = () => {
 
     // Pull in our custom helper to navigate users based on auth status
     const { handleUserRoute } = useActiveUserRoute();
-
-    // Open the dropdown menu anchored to the clicked profile element
-    const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     // Close the dropdown menu by resetting the anchor element
     const handleCloseMenu = () => {
@@ -72,6 +76,80 @@ export const BottomNavigationBarContainer = () => {
         }
     };
 
+    // The single function handling all click events
+    const handleNavbarAction = (
+        action: NavbarAction,
+        event?: React.MouseEvent<HTMLElement>,
+    ) => {
+        switch (action) {
+            case 'home':
+                void navigate('/restaurant');
+                break;
+            case 'cart':
+                handleUserRoute('/cart', '/login');
+                break;
+            case 'addRestaurant':
+                handleUserRoute('/add-restaurant', '/login');
+                break;
+            case 'orders':
+                handleUserRoute('/orders', '/login');
+                break;
+            case 'profile':
+                if (event) setAnchorEl(event.currentTarget);
+                break;
+            case 'closeMenu':
+                handleCloseMenu();
+                break;
+            case 'logout':
+                void handleLogout();
+                break;
+            case 'login':
+                void navigate('/login');
+                break;
+            default:
+                break;
+        }
+    };
+
+    // All the Bottom navigation items
+    const navItemsConfig: NavItemConfig[] = [
+        {
+            label: 'Home',
+            icon: <Home />,
+            action: 'home',
+            value: '/restaurant',
+            isVisible: true,
+        },
+        {
+            label: 'Cart',
+            icon: <ShoppingCart />,
+            action: 'cart',
+            value: '/cart',
+            isVisible: user?.role === 'USER' || !isUserActive,
+        },
+        {
+            label: 'Restaurant',
+            icon: <AddBox />,
+            action: 'addRestaurant',
+            value: '/add-restaurant',
+            isVisible: user?.role === 'RESTAURANT OWNER',
+        },
+        {
+            label: 'Orders',
+            icon: <Assignment />,
+            action: 'orders',
+            value: '/orders',
+            isVisible: true,
+        },
+        {
+            label: 'Profile',
+            icon: <AccountCircle />,
+            action: 'profile',
+            value: 'profile',
+            isVisible: true,
+        },
+    ];
+
     return (
         <BottomNavigationBar
             user={user}
@@ -79,16 +157,8 @@ export const BottomNavigationBarContainer = () => {
             pathname={location.pathname}
             anchorEl={anchorEl}
             isMenuOpen={isMenuOpen}
-            onHomeClick={() => handleUserRoute('/', 'login')}
-            onCartClick={() => handleUserRoute('/cart', '/login')}
-            onAddRestaurantClick={() =>
-                handleUserRoute('/add-restaurant', '/login')
-            }
-            onOrdersClick={() => handleUserRoute('/orders', '/login')}
-            onProfileClick={handleProfileClick}
-            onCloseMenu={handleCloseMenu}
-            onLogoutClick={() => void handleLogout()}
-            onLoginClick={() => void navigate('/login')}
+            navItems={navItemsConfig}
+            onClickAction={handleNavbarAction}
         />
     );
 };

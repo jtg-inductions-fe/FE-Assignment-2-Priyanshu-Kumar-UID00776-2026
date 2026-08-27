@@ -6,7 +6,7 @@ export const NavbarContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: theme.spacing(1.5, 4),
+    padding: theme.typography.pxToRem(10),
     backgroundColor: theme.palette.background.paper,
     boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)',
     position: 'sticky',
@@ -41,7 +41,7 @@ export const NavbarActions = styled(Box)(({ theme }) => ({
 
 export const NavIconButton = styled(IconButton)(({ theme }) => ({
     borderRadius: '12px',
-    padding: theme.spacing(1, 1.5),
+    padding: theme.typography.pxToRem(8),
     display: 'flex',
     alignItems: 'center',
     gap: theme.typography.pxToRem(4),
@@ -55,7 +55,7 @@ export const NavIconButton = styled(IconButton)(({ theme }) => ({
 
 export const LoginButton = styled(Button)(({ theme }) => ({
     borderRadius: '10px',
-    padding: theme.spacing(0.75, 2.5),
+    padding: theme.typography.pxToRem(5),
     textTransform: 'none',
 }));
 

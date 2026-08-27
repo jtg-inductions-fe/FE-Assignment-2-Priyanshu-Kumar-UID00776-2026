@@ -56,6 +56,7 @@ export const signup = async (data: SignupData): Promise<User> => {
         contactNo: data.contactNo,
         role: data.role,
         password: hashedPassword,
+        cart: [],
     };
 
     // Save the updated users list back into browser storage
@@ -67,6 +68,7 @@ export const signup = async (data: SignupData): Promise<User> => {
         email: newUser.email,
         contactNo: newUser.contactNo,
         role: newUser.role,
+        cart: newUser.cart,
     };
 
     return safeUser;
@@ -103,6 +105,7 @@ export const login = async (data: LoginData): Promise<User> => {
         email: user.email,
         contactNo: user.contactNo,
         role: user.role,
+        cart: user.cart,
     };
 
     return safeUser;

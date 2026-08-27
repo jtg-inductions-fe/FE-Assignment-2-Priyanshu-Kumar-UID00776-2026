@@ -38,6 +38,7 @@ export const authSlice = createSlice({
                 email: action.payload.email,
                 contactNo: action.payload.contactNo,
                 role: action.payload.role,
+                cart: action.payload.cart,
             };
 
             // Update redux state with user data, make the session as authenticated and persist the user data in the localStorage

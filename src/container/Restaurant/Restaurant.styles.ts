@@ -51,6 +51,7 @@ export const ScrollableContent = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
     padding: theme.typography.pxToRem(10),
+    paddingBottom: theme.typography.pxToRem(60),
     maxWidth: theme.typography.pxToRem(1200),
     width: '100%',
     margin: '0 auto',

@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Grid, Stack, Typography } from '@mui/material';
 
+import { CartBillCard } from '@/components/CartBillCard/CartBillCard';
 import { CartItemCard } from '@/components/CartItemCard/CartItemCard';
-import { CartSummary } from '@/components/CartSummary/CartSummary';
 import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
 import {
     EmptyCartContainer,
-    EmptyCartSubtitle,
     MainCartContainer,
     PageRoot,
 } from '@/container/Cart/CartContainer.styles';
@@ -32,22 +31,17 @@ export const CartContainer = () => {
 
     const [appliedDiscount, setAppliedDiscount] = useState<{
         code: string;
-        percent: number;
+        amount: number;
     } | null>(null);
 
     const subtotal = cartItems.reduce(
         (sum, item) => sum + item.menuItem.price * item.quantity,
         0,
     );
-    const bookingFee = cartItems.length > 0 ? 2.0 : 0.0;
-    const discountAmount = appliedDiscount
-        ? (subtotal * appliedDiscount.percent) / 100
-        : 0;
-    const taxes = (subtotal - discountAmount) * 0.05;
-    const totalPay = Math.max(
-        0,
-        subtotal - discountAmount + bookingFee + taxes,
-    );
+    const bookingFee = 20;
+    const discountAmount = appliedDiscount?.amount || 0;
+    const taxes = subtotal * 0.02;
+    const totalPay = subtotal - discountAmount + bookingFee + taxes;
 
     const handleIncrement = (menuItemId: string) => {
         dispatch(incrementCartItem({ userEmail, menuItemId }));
@@ -62,11 +56,11 @@ export const CartContainer = () => {
     };
 
     const handleApplyPromo = (code: string) => {
-        if (code.trim().toUpperCase() === 'SAVE10') {
-            setAppliedDiscount({ code: 'SAVE10', percent: 10 });
+        if (code === 'SAVE10') {
+            setAppliedDiscount({ code: 'SAVE10', amount: 10 });
             dispatch(
                 showNotification({
-                    message: 'Coupon SAVE10 applied (10% off)!',
+                    message: 'Coupon SAVE10 applied 10 rupees off!',
                     severity: 'success',
                 }),
             );
@@ -85,12 +79,16 @@ export const CartContainer = () => {
             <PageRoot>
                 <NavbarContainer />
                 <EmptyCartContainer maxWidth="md">
-                    <Typography variant="h4" fontWeight={700} gutterBottom>
+                    <Typography variant="h4" gutterBottom>
                         Your Cart is Empty
                     </Typography>
-                    <EmptyCartSubtitle color="text.secondary">
+                    <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        gutterBottom
+                    >
                         Explore menus and add your favorite dishes.
-                    </EmptyCartSubtitle>
+                    </Typography>
                     <Button
                         variant="contained"
                         color="primary"
@@ -108,7 +106,7 @@ export const CartContainer = () => {
         <PageRoot>
             <NavbarContainer />
             <MainCartContainer maxWidth="lg">
-                <Typography variant="h4" fontWeight={700} gutterBottom>
+                <Typography variant="h4" gutterBottom>
                     Your Cart
                 </Typography>
 
@@ -128,7 +126,7 @@ export const CartContainer = () => {
                     </Grid>
 
                     <Grid item xs={12} md={5}>
-                        <CartSummary
+                        <CartBillCard
                             subtotal={subtotal}
                             bookingFee={bookingFee}
                             taxes={taxes}

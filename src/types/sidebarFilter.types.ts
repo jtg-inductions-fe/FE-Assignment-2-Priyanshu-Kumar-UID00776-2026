@@ -1,3 +1,4 @@
+// Sidebar filter for containing the rating
 export type RestaurantSidebarProps = {
     open: boolean;
     onClose: () => void;

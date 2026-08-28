@@ -4,32 +4,21 @@ import {
     ArrowForward as ArrowForwardIcon,
     LocalOfferOutlined as TagIcon,
 } from '@mui/icons-material';
-import { TextField, Typography } from '@mui/material';
+import { Stack, TextField, Typography } from '@mui/material';
 
 import {
     ApplyPromoButton,
     BillRow,
-    BillStack,
     CheckoutSubmitButton,
     DiscountBillRow,
     PromoInputRow,
     SummaryCard,
     SummaryDivider,
     TagRow,
-} from '@/components/CartSummary/CartSummary.styles';
+} from '@/components/CartBillCard/CartBillCard.styles';
+import { CartBill } from '@/types/cart.types';
 
-interface CartSummaryProps {
-    subtotal: number;
-    bookingFee: number;
-    taxes: number;
-    total: number;
-    discountAmount: number;
-    appliedPromoCode: string | null;
-    onApplyPromo: (code: string) => void;
-    onCheckout: () => void;
-}
-
-export const CartSummary = ({
+export const CartBillCard = ({
     subtotal,
     bookingFee,
     taxes,
@@ -38,7 +27,7 @@ export const CartSummary = ({
     appliedPromoCode,
     onApplyPromo,
     onCheckout,
-}: CartSummaryProps) => {
+}: CartBill) => {
     const [couponInput, setCouponInput] = useState('');
 
     return (
@@ -59,43 +48,39 @@ export const CartSummary = ({
                 </ApplyPromoButton>
             </PromoInputRow>
 
-            <Typography variant="h6" fontWeight={700} gutterBottom>
-                Bill Details
-            </Typography>
+            <Typography variant="h4">Bill Details</Typography>
 
-            <BillStack>
+            <Stack spacing={3}>
                 <BillRow>
                     <Typography color="text.secondary">Item Total</Typography>
-                    <Typography fontWeight={600}>
+                    <Typography variant="body1">
                         ₹{subtotal.toFixed(2)}
                     </Typography>
                 </BillRow>
 
                 <BillRow>
                     <Typography color="text.secondary">Booking Fee</Typography>
-                    <Typography fontWeight={600}>
+                    <Typography variant="body1">
                         ₹{bookingFee.toFixed(2)}
                     </Typography>
                 </BillRow>
 
                 <BillRow>
                     <Typography color="text.secondary">
-                        Estimated Taxes (5%)
+                        Estimated Taxes
                     </Typography>
-                    <Typography fontWeight={600}>
-                        ₹{taxes.toFixed(2)}
-                    </Typography>
+                    <Typography variant="body1">₹{taxes.toFixed(2)}</Typography>
                 </BillRow>
 
                 {appliedPromoCode && (
                     <DiscountBillRow>
                         <TagRow>
                             <TagIcon fontSize="small" />
-                            <Typography variant="body2">
+                            <Typography variant="body1">
                                 Coupon Applied ({appliedPromoCode})
                             </Typography>
                         </TagRow>
-                        <Typography fontWeight={600}>
+                        <Typography variant="body1">
                             -₹{discountAmount.toFixed(2)}
                         </Typography>
                     </DiscountBillRow>
@@ -104,18 +89,12 @@ export const CartSummary = ({
                 <SummaryDivider />
 
                 <BillRow>
-                    <Typography variant="h6" fontWeight={700}>
-                        Total Pay
-                    </Typography>
-                    <Typography
-                        variant="h5"
-                        fontWeight={800}
-                        color="text.primary"
-                    >
+                    <Typography variant="h4">Total Pay</Typography>
+                    <Typography variant="h5" color="text.primary">
                         ₹{total.toFixed(2)}
                     </Typography>
                 </BillRow>
-            </BillStack>
+            </Stack>
 
             <CheckoutSubmitButton
                 variant="contained"

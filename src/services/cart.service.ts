@@ -1,6 +1,7 @@
 import { StoredUser, User } from '@/types/auth.types';
 import { CartItem } from '@/types/cart.types';
 
+// To fetch the record of the current user form the localStorage
 export const getCurrentUserFromStorage = (): User | null => {
     try {
         const stored = localStorage.getItem('currentUser');
@@ -22,8 +23,10 @@ export const persistUserCartToStorage = (
     updatedCart: CartItem[],
 ): void => {
     try {
+        // Gets the current user from the localStorage
         const current = getCurrentUserFromStorage();
 
+        // If the role is USER then update the cart with latest cart value and also sets to the localStorage
         if (
             current &&
             current.role === 'USER' &&
@@ -33,23 +36,26 @@ export const persistUserCartToStorage = (
             localStorage.setItem('currentUser', JSON.stringify(current));
         }
 
+        // Fetches the all users from the localStorage
         const storedUsers = localStorage.getItem('users');
         if (storedUsers) {
+            // Parse the data into JSON if found
             const users = JSON.parse(storedUsers) as StoredUser[];
-            const updatedUsers = users.map((u) => {
+            // Maps through the array of the user
+            const updatedUsers = users.map((user) => {
+                // Finds the particular user with the given email
                 if (
-                    u.email.toLowerCase() === userEmail.toLowerCase() &&
-                    u.role === 'USER'
+                    user.email.toLowerCase() === userEmail.toLowerCase() &&
+                    user.role === 'USER'
                 ) {
-                    return { ...u, cart: updatedCart };
+                    return { ...user, cart: updatedCart };
                 }
-                return u;
+                return user;
             });
+            // Sets the data to the localStorage for all the users
             localStorage.setItem('users', JSON.stringify(updatedUsers));
         }
     } catch {
-        throw new Error(
-            'Unable to save cart data. Storage may be full or disabled.',
-        );
+        throw new Error('Unable to save cart data.');
     }
 };

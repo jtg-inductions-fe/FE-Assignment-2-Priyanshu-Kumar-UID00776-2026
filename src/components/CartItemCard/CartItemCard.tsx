@@ -3,15 +3,12 @@ import {
     Close as CloseIcon,
     Remove as RemoveIcon,
 } from '@mui/icons-material';
-import { IconButton, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 
 import {
     CartItemMedia,
     ItemBottomRow,
-    ItemContentWrapper,
-    ItemDescription,
     QuantityCounterPill,
-    QuantityDisplay,
     StyledCartItemCard,
 } from '@/components/CartItemCard/CardItemCard.styles';
 import { CartItem } from '@/types/cart.types';
@@ -42,7 +39,7 @@ export const CartItemCard = ({
                 alt={menuItem.name}
             />
 
-            <ItemContentWrapper>
+            <Box>
                 <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -59,9 +56,9 @@ export const CartItemCard = ({
                     </IconButton>
                 </Stack>
 
-                <ItemDescription variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary">
                     {menuItem.description}
-                </ItemDescription>
+                </Typography>
 
                 <ItemBottomRow>
                     <Typography
@@ -79,9 +76,7 @@ export const CartItemCard = ({
                         >
                             <RemoveIcon fontSize="small" />
                         </IconButton>
-                        <QuantityDisplay variant="body2">
-                            {quantity}
-                        </QuantityDisplay>
+                        <Typography variant="body2">{quantity}</Typography>
                         <IconButton
                             size="small"
                             disabled={remainingStock <= 0}
@@ -91,7 +86,7 @@ export const CartItemCard = ({
                         </IconButton>
                     </QuantityCounterPill>
                 </ItemBottomRow>
-            </ItemContentWrapper>
+            </Box>
         </StyledCartItemCard>
     );
 };

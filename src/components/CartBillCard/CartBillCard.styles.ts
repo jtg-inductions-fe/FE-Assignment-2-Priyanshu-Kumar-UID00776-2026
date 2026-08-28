@@ -1,29 +1,22 @@
 import { Button, Card, Divider, Stack, styled } from '@mui/material';
 
 export const SummaryCard = styled(Card)(({ theme }) => ({
-    padding: theme.spacing(3),
-    borderRadius: theme.shape.borderRadius * 3,
+    padding: theme.typography.pxToRem(12),
+    borderRadius: '20px',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.06)',
 }));
 
 export const PromoInputRow = styled(Stack)(({ theme }) => ({
     flexDirection: 'row',
-    gap: theme.spacing(1),
-    marginBottom: theme.spacing(3),
+    gap: theme.typography.pxToRem(20),
+    marginBottom: theme.typography.pxToRem(12),
 }));
 
-export const ApplyPromoButton = styled(Button)(() => ({
-    backgroundColor: '#e0e0e0',
-    color: '#000',
-    textTransform: 'none',
+export const ApplyPromoButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.secondary.light,
     '&:hover': {
-        backgroundColor: '#d5d5d5',
+        backgroundColor: theme.palette.primary.dark,
     },
-}));
-
-export const BillStack = styled(Stack)(({ theme }) => ({
-    marginTop: theme.spacing(2),
-    gap: theme.spacing(1.5),
 }));
 
 export const BillRow = styled(Stack)(() => ({
@@ -42,18 +35,16 @@ export const DiscountBillRow = styled(Stack)(({ theme }) => ({
 export const TagRow = styled(Stack)(({ theme }) => ({
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing(0.5),
+    gap: theme.typography.pxToRem(10),
 }));
 
 export const SummaryDivider = styled(Divider)(({ theme }) => ({
-    marginTop: theme.spacing(1.5),
-    marginBottom: theme.spacing(1.5),
+    margin: theme.typography.pxToRem(20),
 }));
 
 export const CheckoutSubmitButton = styled(Button)(({ theme }) => ({
     width: '100%',
-    marginTop: theme.spacing(3),
-    paddingTop: theme.spacing(1.5),
-    paddingBottom: theme.spacing(1.5),
-    borderRadius: theme.shape.borderRadius * 2,
+    marginTop: theme.typography.pxToRem(20),
+    padding: theme.typography.pxToRem(10),
+    borderRadius: '10px',
 }));

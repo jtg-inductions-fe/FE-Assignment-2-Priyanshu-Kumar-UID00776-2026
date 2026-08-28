@@ -1,25 +1,19 @@
-import { Box, Container, styled, Typography } from '@mui/material';
+import { Box, Container, styled } from '@mui/material';
 
-export const PageRoot = styled(Box)(() => ({
+export const PageRoot = styled(Box)(({ theme }) => ({
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    paddingBottom: '64px',
+    paddingBottom: theme.typography.pxToRem(64),
 }));
 
 export const MainCartContainer = styled(Container)(({ theme }) => ({
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    padding: theme.typography.pxToRem(10),
     flexGrow: 1,
 }));
 
 export const EmptyCartContainer = styled(Container)(({ theme }) => ({
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(10),
+    padding: theme.typography.pxToRem(40),
     textAlign: 'center',
     flexGrow: 1,
-}));
-
-export const EmptyCartSubtitle = styled(Typography)(({ theme }) => ({
-    marginBottom: theme.spacing(3),
 }));

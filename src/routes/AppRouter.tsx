@@ -5,6 +5,7 @@ import { SignUp } from '@/components/Auth/SignUp';
 import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
 import { CartPage } from '@/pages/Cart/Cart';
 import { MenuPage } from '@/pages/Menu/Menu';
+import { OrderPage } from '@/pages/Order/order';
 import { RestaurantPage } from '@/pages/Restaurant/Restaurant';
 
 // Define the core application routes and their corresponding UI components
@@ -33,6 +34,11 @@ export const AppRouter = createBrowserRouter([
     {
         path: '/cart',
         element: <CartPage />,
+    },
+    // Render the cart page
+    {
+        path: '/order',
+        element: <OrderPage />,
     },
     // Dynamic route for the menu related to particular restaurant
     {

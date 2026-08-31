@@ -5,7 +5,7 @@ import { User } from '@/types/auth.types';
 // Navbar all items actions
 export type NavbarAction =
     | 'logo'
-    | 'orders'
+    | 'order'
     | 'cart'
     | 'profile'
     | 'login'

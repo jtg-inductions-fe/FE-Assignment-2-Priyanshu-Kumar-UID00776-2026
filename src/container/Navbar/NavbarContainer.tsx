@@ -92,8 +92,8 @@ export const NavbarContainer = () => {
             case 'logo':
                 void navigate('/');
                 break;
-            case 'orders':
-                void navigate('/orders');
+            case 'order':
+                void navigate('/order');
                 break;
             case 'cart':
                 void navigate('/cart');
@@ -116,7 +116,7 @@ export const NavbarContainer = () => {
     };
 
     // Get the capitalized first letter of the user's name for the avatar, defaulting to 'U'
-    const userInitial = user?.fullName?.charAt(0).toUpperCase() || 'U';
+    const userInitial = user?.fullName.charAt(0).toUpperCase() || 'U';
 
     return (
         <Navbar

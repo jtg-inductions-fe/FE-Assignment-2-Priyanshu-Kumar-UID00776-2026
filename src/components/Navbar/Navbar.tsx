@@ -46,7 +46,7 @@ export const Navbar = ({
             {isUserActive ? (
                 <>
                     <NavIconButton
-                        onClick={() => onClickAction('orders')}
+                        onClick={() => onClickAction('order')}
                         aria-label="orders"
                     >
                         <ReceiptLongOutlinedIcon fontSize="small" />

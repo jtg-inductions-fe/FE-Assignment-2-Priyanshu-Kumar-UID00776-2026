@@ -5,6 +5,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import authReducer from '@/features/authSlice';
 import cartReducer from '@/features/cartSlice';
 import notificationReducer from '@/features/notificationSlice';
+import orderReducer from '@/features/orderSlice';
 import restaurantReducer from '@/features/restaurantSlice';
 // Import Redux Toolkit store configurator.
 import { configureStore } from '@reduxjs/toolkit';
@@ -16,10 +17,11 @@ export const store = configureStore({
         notification: notificationReducer,
         restaurant: restaurantReducer,
         cart: cartReducer,
+        order: orderReducer,
     },
 });
 
-// Exporting dispatch and selectors to be used in other compnents
+// Exporting dispatch and selectors to be used in other components
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

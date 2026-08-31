@@ -1,3 +1,5 @@
+import { NavLink } from 'react-router-dom';
+
 import { Badge, BottomNavigationAction } from '@mui/material';
 
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
@@ -33,6 +35,8 @@ export const BottomNavigationBar = ({
                                 {item.icon}
                             </Badge>
                         }
+                        component={NavLink}
+                        to={item.to}
                         onClick={(event) => onClickAction(item.action, event)}
                         value={item.value}
                     />

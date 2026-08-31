@@ -99,17 +99,14 @@ export const BottomNavigationBarContainer = () => {
         event?: React.MouseEvent<HTMLElement>,
     ) => {
         switch (action) {
-            case 'home':
-                void navigate('/restaurant');
-                break;
             case 'cart':
                 handleUserRoute('/cart', '/login');
                 break;
             case 'addRestaurant':
                 handleUserRoute('/add-restaurant', '/login');
                 break;
-            case 'orders':
-                handleUserRoute('/orders', '/login');
+            case 'order':
+                handleUserRoute('/order', '/login');
                 break;
             case 'profile':
                 if (event) setAnchorEl(event.currentTarget);
@@ -119,9 +116,6 @@ export const BottomNavigationBarContainer = () => {
                 break;
             case 'logout':
                 void handleLogout();
-                break;
-            case 'login':
-                void navigate('/login');
                 break;
             default:
                 break;
@@ -135,6 +129,7 @@ export const BottomNavigationBarContainer = () => {
             icon: <Home />,
             action: 'home',
             value: '/restaurant',
+            to: '/home',
             isVisible: true,
         },
         {
@@ -142,6 +137,7 @@ export const BottomNavigationBarContainer = () => {
             icon: <ShoppingCart />,
             action: 'cart',
             value: '/cart',
+            to: '/cart',
             badgeContent: totalCartCount,
             isVisible: user?.role === 'USER' || !isUserActive,
         },
@@ -149,20 +145,23 @@ export const BottomNavigationBarContainer = () => {
             label: 'Restaurant',
             icon: <AddBox />,
             action: 'addRestaurant',
+            to: '/restaurant',
             value: '/add-restaurant',
             isVisible: user?.role === 'RESTAURANT OWNER',
         },
         {
             label: 'Orders',
             icon: <Assignment />,
-            action: 'orders',
-            value: '/orders',
+            action: 'order',
+            value: '/order',
+            to: '/order',
             isVisible: true,
         },
         {
             label: 'Profile',
             icon: <AccountCircle />,
             action: 'profile',
+            to: '#',
             value: 'profile',
             isVisible: true,
         },

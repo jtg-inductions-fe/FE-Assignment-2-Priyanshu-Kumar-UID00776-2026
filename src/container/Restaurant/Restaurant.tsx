@@ -21,6 +21,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
 import { RestaurantCard } from '@/components/RestaurantCard/RestaurantCard';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
+import {
+    DELIVERY_TIME_SLOTS,
+    DIET_TYPE_LABELS,
+} from '@/constant/restaurantConstants';
 import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
 import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import {
@@ -69,7 +73,7 @@ export const Restaurant = () => {
     const isMobile = Boolean(useMediaQuery(theme.breakpoints.down('sm')));
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
+    const [dietFilter, setDietFilter] = useState<FoodVariant>('all');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRestaurant, setEditingRestaurant] =
         useState<RestaurantItemTypes | null>(null);
@@ -98,18 +102,14 @@ export const Restaurant = () => {
     useEffect(() => {
         const loadInitialData = async () => {
             try {
-                // Turn on the loading skeleton while waiting for data
                 setIsLoading(true);
-                // Call the API service to get restaurant records
                 const data = await fetchRestaurants();
-                // Save the loaded restaurants into the redux store
                 dispatch(setRestaurants(data));
             } catch (err: unknown) {
                 const message =
                     err instanceof Error
                         ? err.message
                         : 'Failed to fetch restaurants';
-                // Pop up an error toast if loading fails
                 dispatch(
                     showNotification({
                         message,
@@ -117,11 +117,9 @@ export const Restaurant = () => {
                     }),
                 );
             } finally {
-                // Turn off the skeleton loader once the request finishes
                 setIsLoading(false);
             }
         };
-        // Run the initial data loader
         void loadInitialData();
     }, [dispatch]);
 
@@ -132,7 +130,6 @@ export const Restaurant = () => {
     const filteredRestaurants = useMemo(
         () =>
             allRestaurants.filter((restaurant) => {
-                // If logged in as an owner, only show restaurants belonging to them
                 if (
                     isOwner &&
                     restaurant.ownerId.toLowerCase() !==
@@ -141,30 +138,26 @@ export const Restaurant = () => {
                     return false;
                 }
 
-                // Check if the restaurant name matches what the user typed
                 const matchesSearch = restaurant.name
                     .toLowerCase()
                     .includes(debouncedValue.toLowerCase());
-                // Skip restaurants that don't match the search text
+
                 if (!matchesSearch) return false;
 
-                // Apply food preference filters for regular customers
-                if (!isOwner && dietFilter !== 'ALL') {
-                    // Hide non-veg places when filtering for pure veg
+                if (!isOwner && dietFilter !== 'all') {
                     if (
-                        dietFilter === 'VEG' &&
+                        dietFilter === 'veg' &&
                         restaurant.dietType === 'nonVeg'
                     )
                         return false;
-                    // Hide pure veg places when filtering for non-veg
+
                     if (
-                        dietFilter === 'NON_VEG' &&
+                        dietFilter === 'nonVeg' &&
                         restaurant.dietType === 'veg'
                     )
                         return false;
                 }
 
-                // Include the restaurant if it passed all checks
                 return true;
             }),
         [allRestaurants, isOwner, user?.email, debouncedValue, dietFilter],
@@ -193,7 +186,6 @@ export const Restaurant = () => {
 
     // Save changes for an existing restaurant or create a new one
     const onFormSubmit = async (data: RestaurantFormData) => {
-        // Prevent submission if the owner email is missing
         if (!user?.email) {
             dispatch(
                 showNotification({
@@ -207,15 +199,12 @@ export const Restaurant = () => {
         try {
             // Check whether we are editing an existing item or creating a new one
             if (editingRestaurant) {
-                // Send the updated data to the API
                 const updated = await editRestaurant(
                     editingRestaurant.id,
                     data,
                     user.email,
                 );
-                // Update the restaurant record in redux
                 dispatch(editRestaurantSuccess(updated));
-                // Show a confirmation banner
                 dispatch(
                     showNotification({
                         message: 'Restaurant updated successfully!',
@@ -223,11 +212,10 @@ export const Restaurant = () => {
                     }),
                 );
             } else {
-                // Call the API to create a brand new restaurant
                 const created = await addRestaurant(data, user.email);
-                // Add the new restaurant to the Redux store
+
                 dispatch(addRestaurantSuccess(created));
-                // Show a success banner
+
                 dispatch(
                     showNotification({
                         message: 'Restaurant added successfully!',
@@ -235,14 +223,14 @@ export const Restaurant = () => {
                     }),
                 );
             }
-            // Close the dialog after saving
+
             setIsModalOpen(false);
         } catch (error: unknown) {
             const message =
                 error instanceof Error
                     ? error.message
                     : 'An error occurred while saving.';
-            // Show a error banner if saving fails
+
             dispatch(
                 showNotification({
                     message,
@@ -254,9 +242,7 @@ export const Restaurant = () => {
 
     // Permanently delete a restaurant
     const handleDelete = async (id: string) => {
-        // Ensure the owner is logged in before deleting
         if (!user?.email) {
-            // Show an authentication required alert
             dispatch(
                 showNotification({
                     message: 'Authentication required to delete.',
@@ -268,11 +254,11 @@ export const Restaurant = () => {
 
         try {
             setIsDeleting(true);
-            // Call the API service to remove the restaurant
+
             await deleteRestaurant(id, user.email);
-            // Remove the restaurant from the redux store
+
             dispatch(deleteRestaurantSuccess(id));
-            // Show a success banner confirming deletion
+
             dispatch(
                 showNotification({
                     message: 'Restaurant deleted successfully!',
@@ -285,7 +271,7 @@ export const Restaurant = () => {
                 error instanceof Error
                     ? error.message
                     : 'Failed to delete restaurant.';
-            // Show an error toast if deletion fails
+
             dispatch(
                 showNotification({
                     message,
@@ -498,15 +484,16 @@ export const Restaurant = () => {
                                         error={!!errors.dietType}
                                         helperText={errors.dietType?.message}
                                     >
-                                        <SelectMenuItem value="VEG">
-                                            VEG
-                                        </SelectMenuItem>
-                                        <SelectMenuItem value="NON_VEG">
-                                            NON VEG
-                                        </SelectMenuItem>
-                                        <SelectMenuItem value="BOTH">
-                                            BOTH
-                                        </SelectMenuItem>
+                                        {Object.entries(DIET_TYPE_LABELS).map(
+                                            ([value, label]) => (
+                                                <SelectMenuItem
+                                                    key={value}
+                                                    value={value}
+                                                >
+                                                    {label}
+                                                </SelectMenuItem>
+                                            ),
+                                        )}
                                     </TextField>
                                 )}
                             />
@@ -559,14 +546,24 @@ export const Restaurant = () => {
                                 render={({ field }) => (
                                     <TextField
                                         {...field}
-                                        label="Delivery Time (e.g. 20-30 min)"
+                                        select
+                                        label="Delivery Time"
                                         variant="outlined"
                                         fullWidth
                                         error={!!errors.deliveryTime}
                                         helperText={
                                             errors.deliveryTime?.message
                                         }
-                                    />
+                                    >
+                                        {DELIVERY_TIME_SLOTS.map((slot) => (
+                                            <SelectMenuItem
+                                                key={slot}
+                                                value={slot}
+                                            >
+                                                {slot}
+                                            </SelectMenuItem>
+                                        ))}
+                                    </TextField>
                                 )}
                             />
 
@@ -607,12 +604,11 @@ export const Restaurant = () => {
                             type="submit"
                             variant="contained"
                             disabled={isSubmitting}
+                            loading={isSubmitting}
                         >
-                            {isSubmitting
-                                ? 'Saving...'
-                                : editingRestaurant
-                                  ? 'Save Changes'
-                                  : 'Add Restaurant'}
+                            {editingRestaurant
+                                ? 'Save Changes'
+                                : 'Add Restaurant'}
                         </Button>
                     </StyledDialogActions>
                 </form>
@@ -624,7 +620,7 @@ export const Restaurant = () => {
                 maxWidth="xs"
                 fullWidth
             >
-                <DialogTitle fontWeight={700}>Delete Restaurant?</DialogTitle>
+                <DialogTitle variant="h4">Delete Restaurant?</DialogTitle>
                 <DialogContent>
                     <Typography variant="body2" color="text.secondary">
                         Are you sure you want to delete this restaurant? This
@@ -643,13 +639,14 @@ export const Restaurant = () => {
                         variant="contained"
                         color="error"
                         disabled={isDeleting}
+                        loading={isDeleting}
                         onClick={() => {
                             if (deleteTargetId) {
                                 void handleDelete(deleteTargetId);
                             }
                         }}
                     >
-                        {isDeleting ? 'Deleting...' : 'Delete'}
+                        Delete
                     </Button>
                 </StyledDialogActions>
             </Dialog>

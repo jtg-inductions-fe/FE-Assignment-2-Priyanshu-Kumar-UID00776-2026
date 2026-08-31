@@ -47,13 +47,10 @@ export const BottomNavigationBarContainer = () => {
         handleCloseMenu();
 
         try {
-            // Trigger the logout API call
             await logout();
 
-            // Clear the user from global state and browser storage
             dispatch(clearUser());
 
-            // Show a green success banner
             dispatch(
                 showNotification({
                     message: 'Successfully logged out!',
@@ -63,7 +60,6 @@ export const BottomNavigationBarContainer = () => {
 
             void navigate('/login');
         } catch (error) {
-            // Display an error if the logout request fails
             dispatch(
                 showNotification({
                     message:

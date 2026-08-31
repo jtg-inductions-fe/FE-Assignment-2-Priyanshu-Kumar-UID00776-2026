@@ -18,12 +18,10 @@ export const GlobalSnackbar = () => {
         _event?: React.SyntheticEvent | Event,
         reason?: string,
     ) => {
-        // Ignore background clicks so the alert doesn't close accidentally
         if (reason === 'clickaway') {
             return;
         }
 
-        // Hide the notification in the global state
         dispatch(hideNotification());
     };
 

@@ -30,11 +30,10 @@ export const restaurantSlice = createSlice({
             state,
             action: PayloadAction<RestaurantItemTypes>,
         ) => {
-            // Locate the item index in our state array
             const index = state.restaurants.findIndex(
                 (restaurant) => restaurant.id === action.payload.id,
             );
-            // If found overwrite it with the updated restaurant object
+
             if (index !== -1) {
                 state.restaurants[index] = action.payload;
             }
@@ -48,7 +47,6 @@ export const restaurantSlice = createSlice({
     },
 });
 
-// Export action creators for use in UI components and services
 export const {
     setRestaurants,
     addRestaurantSuccess,
@@ -56,5 +54,4 @@ export const {
     deleteRestaurantSuccess,
 } = restaurantSlice.actions;
 
-// Export the reducer to register in the global redux store
 export default restaurantSlice.reducer;

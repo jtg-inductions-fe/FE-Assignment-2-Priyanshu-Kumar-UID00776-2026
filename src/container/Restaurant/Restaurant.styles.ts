@@ -4,9 +4,8 @@ import { styled } from '@mui/material/styles';
 export const RestaurantContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
-    maxHeight: '100vh',
-    overflow: 'hidden',
+    overflowY: 'hidden',
+    height: '100%',
     backgroundColor: theme.palette.secondary.light,
 }));
 
@@ -16,8 +15,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
     flexDirection: 'column',
     gap: theme.typography.pxToRem(8),
-    padding: theme.spacing(3, 3, 0, 3),
-    maxWidth: theme.typography.pxToRem(1200),
+    padding: theme.spacing(3),
     margin: '0 auto',
     width: '100%',
     flexShrink: 0,
@@ -27,8 +25,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
 export const ScrollableContent = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
-    padding: theme.spacing(0, 3, 15, 3),
-    maxWidth: theme.typography.pxToRem(1200),
+    padding: theme.spacing(0, 3, 35, 3),
     width: '100%',
     margin: '0 auto',
 }));
@@ -51,7 +48,7 @@ export const AddRestaurantButton = styled(Button)(({ theme }) => ({
 
 export const RestaurantGrid = styled(Box)(({ theme }) => ({
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
     gap: theme.typography.pxToRem(12),
     paddingBottom: theme.typography.pxToRem(8),
 }));

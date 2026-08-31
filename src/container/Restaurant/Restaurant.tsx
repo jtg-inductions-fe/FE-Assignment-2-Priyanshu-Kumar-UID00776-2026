@@ -25,8 +25,6 @@ import {
     DELIVERY_TIME_SLOTS,
     DIET_TYPE_LABELS,
 } from '@/constant/restaurantConstants';
-import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
-import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import {
     AddRestaurantButton,
     ControlsWrapper,
@@ -285,8 +283,6 @@ export const Restaurant = () => {
 
     return (
         <RestaurantContainer>
-            <NavbarContainer />
-
             <RestaurantHeaderSection>
                 <HeaderButtonWrapper>
                     <Typography variant="h1">
@@ -410,8 +406,6 @@ export const Restaurant = () => {
                     )}
                 </RestaurantGrid>
             </ScrollableContent>
-
-            <BottomNavigationBarContainer />
 
             <Dialog
                 open={isModalOpen}

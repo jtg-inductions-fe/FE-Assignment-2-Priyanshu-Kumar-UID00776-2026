@@ -44,9 +44,9 @@ export const ControlsWrapper = styled(Box)(({ theme }) => ({
 }));
 
 export const AddRestaurantButton = styled(Button)(({ theme }) => ({
-    padding: theme.spacing(1, 2),
     textTransform: 'none',
     borderRadius: '10px',
+    padding: theme.spacing(2, 4),
 }));
 
 export const RestaurantGrid = styled(Box)(({ theme }) => ({

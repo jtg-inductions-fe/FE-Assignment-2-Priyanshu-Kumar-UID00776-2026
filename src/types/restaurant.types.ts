@@ -1,5 +1,5 @@
 // Allowed food categories for filtering and tags
-export type DietType = 'VEG' | 'NON_VEG' | 'BOTH';
+export type DietType = 'veg' | 'nonVeg' | 'both';
 
 // Individual dish details in a restaurant's menu
 export type MenuItem = {
@@ -7,7 +7,7 @@ export type MenuItem = {
     name: string;
     description: string;
     price: number;
-    dietType: 'VEG' | 'NON_VEG';
+    dietType: DietType;
     image?: string;
 };
 

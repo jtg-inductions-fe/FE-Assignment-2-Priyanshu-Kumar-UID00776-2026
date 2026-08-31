@@ -78,7 +78,7 @@ export const Restaurant = () => {
     const EMPTY_RESTAURANT_FORM: RestaurantFormData = {
         name: '',
         location: '',
-        dietType: 'BOTH',
+        dietType: 'both',
         rating: 4.5,
         deliveryTime: '',
         openingTime: '',
@@ -153,13 +153,13 @@ export const Restaurant = () => {
                     // Hide non-veg places when filtering for pure veg
                     if (
                         dietFilter === 'VEG' &&
-                        restaurant.dietType === 'NON_VEG'
+                        restaurant.dietType === 'nonVeg'
                     )
                         return false;
                     // Hide pure veg places when filtering for non-veg
                     if (
                         dietFilter === 'NON_VEG' &&
-                        restaurant.dietType === 'VEG'
+                        restaurant.dietType === 'veg'
                     )
                         return false;
                 }
@@ -433,7 +433,7 @@ export const Restaurant = () => {
                 maxWidth="sm"
                 fullWidth
             >
-                <DialogTitle fontWeight={700}>
+                <DialogTitle variant="h6">
                     {editingRestaurant
                         ? 'Edit Restaurant'
                         : 'Add New Restaurant'}
@@ -502,7 +502,7 @@ export const Restaurant = () => {
                                             VEG
                                         </SelectMenuItem>
                                         <SelectMenuItem value="NON_VEG">
-                                            NON_VEG
+                                            NON VEG
                                         </SelectMenuItem>
                                         <SelectMenuItem value="BOTH">
                                             BOTH

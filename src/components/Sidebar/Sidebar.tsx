@@ -61,7 +61,6 @@ export const RestaurantSidebar = ({
                         return (
                             <FilterItemLabel
                                 key={rating}
-                                // isSelected={isSelected}
                                 control={
                                     <StyledCheckbox
                                         checked={isSelected}

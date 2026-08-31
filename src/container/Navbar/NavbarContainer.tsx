@@ -99,7 +99,7 @@ export const NavbarContainer = () => {
     };
 
     // Get the capitalized first letter of the user's name for the avatar, defaulting to 'U'
-    const userInitial = user?.fullName?.charAt(0).toUpperCase() || 'U';
+    const userInitial = user?.fullName.charAt(0).toUpperCase() || 'U';
 
     return (
         <Navbar

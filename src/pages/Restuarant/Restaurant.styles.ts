@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const RestaurantContainer = styled(Box)(({ theme }) => ({
-    minHeight: '100dvh',
+    minHeight: '100vh',
     width: '100%',
     backgroundColor: theme.palette.secondary.main,
 }));

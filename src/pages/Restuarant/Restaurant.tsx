@@ -1,7 +1,5 @@
 import { Typography } from '@mui/material';
 
-import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
-import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import {
     RestaurantContainer,
     RestaurantContent,
@@ -9,8 +7,6 @@ import {
 
 export const Restaurant = () => (
     <RestaurantContainer>
-        <NavbarContainer />
-
         <RestaurantContent>
             <Typography variant="h1">Restaurants</Typography>
 
@@ -18,7 +14,5 @@ export const Restaurant = () => (
                 Discover restaurants and explore their menus.
             </Typography>
         </RestaurantContent>
-
-        <BottomNavigationBarContainer />
     </RestaurantContainer>
 );

@@ -1,11 +1,4 @@
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    DialogActions,
-    Stack,
-} from '@mui/material';
+import { Box, Button, Card, CardContent, DialogActions } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const RestaurantContainer = styled(Box)(({ theme }) => ({
@@ -17,17 +10,10 @@ export const RestaurantContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.light,
 }));
 
-export const ContentArea = styled(Box)({
+export const MainContentLayout = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    flex: 1,
-    overflow: 'hidden',
-    width: '100%',
-});
-
-export const MainContentLayout = styled(Box)({
-    display: 'flex',
     flex: 1,
     overflow: 'hidden',
     width: '100%',
@@ -65,13 +51,6 @@ export const ControlsWrapper = styled(Box)(({ theme }) => ({
     flexWrap: 'wrap',
     width: '100%',
 }));
-
-export const FilterButtonStack = styled(Stack)({
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-});
 
 export const AddRestaurantButton = styled(Button)(({ theme }) => ({
     padding: theme.spacing(1, 2),

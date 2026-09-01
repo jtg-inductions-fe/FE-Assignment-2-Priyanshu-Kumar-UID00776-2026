@@ -1,129 +1,93 @@
-import { useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
-
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import { Avatar, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import { logout } from '@/services/auth.service';
-import { clearUser } from '@/slices/authSlice';
-import { showNotification } from '@/slices/notificationSlice';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import LogoImage from '@/assets/images/logo.avif';
+import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
+import type { NavbarProps } from '@/types/navbar.types';
 
 import {
+    LoginButton,
+    Logo,
     LogoContainer,
     NavbarActions,
     NavbarContainer,
-    ProfileInfo,
+    NavIconButton,
+    ProfileIconButton,
+    StyledAvatar,
 } from './Navbar.styles';
 
-export const Navbar = () => {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+export const Navbar = ({
+    user,
+    isUserActive,
+    userInitial,
+    anchorEl,
+    isMenuOpen,
+    onClickAction,
+}: NavbarProps) => (
+    <NavbarContainer>
+        <LogoContainer onClick={() => onClickAction('logo')}>
+            <Logo>
+                <img
+                    src={LogoImage}
+                    height="100%"
+                    width="100%"
+                    alt="Khana Peena Logo"
+                />
+            </Logo>
 
-    // Read the current logged in user details from the redux store
-    const user = useAppSelector((state) => state.auth.user);
+            <Typography color="primary.main" variant="h5">
+                Khana Peena
+            </Typography>
+        </LogoContainer>
 
-    // Track the HTML element that anchors the dropdown menu
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+        <NavbarActions>
+            {isUserActive ? (
+                <>
+                    <NavIconButton
+                        onClick={() => onClickAction('orders')}
+                        aria-label="orders"
+                    >
+                        <ReceiptLongOutlinedIcon fontSize="small" />
+                        <Typography variant="body1">Orders</Typography>
+                    </NavIconButton>
 
-    // Check if the dropdown menu is currently visible
-    const isMenuOpen = Boolean(anchorEl);
+                    {user?.role === 'USER' && (
+                        <NavIconButton
+                            onClick={() => onClickAction('cart')}
+                            aria-label="cart"
+                        >
+                            <ShoppingCartOutlinedIcon fontSize="small" />
+                            <Typography variant="body1">Cart</Typography>
+                        </NavIconButton>
+                    )}
 
-    // Open the dropdown menu anchored to the clicked profile element
-    const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    // Close the dropdown menu by clearing the anchor element.
-    const handleCloseMenu = () => {
-        setAnchorEl(null);
-    };
-
-    // Log the user out, clear their session, display an alert, and redirect to login
-    const handleLogout = async () => {
-        // Dismiss the dropdown menu
-        handleCloseMenu();
-
-        try {
-            // Call the logout function to end the active session
-            await logout();
-
-            // Clear the user from the global redux store and localStorage
-            dispatch(clearUser());
-
-            // Show a green logout success banner
-            dispatch(
-                showNotification({
-                    message: 'Successfully logged out!',
-                    severity: 'success',
-                }),
-            );
-
-            // Redirecting the user to login screen after logout
-            void navigate('/login');
-        } catch (error) {
-            // Display an error banner if logging out fails
-            dispatch(
-                showNotification({
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : 'Unable to logout.',
-                    severity: 'error',
-                }),
-            );
-        }
-    };
-
-    // Get the capitalized first letter of the user's name for the avatar, defaulting to 'U'
-    const userInitial = user?.fullName?.charAt(0).toUpperCase() ?? 'U';
-
-    return (
-        <NavbarContainer>
-            <LogoContainer>
-                <Typography variant="h2">Khana Peena</Typography>
-            </LogoContainer>
-
-            <NavbarActions>
-                <IconButton aria-label="shopping cart" size="large">
-                    <ShoppingCartOutlinedIcon />
-                </IconButton>
-
-                <IconButton
-                    onClick={handleProfileClick}
-                    size="small"
-                    aria-label="profile"
+                    <ProfileIconButton
+                        onClick={(event) => onClickAction('profile', event)}
+                        size="medium"
+                        aria-label="account settings"
+                    >
+                        <StyledAvatar>{userInitial}</StyledAvatar>
+                    </ProfileIconButton>
+                </>
+            ) : (
+                <LoginButton
+                    onClick={() => onClickAction('login')}
+                    variant="outlined"
                 >
-                    <Avatar>{userInitial}</Avatar>
-                </IconButton>
+                    Login
+                </LoginButton>
+            )}
 
-                <Menu
-                    anchorEl={anchorEl}
-                    open={isMenuOpen}
-                    onClose={handleCloseMenu}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                >
-                    <ProfileInfo>
-                        <Typography variant="body1">
-                            {user?.fullName}
-                        </Typography>
-
-                        <Typography variant="body2" color="text.secondary">
-                            {user?.email}
-                        </Typography>
-                    </ProfileInfo>
-
-                    <MenuItem onClick={void handleLogout}>Logout</MenuItem>
-                </Menu>
-            </NavbarActions>
-        </NavbarContainer>
-    );
-};
+            <ProfileMenu
+                user={user}
+                isUserActive={isUserActive}
+                anchorEl={anchorEl}
+                isMenuOpen={isMenuOpen}
+                onCloseMenu={() => onClickAction('closeMenu')}
+                onLogoutClick={() => onClickAction('logout')}
+                onLoginClick={() => onClickAction('login')}
+            />
+        </NavbarActions>
+    </NavbarContainer>
+);

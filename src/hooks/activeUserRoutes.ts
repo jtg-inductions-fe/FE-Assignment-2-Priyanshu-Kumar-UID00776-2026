@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '@/store/store';
 
 // Custom hook to redirect users based on whether they are logged in or not
-export default function useActiveUserRoute() {
+export function useActiveUserRoute() {
     const navigate = useNavigate();
+
     // Get the active user profile from redux state
     const user = useAppSelector((state) => state.auth.user);
 

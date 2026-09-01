@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material';
 
-import { Navbar } from '@/components/Navbar/Navbar';
 import {
     RestaurantContainer,
     RestaurantContent,
@@ -8,8 +7,6 @@ import {
 
 export const Restaurant = () => (
     <RestaurantContainer>
-        <Navbar />
-
         <RestaurantContent>
             <Typography variant="h1">Restaurants</Typography>
 

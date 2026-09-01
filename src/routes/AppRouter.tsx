@@ -2,9 +2,9 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { Login } from '@/components/Auth/Login';
 import { SignUp } from '@/components/Auth/SignUp';
+import { RootLayout } from '@/layout/RootLayout';
 import { Restaurant } from '@/pages/Restuarant/Restaurant';
 
-// Define the core application routes and their corresponding UI components
 export const AppRouter = createBrowserRouter([
     // Redirect the root path directly to the restaurant screen
     {
@@ -21,10 +21,16 @@ export const AppRouter = createBrowserRouter([
         path: '/login',
         element: <Login />,
     },
-    // Render the restaurant dashboard screen
+    // Children for the pages
     {
-        path: '/restaurant',
-        element: <Restaurant />,
+        path: '/',
+        element: <RootLayout />,
+        children: [
+            {
+                path: 'restaurant',
+                element: <Restaurant />,
+            },
+        ],
     },
     // Catch-all route to redirect any invalid or unknown URLs back to signup
     {

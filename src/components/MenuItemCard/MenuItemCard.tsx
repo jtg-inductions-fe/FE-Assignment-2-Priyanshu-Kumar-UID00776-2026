@@ -5,14 +5,12 @@ import {
     Remove as RemoveIcon,
     Star as StarIcon,
 } from '@mui/icons-material';
-import { Box, Chip, Stack, Typography } from '@mui/material';
+import { Box, Chip, Stack, Typography, useTheme } from '@mui/material';
 
 import {
     AddButton,
     CounterButton,
     MenuCardBody,
-    MenuImageWrapper,
-    QuantityCounter,
     RatingBadge,
     StyledCardMedia,
     StyledMenuCard,
@@ -23,25 +21,16 @@ export const MenuItemCard = ({
     item,
     isOwner = false,
     quantity = 0,
-    onAddToCart,
-    onIncrement,
-    onDecrement,
-    onEdit,
-    onDelete,
+    onAction,
 }: MenuItemCardProps) => {
     const remainingStock = Math.max(0, (item.stock || 0) - quantity);
+    const theme = useTheme();
 
     return (
         <StyledMenuCard>
-            <MenuImageWrapper>
-                <StyledCardMedia
-                    src={
-                        item.image ||
-                        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'
-                    }
-                    alt={item.name}
-                />
-            </MenuImageWrapper>
+            <Box width={theme.typography.pxToRem(130)}>
+                <StyledCardMedia src={item.image} alt={item.name} />
+            </Box>
 
             <MenuCardBody>
                 <Box>
@@ -54,8 +43,11 @@ export const MenuItemCard = ({
 
                         <RatingBadge>
                             <StarIcon />
-                            <Typography variant="caption">
-                                {item.rating?.toFixed(1) ?? '0.0'}
+                            <Typography
+                                variant="body2"
+                                color={theme.palette.secondary.dark}
+                            >
+                                {item.rating}
                             </Typography>
                         </RatingBadge>
                     </Stack>
@@ -75,12 +67,12 @@ export const MenuItemCard = ({
                         sx={{ mt: 2.5 }}
                     >
                         <Chip
-                            label={item.dietType === 'VEG' ? 'Veg' : 'Non-Veg'}
+                            label={item.dietType === 'veg' ? 'Veg' : 'Non-Veg'}
                             size="small"
                             color={
-                                item.dietType === 'VEG' ? 'success' : 'error'
+                                item.dietType === 'veg' ? 'success' : 'error'
                             }
-                            variant="outlined"
+                            variant="filled"
                         />
                         <Chip
                             label={`Stock: ${remainingStock}`}
@@ -106,47 +98,48 @@ export const MenuItemCard = ({
                             <AddButton
                                 variant="outlined"
                                 size="small"
-                                onClick={() => onEdit?.(item)}
+                                onClick={() => onAction('edit', item)}
                             >
                                 <EditIcon fontSize="small" />
                             </AddButton>
                             <AddButton
                                 variant="outlined"
                                 color="error"
-                                size="small"
-                                onClick={() => onDelete?.(item.id)}
+                                onClick={() => onAction('delete', item)}
                             >
                                 <DeleteIcon fontSize="small" />
                             </AddButton>
                         </Stack>
                     ) : quantity > 0 ? (
-                        <QuantityCounter>
+                        <Stack
+                            alignItems="center"
+                            direction="row"
+                            gap={theme.typography.pxToRem(4)}
+                        >
                             <CounterButton
                                 size="small"
-                                onClick={() => onDecrement?.(item)}
+                                onClick={() => onAction('decrement', item)}
                             >
                                 <RemoveIcon fontSize="small" />
                             </CounterButton>
-                            <Typography fontWeight={600} variant="body2">
-                                {quantity}
-                            </Typography>
+                            <Typography variant="body2">{quantity}</Typography>
                             <CounterButton
                                 size="small"
                                 disabled={remainingStock <= 0}
-                                onClick={() => onIncrement?.(item)}
+                                onClick={() => onAction('increment', item)}
                             >
                                 <AddIcon fontSize="small" />
                             </CounterButton>
-                        </QuantityCounter>
+                        </Stack>
                     ) : (
                         <AddButton
                             variant="contained"
                             color="primary"
                             size="small"
                             disabled={remainingStock <= 0}
-                            onClick={() => onAddToCart?.(item)}
+                            onClick={() => onAction('addToCart', item)}
                         >
-                            {remainingStock > 0 ? 'Add' : 'Out of Stock'}
+                            Add
                         </AddButton>
                     )}
                 </Stack>

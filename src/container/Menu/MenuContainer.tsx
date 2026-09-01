@@ -22,21 +22,15 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
 import { MenuItemCard } from '@/components/MenuItemCard/MenuItemCard';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
 import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
-import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
-import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import {
     AddRestaurantButton,
-    ContentArea,
     ControlsWrapper,
     FilterButton,
-    FilterButtonStack,
     FormStack,
     HeaderButtonWrapper,
     MainContentLayout,
@@ -65,13 +59,12 @@ import {
 } from '@/services/restaurant.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { FoodVariant } from '@/types/filterToggleButton.types';
-import type { MenuFormData, MenuItem } from '@/types/restaurant.types';
+import { MenuFormData, MenuItem } from '@/types/restaurant.types';
 
 export const MenuContainer = () => {
     const { restaurantId } = useParams<{ restaurantId: string }>();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const theme = useTheme();
 
     const user = useAppSelector((state) => state.auth.user);
     const isOwner = user?.role === 'RESTAURANT OWNER';
@@ -83,17 +76,35 @@ export const MenuContainer = () => {
     );
 
     const cartItems = useAppSelector((state) => state.cart.items);
-
-    const isMobile = Boolean(useMediaQuery(theme.breakpoints.down('sm')));
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [dietFilter, setDietFilter] = useState<FoodVariant>('ALL');
+    const [dietFilter, setDietFilter] = useState<FoodVariant>('all');
     const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+    const handleMenuAction = (actionType: string, item: MenuItem) => {
+        switch (actionType) {
+            case 'addToCart':
+                handleAddToCart(item);
+                break;
+            case 'increment':
+                handleIncrement(item);
+                break;
+            case 'decrement':
+                handleDecrement(item);
+                break;
+            case 'edit':
+                handleOpenEditModal(item);
+                break;
+            case 'delete':
+                setDeleteTargetId(item.id);
+                break;
+        }
+    };
 
     const {
         control,
@@ -107,8 +118,7 @@ export const MenuContainer = () => {
             price: 0,
             rating: 0,
             stock: 0,
-            dietType: 'VEG',
-            category: '',
+            dietType: 'veg',
         },
         mode: 'onTouched',
     });
@@ -130,33 +140,29 @@ export const MenuContainer = () => {
     const handleRatingToggle = (rating: number) => {
         setSelectedRatings((prev) =>
             prev.includes(rating)
-                ? prev.filter((r) => r !== rating)
+                ? prev.filter((restaurant) => restaurant !== rating)
                 : [...prev, rating],
         );
     };
 
     // Filter menu items by search query, diet type, and minimum rating
     const filteredMenuItems = useMemo(() => {
-        // Return an empty list if the restaurant has no menus
         if (!selectedRestaurant?.menus) return [];
 
         return selectedRestaurant.menus.filter((item: MenuItem) => {
-            // Check if the item name includes the searched text
             const matchesSearch = item.name
                 .toLowerCase()
                 .includes(debouncedSearch.toLowerCase());
-            // Return fasle if it doesn't match the search term
+
             if (!matchesSearch) return false;
 
-            // Apply veg, non-veg filter if one is selected
-            if (dietFilter !== 'ALL') {
-                if (dietFilter === 'VEG' && item.dietType !== 'VEG')
+            if (dietFilter !== 'all') {
+                if (dietFilter === 'veg' && item.dietType !== 'veg')
                     return false;
-                if (dietFilter === 'NON_VEG' && item.dietType !== 'NON_VEG')
+                if (dietFilter === 'nonVeg' && item.dietType !== 'nonVeg')
                     return false;
             }
 
-            // Check if the item matches any of the active rating filters
             if (selectedRatings.length > 0 && item.rating) {
                 const passes = selectedRatings.some((r) => item.rating >= r);
                 if (!passes) return false;
@@ -235,8 +241,7 @@ export const MenuContainer = () => {
             price: 0,
             stock: 0,
             rating: 0,
-            dietType: 'VEG',
-            category: '',
+            dietType: 'veg',
         });
         setIsModalOpen(true);
     };
@@ -257,7 +262,6 @@ export const MenuContainer = () => {
 
     // Save added or edited menu item data to the restaurant store
     const onFormSubmit = async (data: MenuFormData) => {
-        // Return error if user is not authenticated or restaurant ID is missing
         if (!user?.email || !restaurantId) {
             dispatch(
                 showNotification({
@@ -267,9 +271,8 @@ export const MenuContainer = () => {
             );
             return;
         }
-        // Attempt to create or update the menu item
+
         try {
-            // Update the existing item if edit mode is active
             if (editingItem) {
                 const updated = await editMenuItem(
                     restaurantId,
@@ -286,9 +289,7 @@ export const MenuContainer = () => {
                         severity: 'success',
                     }),
                 );
-            }
-            // Otherwise create and append a new menu item
-            else {
+            } else {
                 const created = await addMenuItem(
                     restaurantId,
                     data,
@@ -304,15 +305,14 @@ export const MenuContainer = () => {
                     }),
                 );
             }
-            // Close the modal dialog upon successful save
+
             setIsModalOpen(false);
         } catch (error: unknown) {
-            // Handle edit or add failures
             const message =
                 error instanceof Error
                     ? error.message
                     : 'An error occurred while saving.';
-            // Show a error banner if saving fails
+
             dispatch(
                 showNotification({
                     message,
@@ -324,7 +324,6 @@ export const MenuContainer = () => {
 
     // Delete a menu item by ID from the restaurant
     const handleDelete = async (id: string) => {
-        // Verify user authentication before allowing deletion
         if (!user?.email || !restaurantId) {
             dispatch(
                 showNotification({
@@ -355,7 +354,6 @@ export const MenuContainer = () => {
             );
             setDeleteTargetId(null);
         } catch (error: unknown) {
-            // Show error alert if deletion fails
             const message =
                 error instanceof Error
                     ? error.message
@@ -367,7 +365,6 @@ export const MenuContainer = () => {
                 }),
             );
         } finally {
-            // Reset deleting loading state regardless of outcome
             setIsDeleting(false);
         }
     };
@@ -375,27 +372,22 @@ export const MenuContainer = () => {
     if (!selectedRestaurant) {
         return (
             <RestaurantContainer>
-                <NavbarContainer />
                 <Box textAlign="center" py={10}>
-                    <Typography variant="h5">Restaurant not found.</Typography>
+                    <Typography variant="h5">Menu not found.</Typography>
                     <Typography
                         variant="body1"
                         color="primary"
-                        sx={{ cursor: 'pointer', mt: 2 }}
                         onClick={() => void navigate('/restaurant')}
                     >
                         Back to Restaurants
                     </Typography>
                 </Box>
-                <BottomNavigationBarContainer />
             </RestaurantContainer>
         );
     }
 
     return (
         <RestaurantContainer>
-            <NavbarContainer />
-
             <MainContentLayout>
                 <RestaurantSidebar
                     open={isDrawerOpen}
@@ -403,169 +395,141 @@ export const MenuContainer = () => {
                     selectedRatings={selectedRatings}
                     onRatingToggle={handleRatingToggle}
                 />
-
-                <ContentArea>
-                    <RestaurantHeaderSection>
-                        <HeaderButtonWrapper>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
+                <RestaurantHeaderSection>
+                    <HeaderButtonWrapper>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                            <IconButton
+                                onClick={() => void navigate('/restaurant')}
                             >
-                                <IconButton
-                                    onClick={() => void navigate('/restaurant')}
-                                >
-                                    <ArrowBackIcon />
-                                </IconButton>
+                                <ArrowBackIcon />
+                            </IconButton>
 
-                                <Typography variant="h1">
-                                    {selectedRestaurant.name}
+                            <Typography variant="h1">
+                                {selectedRestaurant.name}
+                            </Typography>
+                        </Stack>
+
+                        <Stack
+                            direction="row"
+                            spacing={1.5}
+                            alignItems="center"
+                            sx={{ display: { xs: 'none', sm: 'flex' } }}
+                        >
+                            {isOwner ? (
+                                <AddRestaurantButton
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpenAddModal}
+                                >
+                                    Add Menu Item
+                                </AddRestaurantButton>
+                            ) : (
+                                <>
+                                    <FoodVariantToggle
+                                        foodVariant={dietFilter}
+                                        onFilterChange={setDietFilter}
+                                    />
+                                    <FilterButton
+                                        variant="outlined"
+                                        startIcon={<FilterListIcon />}
+                                        onClick={() =>
+                                            setIsDrawerOpen((prev) => !prev)
+                                        }
+                                    >
+                                        Filters
+                                    </FilterButton>
+                                </>
+                            )}
+                        </Stack>
+                    </HeaderButtonWrapper>
+                    {user?.role === 'USER' && (
+                        <>
+                            <Stack direction="row" spacing={1}>
+                                <Clock color="primary" />
+                                <Typography variant="body1">
+                                    {selectedRestaurant.location}
                                 </Typography>
                             </Stack>
+                            <Stack direction="row" spacing={1}>
+                                <Location color="primary" />
+                                <Typography variant="body1">
+                                    {selectedRestaurant.deliveryTime}
+                                </Typography>
+                            </Stack>
+                        </>
+                    )}
 
-                            {!isMobile && (
-                                <Stack
-                                    direction="row"
-                                    spacing={2}
-                                    alignItems="center"
-                                >
-                                    {isOwner ? (
-                                        <AddRestaurantButton
-                                            variant="contained"
-                                            color="primary"
-                                            startIcon={<AddIcon />}
-                                            onClick={handleOpenAddModal}
-                                        >
-                                            Add Menu Item
-                                        </AddRestaurantButton>
-                                    ) : (
-                                        <>
-                                            <FoodVariantToggle
-                                                foodVariant={dietFilter}
-                                                onFilterChange={setDietFilter}
-                                            />
-                                            <FilterButton
-                                                variant="outlined"
-                                                startIcon={<FilterListIcon />}
-                                                onClick={() =>
-                                                    setIsDrawerOpen(
-                                                        (prev) => !prev,
-                                                    )
-                                                }
-                                            >
-                                                Filters
-                                            </FilterButton>
-                                        </>
-                                    )}
-                                </Stack>
-                            )}
-                        </HeaderButtonWrapper>
-                        {user?.role === 'USER' && (
-                            <>
-                                <Stack direction="row" spacing={1}>
-                                    <Clock color="primary" />
-                                    <Typography variant="body1">
-                                        {selectedRestaurant.location}
-                                    </Typography>
-                                </Stack>
-                                <Stack direction="row" spacing={1}>
-                                    <Location color="primary" />
-                                    <Typography variant="body1">
-                                        {selectedRestaurant.deliveryTime}
-                                    </Typography>
-                                </Stack>
-                            </>
-                        )}
+                    <ControlsWrapper>
+                        <RestaurantSearch
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Search dishes in this restaurant..."
+                        />
 
-                        <ControlsWrapper>
-                            <RestaurantSearch
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Search dishes in this restaurant..."
-                            />
-
-                            {isMobile && (
-                                <Stack
-                                    direction="row"
-                                    spacing={1.5}
-                                    alignItems="center"
-                                    sx={{ width: '100%' }}
-                                >
-                                    {isOwner ? (
-                                        <AddRestaurantButton
-                                            variant="contained"
-                                            color="primary"
-                                            fullWidth
-                                            startIcon={<AddIcon />}
-                                            onClick={handleOpenAddModal}
-                                        >
-                                            Add Menu Item
-                                        </AddRestaurantButton>
-                                    ) : (
-                                        <FilterButtonStack>
-                                            <FoodVariantToggle
-                                                foodVariant={dietFilter}
-                                                onFilterChange={setDietFilter}
-                                            />
-                                            <FilterButton
-                                                variant="outlined"
-                                                startIcon={<FilterListIcon />}
-                                                onClick={() =>
-                                                    setIsDrawerOpen(true)
-                                                }
-                                            >
-                                                Filters
-                                            </FilterButton>
-                                        </FilterButtonStack>
-                                    )}
-                                </Stack>
-                            )}
-                        </ControlsWrapper>
-                    </RestaurantHeaderSection>
-
-                    <ScrollableContent>
-                        <RestaurantGrid
+                        <Stack
+                            direction="row"
+                            spacing={1.5}
+                            alignItems="center"
+                            justifyContent="space-between"
                             sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 2,
                                 width: '100%',
+                                display: { xs: 'flex', sm: 'none' },
                             }}
                         >
-                            {filteredMenuItems.length === 0 ? (
-                                <Box
-                                    textAlign="center"
-                                    py={6}
-                                    gridColumn="1 / -1"
+                            {isOwner ? (
+                                <AddRestaurantButton
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpenAddModal}
                                 >
-                                    <Typography
-                                        variant="h6"
-                                        color="text.secondary"
-                                    >
-                                        No menu items found for this restaurant.
-                                    </Typography>
-                                </Box>
+                                    Add Menu Item
+                                </AddRestaurantButton>
                             ) : (
-                                filteredMenuItems.map((item) => (
-                                    <MenuItemCard
-                                        key={item.id}
-                                        item={item}
-                                        isOwner={isOwner}
-                                        quantity={cartQuantities[item.id] || 0}
-                                        onAddToCart={handleAddToCart}
-                                        onIncrement={handleIncrement}
-                                        onDecrement={handleDecrement}
-                                        onEdit={handleOpenEditModal}
-                                        onDelete={setDeleteTargetId}
+                                <>
+                                    <FoodVariantToggle
+                                        foodVariant={dietFilter}
+                                        onFilterChange={setDietFilter}
                                     />
-                                ))
+                                    <FilterButton
+                                        variant="outlined"
+                                        startIcon={<FilterListIcon />}
+                                        onClick={() => setIsDrawerOpen(true)}
+                                    >
+                                        Filters
+                                    </FilterButton>
+                                </>
                             )}
-                        </RestaurantGrid>
-                    </ScrollableContent>
-                </ContentArea>
-            </MainContentLayout>
+                        </Stack>
+                    </ControlsWrapper>
+                </RestaurantHeaderSection>
 
-            <BottomNavigationBarContainer />
+                <ScrollableContent>
+                    <RestaurantGrid>
+                        {filteredMenuItems.length === 0 ? (
+                            <Typography
+                                variant="h6"
+                                color="text.secondary"
+                                textAlign="center"
+                            >
+                                No menu items found for this restaurant.
+                            </Typography>
+                        ) : (
+                            filteredMenuItems.map((item) => (
+                                <MenuItemCard
+                                    key={item.id}
+                                    item={item}
+                                    isOwner={isOwner}
+                                    quantity={cartQuantities[item.id] || 0}
+                                    onAction={handleMenuAction}
+                                />
+                            ))
+                        )}
+                    </RestaurantGrid>
+                </ScrollableContent>
+            </MainContentLayout>
 
             <Dialog
                 open={isModalOpen}
@@ -573,7 +537,7 @@ export const MenuContainer = () => {
                 maxWidth="sm"
                 fullWidth
             >
-                <DialogTitle fontWeight={700}>
+                <DialogTitle variant="h5">
                     {editingItem ? 'Edit Menu Item' : 'Add New Menu Item'}
                 </DialogTitle>
                 <form onSubmit={(e) => void handleSubmit(onFormSubmit)(e)}>
@@ -655,7 +619,7 @@ export const MenuContainer = () => {
                             <Controller
                                 name="rating"
                                 control={control}
-                                rules={{ min: 0, max: 5 }}
+                                rules={{ min: 1, max: 5 }}
                                 render={({ field }) => (
                                     <TextField
                                         {...field}
@@ -663,11 +627,11 @@ export const MenuContainer = () => {
                                         slotProps={{
                                             htmlInput: {
                                                 step: 0.1,
-                                                min: 0,
+                                                min: 1,
                                                 max: 5,
                                             },
                                         }}
-                                        label="Rating (0.0 - 5.0)"
+                                        label="Rating (1.0 - 5.0)"
                                         fullWidth
                                         onChange={(e) =>
                                             field.onChange(
@@ -687,24 +651,13 @@ export const MenuContainer = () => {
                                         label="Diet Type"
                                         fullWidth
                                     >
-                                        <SelectMenuItem value="VEG">
+                                        <SelectMenuItem value="veg">
                                             VEG
                                         </SelectMenuItem>
-                                        <SelectMenuItem value="NON_VEG">
-                                            NON_VEG
+                                        <SelectMenuItem value="nonVeg">
+                                            NON VEG
                                         </SelectMenuItem>
                                     </TextField>
-                                )}
-                            />
-                            <Controller
-                                name="category"
-                                control={control}
-                                render={({ field }) => (
-                                    <TextField
-                                        {...field}
-                                        label="Category (e.g. Burgers, Pizzas)"
-                                        fullWidth
-                                    />
                                 )}
                             />
                         </FormStack>
@@ -721,12 +674,9 @@ export const MenuContainer = () => {
                             type="submit"
                             variant="contained"
                             disabled={isSubmitting}
+                            loading={isSubmitting}
                         >
-                            {isSubmitting
-                                ? 'Saving...'
-                                : editingItem
-                                  ? 'Save Changes'
-                                  : 'Add Item'}
+                            {editingItem ? 'Save Changes' : 'Add Item'}
                         </Button>
                     </StyledDialogActions>
                 </form>
@@ -738,7 +688,7 @@ export const MenuContainer = () => {
                 maxWidth="xs"
                 fullWidth
             >
-                <DialogTitle fontWeight={700}>Delete Menu Item?</DialogTitle>
+                <DialogTitle variant="h4">Delete Menu Item?</DialogTitle>
                 <DialogContent>
                     <Typography variant="body2" color="text.secondary">
                         Are you sure you want to delete this menu item?

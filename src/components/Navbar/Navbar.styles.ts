@@ -11,6 +11,7 @@ export const NavbarContainer = styled(Box)(({ theme }) => ({
     boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)',
     position: 'sticky',
     top: 0,
+    zIndex: 1,
 }));
 
 export const LogoContainer = styled(Box)(({ theme }) => ({

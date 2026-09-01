@@ -3,30 +3,18 @@ import {
     Close as CloseIcon,
     Remove as RemoveIcon,
 } from '@mui/icons-material';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material';
 
 import {
     CartItemMedia,
-    ItemBottomRow,
-    QuantityCounterPill,
     StyledCartItemCard,
 } from '@/components/CartItemCard/CardItemCard.styles';
-import { CartItem } from '@/types/cart.types';
+import { CounterButton } from '@/components/MenuItemCard/MenuItemCard.styles';
+import { CartItemCardProps } from '@/types/cart.types';
 
-interface CartItemCardProps {
-    item: CartItem;
-    onIncrement: (menuItemId: string) => void;
-    onDecrement: (menuItemId: string) => void;
-    onRemove: (menuItemId: string) => void;
-}
-
-export const CartItemCard = ({
-    item,
-    onIncrement,
-    onDecrement,
-    onRemove,
-}: CartItemCardProps) => {
+export const CartItemCard = ({ item, onCartAction }: CartItemCardProps) => {
     const { menuItem, quantity } = item;
+    const theme = useTheme();
     const remainingStock = (menuItem.stock ?? 0) - quantity;
 
     return (
@@ -45,12 +33,10 @@ export const CartItemCard = ({
                     justifyContent="space-between"
                     alignItems="flex-start"
                 >
-                    <Typography variant="subtitle1" fontWeight={700}>
-                        {menuItem.name}
-                    </Typography>
+                    <Typography variant="h5">{menuItem.name}</Typography>
                     <IconButton
                         size="small"
-                        onClick={() => onRemove(menuItem.id)}
+                        onClick={() => onCartAction('remove', menuItem.id)}
                     >
                         <CloseIcon fontSize="small" />
                     </IconButton>
@@ -60,32 +46,40 @@ export const CartItemCard = ({
                     {menuItem.description}
                 </Typography>
 
-                <ItemBottomRow>
-                    <Typography
-                        variant="subtitle1"
-                        fontWeight={700}
-                        color="primary"
-                    >
+                <Stack
+                    justifyContent="space-between"
+                    alignContent="center"
+                    direction="row"
+                    marginTop={theme.typography.pxToRem(10)}
+                >
+                    <Typography variant="body1" color="primary">
                         ₹{menuItem.price.toFixed(2)}
                     </Typography>
-
-                    <QuantityCounterPill>
-                        <IconButton
+                    <Stack
+                        alignItems="center"
+                        direction="row"
+                        gap={theme.typography.pxToRem(4)}
+                    >
+                        <CounterButton
                             size="small"
-                            onClick={() => onDecrement(menuItem.id)}
+                            onClick={() =>
+                                onCartAction('decrement', menuItem.id)
+                            }
                         >
                             <RemoveIcon fontSize="small" />
-                        </IconButton>
+                        </CounterButton>
                         <Typography variant="body2">{quantity}</Typography>
-                        <IconButton
+                        <CounterButton
                             size="small"
                             disabled={remainingStock <= 0}
-                            onClick={() => onIncrement(menuItem.id)}
+                            onClick={() =>
+                                onCartAction('increment', menuItem.id)
+                            }
                         >
                             <AddIcon fontSize="small" />
-                        </IconButton>
-                    </QuantityCounterPill>
-                </ItemBottomRow>
+                        </CounterButton>
+                    </Stack>
+                </Stack>
             </Box>
         </StyledCartItemCard>
     );

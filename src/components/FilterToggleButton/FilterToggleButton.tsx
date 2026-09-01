@@ -15,28 +15,28 @@ export const FoodVariantToggle = ({
         aria-label="FIlter restaurants by diet"
     >
         <AllFilterButton
-            onClick={() => onFilterChange('ALL')}
-            variant={foodVariant === 'ALL' ? 'contained' : 'outlined'}
-            aria-pressed={foodVariant === 'ALL'}
+            onClick={() => onFilterChange('all')}
+            variant={foodVariant === 'all' ? 'contained' : 'outlined'}
+            aria-pressed={foodVariant === 'all'}
             color="primary"
         >
             All
         </AllFilterButton>
 
         <VegFilterButton
-            onClick={() => onFilterChange('VEG')}
-            variant={foodVariant === 'VEG' ? 'contained' : 'outlined'}
-            aria-pressed={foodVariant === 'VEG'}
-            isActive={foodVariant === 'VEG'}
+            onClick={() => onFilterChange('veg')}
+            variant={foodVariant === 'veg' ? 'contained' : 'outlined'}
+            aria-pressed={foodVariant === 'veg'}
+            isActive={foodVariant === 'veg'}
         >
             Veg
         </VegFilterButton>
 
         <NonVegFilterButton
-            onClick={() => onFilterChange('NON_VEG')}
-            variant={foodVariant === 'NON_VEG' ? 'contained' : 'outlined'}
-            aria-pressed={foodVariant === 'NON_VEG'}
-            isActive={foodVariant === 'NON_VEG'}
+            onClick={() => onFilterChange('nonVeg')}
+            variant={foodVariant === 'nonVeg' ? 'contained' : 'outlined'}
+            aria-pressed={foodVariant === 'nonVeg'}
+            isActive={foodVariant === 'nonVeg'}
         >
             Non-Veg
         </NonVegFilterButton>

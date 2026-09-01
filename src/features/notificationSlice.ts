@@ -1,4 +1,3 @@
-// Importing redux toolkit utilities
 import {
     NotificationSeverity,
     NotificationState,
@@ -17,7 +16,6 @@ const notificationSlice = createSlice({
     name: 'notification',
     initialState,
     reducers: {
-        // Pop up the notification on screen with a custom message and theme
         showNotification: (
             state,
             action: PayloadAction<{
@@ -37,6 +35,5 @@ const notificationSlice = createSlice({
     },
 });
 
-// Export the actions for the dispatch and reducer for the store
 export const { showNotification, hideNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;

@@ -1,0 +1,17 @@
+[
+    {
+        "fullName": "Priyanshu Ojha",
+        "email": "priyanshu@gmail.com",
+        "contactNo": "9835180994",
+        "role": "USER",
+        "password": "4848615ba55e5be5e25f1a8406ed9cb26fbbd888469d7ba46bb22aeec74899cb",
+        "cart": []
+    },
+    {
+        "fullName": "Haldiram",
+        "email": "haldiram@gmail.com",
+        "contactNo": "9835180994",
+        "role": "RESTAURANT OWNER",
+        "password": "41810162878e41d2a6cd4350c61c771a33ec7d4f609a2d052e7b84d14b1435cf"
+    }
+]

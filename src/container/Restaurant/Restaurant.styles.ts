@@ -1,33 +1,19 @@
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    DialogActions,
-    Stack,
-} from '@mui/material';
+import { Box, Button, Card, CardContent, DialogActions } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const RestaurantContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
-    maxHeight: '100vh',
     overflow: 'hidden',
+    height: '100dvh',
+    maxHeight: '100dvh',
     backgroundColor: theme.palette.secondary.light,
 }));
 
-export const ContentArea = styled(Box)({
+export const MainContentLayout = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    flex: 1,
-    overflow: 'hidden',
-    width: '100%',
-});
-
-export const MainContentLayout = styled(Box)({
-    display: 'flex',
     flex: 1,
     overflow: 'hidden',
     width: '100%',
@@ -39,8 +25,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
     flexDirection: 'column',
     gap: theme.typography.pxToRem(8),
-    padding: theme.typography.pxToRem(12),
-    maxWidth: theme.typography.pxToRem(1200),
+    padding: theme.spacing(3),
     margin: '0 auto',
     width: '100%',
     flexShrink: 0,
@@ -50,9 +35,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
 export const ScrollableContent = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
-    padding: theme.typography.pxToRem(10),
-    paddingBottom: theme.typography.pxToRem(60),
-    maxWidth: theme.typography.pxToRem(1200),
+    padding: theme.spacing(0, 3, 35, 3),
     width: '100%',
     margin: '0 auto',
 }));
@@ -67,17 +50,10 @@ export const ControlsWrapper = styled(Box)(({ theme }) => ({
     width: '100%',
 }));
 
-export const FilterButtonStack = styled(Stack)({
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-});
-
 export const AddRestaurantButton = styled(Button)(({ theme }) => ({
-    padding: theme.spacing(1, 2),
     textTransform: 'none',
     borderRadius: '10px',
+    padding: theme.spacing(2, 4),
 }));
 
 export const FilterButton = styled(Button)(({ theme }) => ({
@@ -88,7 +64,7 @@ export const FilterButton = styled(Button)(({ theme }) => ({
 
 export const RestaurantGrid = styled(Box)(({ theme }) => ({
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
     gap: theme.typography.pxToRem(12),
     paddingBottom: theme.typography.pxToRem(8),
 }));

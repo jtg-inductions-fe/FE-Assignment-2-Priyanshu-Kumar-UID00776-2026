@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import {
+    Box,
     Chip,
     Collapse,
     Divider,
@@ -10,24 +11,15 @@ import {
     SelectChangeEvent,
     Stack,
     Typography,
+    useTheme,
 } from '@mui/material';
 
 import {
-    CustomerContactSection,
-    ExpandedDetailsBox,
     OrderActionArea,
     OrderStyledCard,
-    StatusSelectContainer,
 } from '@/components/OrderCard/OrderCard.styles';
+import { ORDER_STATUS_OPTIONS } from '@/constant/orderStateConstants';
 import { OrderCardProps, OrderStatus } from '@/types/order.types';
-
-const ORDER_STATUS_OPTIONS: OrderStatus[] = [
-    'Pending',
-    'Accepted',
-    'Preparing',
-    'Out for Delivery',
-    'Delivered',
-];
 
 export const OrderCard = ({
     order,
@@ -35,6 +27,7 @@ export const OrderCard = ({
     onStatusChange,
 }: OrderCardProps) => {
     const [expanded, setExpanded] = useState(false);
+    const theme = useTheme();
 
     const formattedTime = new Date(order.createdAt).toLocaleTimeString();
 
@@ -64,7 +57,7 @@ export const OrderCard = ({
                     )}
 
                     <Typography variant="body1" color="primary">
-                        ${order.totalAmount.toFixed(2)}
+                        ₹{order.totalAmount.toFixed(2)}
                     </Typography>
                 </Stack>
 
@@ -101,7 +94,7 @@ export const OrderCard = ({
 
             <Collapse in={expanded} timeout="auto">
                 <Divider />
-                <ExpandedDetailsBox>
+                <Box padding={theme.typography.pxToRem(20)}>
                     <Typography
                         variant="overline"
                         color="text.secondary"
@@ -110,7 +103,7 @@ export const OrderCard = ({
                         Order Summary
                     </Typography>
 
-                    <Stack spacing={0.75}>
+                    <Stack spacing={1}>
                         {order.items.map((item, idx) => (
                             <Stack
                                 key={idx}
@@ -121,7 +114,7 @@ export const OrderCard = ({
                                     {item.quantity} x {item.menuItem.name}
                                 </Typography>
                                 <Typography variant="body2">
-                                    $
+                                    ₹
                                     {(
                                         item.menuItem.price * item.quantity
                                     ).toFixed(2)}
@@ -131,7 +124,11 @@ export const OrderCard = ({
                     </Stack>
 
                     {isOwner && (
-                        <CustomerContactSection>
+                        <Box
+                            marginTop={theme.typography.pxToRem(20)}
+                            paddingTop={theme.typography.pxToRem(12)}
+                            borderTop={`1px solid ${theme.palette.divider}`}
+                        >
                             <Typography
                                 variant="overline"
                                 color="text.secondary"
@@ -145,13 +142,13 @@ export const OrderCard = ({
                             <Typography variant="body2">
                                 Email: {order.customerEmail}
                             </Typography>
-                        </CustomerContactSection>
+                        </Box>
                     )}
-                </ExpandedDetailsBox>
+                </Box>
             </Collapse>
 
             {isOwner && (
-                <StatusSelectContainer>
+                <Box padding={theme.typography.pxToRem(20)}>
                     <FormControl fullWidth size="small">
                         <Select
                             value={order.status}
@@ -164,7 +161,7 @@ export const OrderCard = ({
                             ))}
                         </Select>
                     </FormControl>
-                </StatusSelectContainer>
+                </Box>
             )}
         </OrderStyledCard>
     );

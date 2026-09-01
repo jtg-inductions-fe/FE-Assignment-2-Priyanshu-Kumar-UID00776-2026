@@ -1,22 +1,14 @@
+import ordersData from '@/mockData/orders.json';
 import { User } from '@/types/auth.types';
 import { CartItem } from '@/types/cart.types';
 import { Order, OrderStatus } from '@/types/order.types';
 
-export const getStoredOrders = (): Order[] => {
-    try {
-        const stored = localStorage.getItem('orders');
-        return stored ? (JSON.parse(stored) as Order[]) : [];
-    } catch {
-        return [];
-    }
-};
+let mockOrders: Order[] = ordersData as Order[];
 
-const saveOrders = (orders: Order[]): void => {
-    localStorage.setItem('orders', JSON.stringify(orders));
-};
+export const getStoredOrders = (): Order[] => [...mockOrders];
 
 export const fetchOrders = async (): Promise<Order[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     return getStoredOrders();
 };
 
@@ -24,13 +16,12 @@ export const placeOrder = async (
     cartItems: CartItem[],
     user: User,
 ): Promise<Order[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     if (!cartItems.length) {
         throw new Error('Empty cart');
     }
 
-    const existingOrders = getStoredOrders();
     const checkoutId = `chk_${crypto.randomUUID()}`;
     const createdAt = new Date().toISOString();
 
@@ -68,7 +59,7 @@ export const placeOrder = async (
         },
     );
 
-    saveOrders([...existingOrders, ...newOrders]);
+    mockOrders = [...mockOrders, ...newOrders];
     return newOrders;
 };
 
@@ -76,21 +67,19 @@ export const updateOrderStatus = async (
     orderId: string,
     nextStatus: OrderStatus,
 ): Promise<Order> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const orders = getStoredOrders();
-    const targetIndex = orders.findIndex((order) => order.id === orderId);
+    const targetIndex = mockOrders.findIndex((order) => order.id === orderId);
 
     if (targetIndex === -1) {
         throw new Error('Order not found.');
     }
 
     const updatedOrder: Order = {
-        ...orders[targetIndex],
+        ...mockOrders[targetIndex],
         status: nextStatus,
     };
 
-    orders[targetIndex] = updatedOrder;
-    saveOrders(orders);
+    mockOrders[targetIndex] = updatedOrder;
     return updatedOrder;
 };

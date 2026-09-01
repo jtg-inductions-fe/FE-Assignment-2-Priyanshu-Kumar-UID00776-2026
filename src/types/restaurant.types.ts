@@ -1,5 +1,5 @@
 // Allowed food categories for filtering and tags
-export type DietType = 'VEG' | 'NON_VEG' | 'BOTH';
+export type DietType = 'veg' | 'nonVeg' | 'both';
 
 // Individual dish details in a restaurant's menu
 export type MenuItem = {
@@ -9,7 +9,7 @@ export type MenuItem = {
     rating: number;
     price: number;
     stock: number;
-    dietType: 'VEG' | 'NON_VEG';
+    dietType: DietType;
     image?: string;
 };
 
@@ -54,8 +54,7 @@ export type MenuFormData = {
     price: number;
     stock: number;
     rating: number;
-    dietType: 'VEG' | 'NON_VEG';
-    category?: string;
+    dietType: DietType;
 };
 
 // Component props passed into the MenuItemCard
@@ -63,6 +62,7 @@ export type MenuItemCardProps = {
     item: MenuItem;
     isOwner?: boolean;
     quantity?: number;
+    onAction: (actionType: string, item: MenuItem) => void;
     onAddToCart?: (item: MenuItem) => void;
     onIncrement?: (item: MenuItem) => void;
     onDecrement?: (item: MenuItem) => void;

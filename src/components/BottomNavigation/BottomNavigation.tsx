@@ -1,5 +1,3 @@
-import { NavLink } from 'react-router-dom';
-
 import { Badge, BottomNavigationAction } from '@mui/material';
 
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
@@ -17,6 +15,7 @@ export const BottomNavigationBar = ({
     anchorEl,
     isMenuOpen,
     navItems,
+    cartCount,
     onClickAction,
 }: BottomNavigationBarProps) => (
     <BottomNavigationContainer>
@@ -28,15 +27,14 @@ export const BottomNavigationBar = ({
                         key={item.value}
                         label={item.label}
                         icon={
-                            <Badge
-                                badgeContent={item.badgeContent}
-                                color="error"
-                            >
-                                {item.icon}
-                            </Badge>
+                            item.label === 'Cart' ? (
+                                <Badge badgeContent={cartCount} color="error">
+                                    {item.icon}
+                                </Badge>
+                            ) : (
+                                item.icon
+                            )
                         }
-                        component={NavLink}
-                        to={item.to}
                         onClick={(event) => onClickAction(item.action, event)}
                         value={item.value}
                     />

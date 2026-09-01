@@ -7,13 +7,7 @@ export const PageRoot = styled(Box)(({ theme }) => ({
     paddingBottom: theme.typography.pxToRem(64),
 }));
 
-export const MainCartContainer = styled(Container)(({ theme }) => ({
+export const CartContainerArea = styled(Container)(({ theme }) => ({
     padding: theme.typography.pxToRem(10),
-    flexGrow: 1,
-}));
-
-export const EmptyCartContainer = styled(Container)(({ theme }) => ({
-    padding: theme.typography.pxToRem(40),
-    textAlign: 'center',
     flexGrow: 1,
 }));

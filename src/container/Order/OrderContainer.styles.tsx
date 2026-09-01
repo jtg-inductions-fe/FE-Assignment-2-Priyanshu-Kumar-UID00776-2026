@@ -1,6 +1,8 @@
 import { Box, styled } from '@mui/material';
 
 export const OrdersPage = styled(Box)(({ theme }) => ({
-    minHeight: '100vh',
-    paddingBottom: theme.typography.pxToRem(80),
+    height: '100vh',
+    maxHeight: '100vh',
+    overflowY: 'auto',
+    paddingBottom: theme.typography.pxToRem(150),
 }));

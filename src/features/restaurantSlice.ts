@@ -1,3 +1,4 @@
+import restaurantData from '@/mockData/restaurant.json';
 import {
     MenuItem,
     RestaurantItemTypes,
@@ -7,7 +8,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Set up the default starting state with an empty list
 const initialState: RestaurantState = {
-    restaurants: [],
+    restaurants: restaurantData as RestaurantItemTypes[],
 };
 
 // Create the redux slice to manage restaurant state and actions
@@ -34,11 +35,10 @@ export const restaurantSlice = createSlice({
             state,
             action: PayloadAction<RestaurantItemTypes>,
         ) => {
-            // Locate the item index in our state array
             const index = state.restaurants.findIndex(
                 (restaurant) => restaurant.id === action.payload.id,
             );
-            // If found overwrite it with the updated restaurant object
+
             if (index !== -1) {
                 state.restaurants[index] = action.payload;
             }
@@ -49,34 +49,33 @@ export const restaurantSlice = createSlice({
                 (restaurant) => restaurant.id !== action.payload,
             );
         },
+        // Add new menu item for the selected item
         addMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
         ) => {
-            // Find the restaurant in state that matches the payload restaurant ID
             const restaurants = state.restaurants.find(
                 (restaurant) => restaurant.id === action.payload.restaurantId,
             );
-            // Push the new menu item to the restaurant if found
+
             if (restaurants) {
                 restaurants.menus.push(action.payload.menuItem);
             }
         },
+        // Edit menu item for the selected restaurant
         editMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
         ) => {
-            // Locate the target restaurant by its ID
             const restaurants = state.restaurants.find(
                 (restaurant) => restaurant.id === action.payload.restaurantId,
             );
-            // Proceed only if the restaurant exists in state
+
             if (restaurants) {
-                // Find the index of the specific menu item to update
                 const itemIndex = restaurants.menus.findIndex(
                     (menu) => menu.id === action.payload.menuItem.id,
                 );
-                // Replace the menu item if it exists in the array
+
                 if (itemIndex !== -1) {
                     restaurants.menus[itemIndex] = action.payload.menuItem;
                 }
@@ -87,11 +86,10 @@ export const restaurantSlice = createSlice({
             state,
             action: PayloadAction<{ restaurantId: string; menuId: string }>,
         ) => {
-            // Locate the target restaurant by its ID
             const restaurants = state.restaurants.find(
                 (restaurant) => restaurant.id === action.payload.restaurantId,
             );
-            // Filter out the deleted menu item if the restaurant is found
+
             if (restaurants) {
                 restaurants.menus = restaurants.menus.filter(
                     (menu) => menu.id !== action.payload.menuId,
@@ -101,7 +99,6 @@ export const restaurantSlice = createSlice({
     },
 });
 
-// Export action creators for use in UI components and services
 export const {
     setRestaurants,
     addRestaurantSuccess,
@@ -112,5 +109,4 @@ export const {
     deleteMenuItemSuccess,
 } = restaurantSlice.actions;
 
-// Export the reducer to register in the global redux store
 export default restaurantSlice.reducer;

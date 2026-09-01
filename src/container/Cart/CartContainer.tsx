@@ -6,13 +6,10 @@ import { Button, Grid, Stack, Typography } from '@mui/material';
 
 import { CartBillCard } from '@/components/CartBillCard/CartBillCard';
 import { CartItemCard } from '@/components/CartItemCard/CartItemCard';
-import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
 import {
-    EmptyCartContainer,
-    MainCartContainer,
+    CartContainerArea,
     PageRoot,
 } from '@/container/Cart/CartContainer.styles';
-import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import {
     decrementCartItem,
     incrementCartItem,
@@ -46,16 +43,20 @@ export const CartContainer = () => {
     const taxes = subtotal * 0.02;
     const totalPay = subtotal - discountAmount + bookingFee + taxes;
 
-    const handleIncrement = (menuItemId: string) => {
-        dispatch(incrementCartItem({ userEmail, menuItemId }));
-    };
-
-    const handleDecrement = (menuItemId: string) => {
-        dispatch(decrementCartItem({ userEmail, menuItemId }));
-    };
-
-    const handleRemove = (menuItemId: string) => {
-        dispatch(removeCartItem({ userEmail, menuItemId }));
+    const handleCartAction = (action: string, menuItemId: string) => {
+        switch (action) {
+            case 'increment':
+                dispatch(incrementCartItem({ userEmail, menuItemId }));
+                break;
+            case 'decrement':
+                dispatch(decrementCartItem({ userEmail, menuItemId }));
+                break;
+            case 'remove':
+                dispatch(removeCartItem({ userEmail, menuItemId }));
+                break;
+            default:
+                break;
+        }
     };
 
     const handleApplyPromo = (code: string) => {
@@ -92,11 +93,9 @@ export const CartContainer = () => {
         try {
             const createdOrders = await placeOrder(cartItems, user);
 
-            // Update Redux state
             dispatch(addOrdersSuccess(createdOrders));
             dispatch(clearCart({ userEmail }));
 
-            // Notify user
             dispatch(
                 showNotification({
                     message: 'Order placed successfully!',
@@ -104,7 +103,6 @@ export const CartContainer = () => {
                 }),
             );
 
-            // Navigate to order history screen
             void navigate('/order');
         } catch (error: unknown) {
             const message =
@@ -123,14 +121,14 @@ export const CartContainer = () => {
     if (cartItems.length === 0) {
         return (
             <PageRoot>
-                <NavbarContainer />
-                <EmptyCartContainer maxWidth="md">
-                    <Typography variant="h4" gutterBottom>
+                <CartContainerArea maxWidth="md">
+                    <Typography textAlign="center" variant="h4" pb={3}>
                         Your Cart is Empty
                     </Typography>
                     <Typography
                         variant="body1"
                         color="text.secondary"
+                        textAlign="center"
                         gutterBottom
                     >
                         Explore menus and add your favorite dishes.
@@ -142,17 +140,15 @@ export const CartContainer = () => {
                     >
                         Browse Restaurants
                     </Button>
-                </EmptyCartContainer>
-                <BottomNavigationBarContainer />
+                </CartContainerArea>
             </PageRoot>
         );
     }
 
     return (
         <PageRoot>
-            <NavbarContainer />
-            <MainCartContainer maxWidth="lg">
-                <Typography variant="h4" gutterBottom>
+            <CartContainerArea maxWidth="lg">
+                <Typography variant="h2" py={3}>
                     Your Cart
                 </Typography>
 
@@ -163,9 +159,7 @@ export const CartContainer = () => {
                                 <CartItemCard
                                     key={item.menuItem.id}
                                     item={item}
-                                    onIncrement={handleIncrement}
-                                    onDecrement={handleDecrement}
-                                    onRemove={handleRemove}
+                                    onCartAction={handleCartAction}
                                 />
                             ))}
                         </Stack>
@@ -180,12 +174,11 @@ export const CartContainer = () => {
                             discountAmount={discountAmount}
                             appliedPromoCode={appliedDiscount?.code || null}
                             onApplyPromo={handleApplyPromo}
-                            onCheckout={() => void handleCheckout}
+                            onCheckout={() => void handleCheckout()}
                         />
                     </Grid>
                 </Grid>
-            </MainCartContainer>
-            <BottomNavigationBarContainer />
+            </CartContainerArea>
         </PageRoot>
     );
 };

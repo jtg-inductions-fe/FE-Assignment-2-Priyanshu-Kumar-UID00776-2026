@@ -8,7 +8,6 @@ export const getCurrentUserFromStorage = (): User | null => {
         if (!stored) return null;
         const user = JSON.parse(stored) as User;
 
-        // Initialize empty cart only if the user is a regular customer
         if (user.role === 'USER') {
             user.cart = user.cart || [];
         }
@@ -23,10 +22,8 @@ export const persistUserCartToStorage = (
     updatedCart: CartItem[],
 ): void => {
     try {
-        // Gets the current user from the localStorage
         const current = getCurrentUserFromStorage();
 
-        // If the role is USER then update the cart with latest cart value and also sets to the localStorage
         if (
             current &&
             current.role === 'USER' &&
@@ -36,14 +33,11 @@ export const persistUserCartToStorage = (
             localStorage.setItem('currentUser', JSON.stringify(current));
         }
 
-        // Fetches the all users from the localStorage
         const storedUsers = localStorage.getItem('users');
         if (storedUsers) {
-            // Parse the data into JSON if found
             const users = JSON.parse(storedUsers) as StoredUser[];
-            // Maps through the array of the user
+
             const updatedUsers = users.map((user) => {
-                // Finds the particular user with the given email
                 if (
                     user.email.toLowerCase() === userEmail.toLowerCase() &&
                     user.role === 'USER'
@@ -52,7 +46,7 @@ export const persistUserCartToStorage = (
                 }
                 return user;
             });
-            // Sets the data to the localStorage for all the users
+
             localStorage.setItem('users', JSON.stringify(updatedUsers));
         }
     } catch {

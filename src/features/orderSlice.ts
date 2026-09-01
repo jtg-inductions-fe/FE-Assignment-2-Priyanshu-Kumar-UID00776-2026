@@ -23,7 +23,7 @@ export const orderSlice = createSlice({
         // Update a specific order status when the owner changes it
         updateOrderStatusSuccess: (state, action: PayloadAction<Order>) => {
             const index = state.orders.findIndex(
-                (o) => o.id === action.payload.id,
+                (order) => order.id === action.payload.id,
             );
             if (index !== -1) {
                 state.orders[index] = action.payload;

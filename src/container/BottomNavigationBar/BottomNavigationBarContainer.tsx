@@ -2,22 +2,14 @@ import { useMemo, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import {
-    AccountCircle,
-    AddBox,
-    Assignment,
-    Home,
-    ShoppingCart,
-} from '@mui/icons-material';
-
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
+import { navItemsConfig } from '@/configs/BottomNavigationConfigs';
 import { clearUser } from '@/features/authSlice';
-import { setUserCart } from '@/features/cartSlice';
 import { showNotification } from '@/features/notificationSlice';
 import { useActiveUserRoute } from '@/hooks/activeUserRoutes';
 import { logout } from '@/services/auth.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { NavbarAction, NavItemConfig } from '@/types/bottomNavigation.types';
+import { NavbarAction } from '@/types/bottomNavigation.types';
 
 export const BottomNavigationBarContainer = () => {
     const navigate = useNavigate();
@@ -32,6 +24,8 @@ export const BottomNavigationBarContainer = () => {
 
     // Convert user presence into a simple true/false login flag
     const isUserActive = Boolean(user);
+
+    const navItems = navItemsConfig(user, isUserActive);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -60,17 +54,10 @@ export const BottomNavigationBarContainer = () => {
         handleCloseMenu();
 
         try {
-            // Trigger the logout API call
             await logout();
 
-            // Clears the user cart redux state
-            dispatch(clearUser());
-            dispatch(setUserCart([]));
-
-            // Clear the user from global state and browser storage
             dispatch(clearUser());
 
-            // Show a green success banner
             dispatch(
                 showNotification({
                     message: 'Successfully logged out!',
@@ -80,7 +67,6 @@ export const BottomNavigationBarContainer = () => {
 
             void navigate('/login');
         } catch (error) {
-            // Display an error if the logout request fails
             dispatch(
                 showNotification({
                     message:
@@ -99,6 +85,9 @@ export const BottomNavigationBarContainer = () => {
         event?: React.MouseEvent<HTMLElement>,
     ) => {
         switch (action) {
+            case 'home':
+                void navigate('/restaurant');
+                break;
             case 'cart':
                 handleUserRoute('/cart', '/login');
                 break;
@@ -122,51 +111,6 @@ export const BottomNavigationBarContainer = () => {
         }
     };
 
-    // All the Bottom navigation items
-    const navItemsConfig: NavItemConfig[] = [
-        {
-            label: 'Home',
-            icon: <Home />,
-            action: 'home',
-            value: '/restaurant',
-            to: '/home',
-            isVisible: true,
-        },
-        {
-            label: 'Cart',
-            icon: <ShoppingCart />,
-            action: 'cart',
-            value: '/cart',
-            to: '/cart',
-            badgeContent: totalCartCount,
-            isVisible: user?.role === 'USER' || !isUserActive,
-        },
-        {
-            label: 'Restaurant',
-            icon: <AddBox />,
-            action: 'addRestaurant',
-            to: '/restaurant',
-            value: '/add-restaurant',
-            isVisible: user?.role === 'RESTAURANT OWNER',
-        },
-        {
-            label: 'Orders',
-            icon: <Assignment />,
-            action: 'order',
-            value: '/order',
-            to: '/order',
-            isVisible: true,
-        },
-        {
-            label: 'Profile',
-            icon: <AccountCircle />,
-            action: 'profile',
-            to: '#',
-            value: 'profile',
-            isVisible: true,
-        },
-    ];
-
     return (
         <BottomNavigationBar
             user={user}
@@ -175,7 +119,7 @@ export const BottomNavigationBarContainer = () => {
             anchorEl={anchorEl}
             cartCount={totalCartCount}
             isMenuOpen={isMenuOpen}
-            navItems={navItemsConfig}
+            navItems={navItems}
             onClickAction={handleNavbarAction}
         />
     );

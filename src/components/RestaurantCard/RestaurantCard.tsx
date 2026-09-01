@@ -27,8 +27,8 @@ export const RestaurantCard = ({
 }: RestaurantCardProps) => {
     // Convert diet codes into display labels for badges
     const formatDietType = (type: string) => {
-        if (type === 'NON_VEG') return 'Non-Veg';
-        if (type === 'VEG') return 'Pure Veg';
+        if (type === 'nonVeg') return 'Non-Veg';
+        if (type === 'veg') return 'Pure Veg';
         return 'Veg & Non-Veg';
     };
 
@@ -54,16 +54,16 @@ export const RestaurantCard = ({
                         justifyContent="space-between"
                         alignItems="center"
                     >
-                        <Typography variant="h3" fontWeight={700} noWrap>
+                        <Typography variant="h3" noWrap>
                             {restaurant.name}
                         </Typography>
                         <Chip
                             label={`${formatDietType(restaurant.dietType)}`}
                             variant="filled"
                             color={
-                                restaurant.dietType === 'VEG'
+                                restaurant.dietType === 'veg'
                                     ? 'success'
-                                    : restaurant.dietType === 'NON_VEG'
+                                    : restaurant.dietType === 'nonVeg'
                                       ? 'error'
                                       : 'default'
                             }
@@ -88,7 +88,10 @@ export const RestaurantCard = ({
                             fullWidth
                             startIcon={<EditIcon />}
                             size="small"
-                            onClick={() => onEdit?.(restaurant)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onEdit?.(restaurant);
+                            }}
                         >
                             Edit
                         </OwnerActionButton>
@@ -98,7 +101,10 @@ export const RestaurantCard = ({
                             fullWidth
                             startIcon={<DeleteIcon />}
                             size="small"
-                            onClick={() => onDelete?.(restaurant.id)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete?.(restaurant.id);
+                            }}
                         >
                             Delete
                         </OwnerActionButton>

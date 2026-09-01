@@ -6,8 +6,7 @@ export const BottomNavigationContainer = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down('sm')]: {
         display: 'flex',
         width: '100%',
-        position: 'absolute',
-        backgroundColor: 'red',
+        position: 'sticky',
         bottom: 0,
     },
 }));

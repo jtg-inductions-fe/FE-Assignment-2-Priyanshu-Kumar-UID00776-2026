@@ -1,8 +1,6 @@
 import { Container, Stack, Typography } from '@mui/material';
 
 import { OrderCard } from '@/components/OrderCard/OrderCard';
-import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/BottomNavigationBarContainer';
-import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 import { OrdersPage } from '@/container/Order/OrderContainer.styles';
 import { showNotification } from '@/features/notificationSlice';
 import { updateOrderStatusSuccess } from '@/features/orderSlice';
@@ -32,16 +30,13 @@ export const OrderContainer = () => {
         ? ownerOrders
         : allOrders.filter((order) => order.customerEmail === userEmail);
 
-    const handleStatusUpdate = async (
-        orderId: string,
-        nextStatus: OrderStatus,
-    ) => {
+    const handleStatusUpdate = async (orderId: string, status: OrderStatus) => {
         try {
-            const updated = await updateOrderStatus(orderId, nextStatus);
+            const updated = await updateOrderStatus(orderId, status);
             dispatch(updateOrderStatusSuccess(updated));
             dispatch(
                 showNotification({
-                    message: `Status updated to ${nextStatus}`,
+                    message: `Status updated to ${status}`,
                     severity: 'success',
                 }),
             );
@@ -59,19 +54,20 @@ export const OrderContainer = () => {
 
     return (
         <OrdersPage>
-            <NavbarContainer />
             <Container maxWidth="sm" sx={{ mt: 3 }}>
                 <Typography variant="h2">
                     {isOwner ? 'Order Management' : 'Your Orders'}
                 </Typography>
 
-                <Stack spacing={2} sx={{ mt: 2 }}>
+                <Stack spacing={2} mt={2}>
                     {visibleOrders.map((order) => (
                         <OrderCard
                             key={order.id}
                             order={order}
                             isOwner={isOwner}
-                            onStatusChange={void handleStatusUpdate}
+                            onStatusChange={(orderId, status) => {
+                                void handleStatusUpdate(orderId, status);
+                            }}
                         />
                     ))}
                     {visibleOrders.length === 0 && (
@@ -79,14 +75,13 @@ export const OrderContainer = () => {
                             variant="body2"
                             color="text.secondary"
                             textAlign="center"
-                            sx={{ py: 6 }}
+                            py={6}
                         >
                             No orders found.
                         </Typography>
                     )}
                 </Stack>
             </Container>
-            <BottomNavigationBarContainer />
         </OrdersPage>
     );
 };

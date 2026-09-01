@@ -1,20 +1,13 @@
 import { useState } from 'react';
 
-import {
-    ArrowForward as ArrowForwardIcon,
-    LocalOfferOutlined as TagIcon,
-} from '@mui/icons-material';
-import { Stack, TextField, Typography } from '@mui/material';
+import { ArrowForward as ArrowForwardIcon } from '@mui/icons-material';
+import { Divider, Stack, TextField, Typography, useTheme } from '@mui/material';
 
 import {
     ApplyPromoButton,
     BillRow,
     CheckoutSubmitButton,
-    DiscountBillRow,
-    PromoInputRow,
     SummaryCard,
-    SummaryDivider,
-    TagRow,
 } from '@/components/CartBillCard/CartBillCard.styles';
 import { CartBill } from '@/types/cart.types';
 
@@ -29,10 +22,11 @@ export const CartBillCard = ({
     onCheckout,
 }: CartBill) => {
     const [couponInput, setCouponInput] = useState('');
+    const theme = useTheme();
 
     return (
         <SummaryCard>
-            <PromoInputRow>
+            <Stack direction="row" gap={theme.typography.pxToRem(20)} py={3}>
                 <TextField
                     size="small"
                     fullWidth
@@ -46,7 +40,7 @@ export const CartBillCard = ({
                 >
                     Apply
                 </ApplyPromoButton>
-            </PromoInputRow>
+            </Stack>
 
             <Typography variant="h4">Bill Details</Typography>
 
@@ -73,20 +67,18 @@ export const CartBillCard = ({
                 </BillRow>
 
                 {appliedPromoCode && (
-                    <DiscountBillRow>
-                        <TagRow>
-                            <TagIcon fontSize="small" />
-                            <Typography variant="body1">
-                                Coupon Applied ({appliedPromoCode})
-                            </Typography>
-                        </TagRow>
+                    <BillRow color={theme.palette.tertiary.light}>
+                        <Typography variant="body1">
+                            Coupon Applied ({appliedPromoCode})
+                        </Typography>
+
                         <Typography variant="body1">
                             -₹{discountAmount.toFixed(2)}
                         </Typography>
-                    </DiscountBillRow>
+                    </BillRow>
                 )}
 
-                <SummaryDivider />
+                <Divider />
 
                 <BillRow>
                     <Typography variant="h4">Total Pay</Typography>

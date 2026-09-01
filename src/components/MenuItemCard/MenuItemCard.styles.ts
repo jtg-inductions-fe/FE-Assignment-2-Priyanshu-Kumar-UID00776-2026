@@ -1,11 +1,4 @@
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    IconButton,
-    Stack,
-} from '@mui/material';
+import { Box, Button, Card, CardContent, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const StyledMenuCard = styled(Card)(({ theme }) => ({
@@ -14,23 +7,8 @@ export const StyledMenuCard = styled(Card)(({ theme }) => ({
     boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
     display: 'flex',
     width: '100%',
-    minWidth: theme.typography.pxToRem(450),
+    minWidth: theme.typography.pxToRem(350),
     backgroundColor: theme.palette.background.paper,
-    [theme.breakpoints.down('sm')]: {
-        flexDirection: 'row',
-        minWidth: '100%',
-        minHeight: theme.typography.pxToRem(120),
-    },
-}));
-
-export const MenuImageWrapper = styled(Box)(({ theme }) => ({
-    position: 'relative',
-    width: theme.typography.pxToRem(160),
-    minWidth: theme.typography.pxToRem(160),
-    [theme.breakpoints.down('sm')]: {
-        width: theme.typography.pxToRem(110),
-        minWidth: theme.typography.pxToRem(110),
-    },
 }));
 
 export const MenuCardBody = styled(CardContent)(({ theme }) => ({
@@ -45,13 +23,6 @@ export const StyledCardMedia = styled('img')(() => ({
     height: '100%',
     width: '100%',
     objectFit: 'cover',
-}));
-
-export const QuantityCounter = styled(Stack)(({ theme }) => ({
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderRadius: '12px',
-    gap: theme.typography.pxToRem(4),
 }));
 
 export const CounterButton = styled(IconButton)(({ theme }) => ({
@@ -72,9 +43,6 @@ export const RatingBadge = styled(Box)(({ theme }) => ({
     borderRadius: '15px',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: theme.typography.pxToRem(3),
-    '& .MuiSvgIcon-root': {
-        color: '#FFD700',
-        fontSize: theme.typography.pxToRem(16),
-    },
+    color: theme.palette.primary.light,
+    gap: theme.typography.pxToRem(5),
 }));

@@ -32,17 +32,13 @@ export const NavbarContainer = () => {
 
     // Log the user out, clear their session, display an alert, and redirect to login
     const handleLogout = async () => {
-        // Dismiss the dropdown menu
         handleCloseMenu();
 
         try {
-            // Call the logout function to end the active session
             await logout();
 
-            // Clear the user from the global redux store and localStorage
             dispatch(clearUser());
 
-            // Show a green logout success banner
             dispatch(
                 showNotification({
                     message: 'Successfully logged out!',
@@ -50,10 +46,8 @@ export const NavbarContainer = () => {
                 }),
             );
 
-            // Redirecting the user to login screen after logout
             void navigate('/login');
         } catch (error) {
-            // Display an error banner if logging out fails
             dispatch(
                 showNotification({
                     message:
@@ -99,7 +93,7 @@ export const NavbarContainer = () => {
     };
 
     // Get the capitalized first letter of the user's name for the avatar, defaulting to 'U'
-    const userInitial = user?.fullName?.charAt(0).toUpperCase() || 'U';
+    const userInitial = user?.fullName.charAt(0).toUpperCase() || 'U';
 
     return (
         <Navbar

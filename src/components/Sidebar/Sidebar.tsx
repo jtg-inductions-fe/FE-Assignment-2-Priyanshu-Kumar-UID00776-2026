@@ -1,8 +1,13 @@
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+    IconButton,
+    Stack,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
 
 import {
-    CloseDrawerIconButton,
     DrawerContentContainer,
     DrawerHeader,
     FilterItemLabel,
@@ -35,12 +40,16 @@ export const RestaurantSidebar = ({
                 <DrawerHeader>
                     <Typography variant="h5">Filters</Typography>
 
-                    <CloseDrawerIconButton size="small" onClick={onClose}>
+                    <IconButton
+                        aria-label="Close filters"
+                        size="small"
+                        onClick={onClose}
+                    >
                         <CloseRoundedIcon fontSize="small" />
-                    </CloseDrawerIconButton>
+                    </IconButton>
                 </DrawerHeader>
 
-                <Stack gap="4px">
+                <Stack gap={theme.typography.pxToRem(4)}>
                     <Typography
                         color={theme.palette.secondary.dark}
                         variant="h6"
@@ -52,7 +61,6 @@ export const RestaurantSidebar = ({
                         return (
                             <FilterItemLabel
                                 key={rating}
-                                isSelected={isSelected}
                                 control={
                                     <StyledCheckbox
                                         checked={isSelected}
@@ -62,7 +70,9 @@ export const RestaurantSidebar = ({
                                 label={
                                     <Stack direction="row" gap="4px">
                                         <Typography variant="body2">
-                                            {rating.toFixed(1)} & above
+                                            {rating === 5
+                                                ? '5.0'
+                                                : `${rating.toFixed(1)} & above`}
                                         </Typography>
                                     </Stack>
                                 }

@@ -2,21 +2,14 @@ import { useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import {
-    AccountCircle,
-    AddBox,
-    Assignment,
-    Home,
-    ShoppingCart,
-} from '@mui/icons-material';
-
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
+import { navItemsConfig } from '@/configs/BottomNavigationConfigs';
 import { useActiveUserRoute } from '@/hooks/activeUserRoutes';
 import { logout } from '@/services/auth.service';
 import { clearUser } from '@/slices/authSlice';
 import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { NavbarAction, NavItemConfig } from '@/types/bottomNavigation.types';
+import { NavbarAction } from '@/types/bottomNavigation.types';
 
 export const BottomNavigationBarContainer = ({
     cartCount = 0,
@@ -32,6 +25,8 @@ export const BottomNavigationBarContainer = ({
 
     // Convert user presence into a simple true/false login flag
     const isUserActive = Boolean(user);
+
+    const navItems = navItemsConfig(user, isUserActive);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -51,13 +46,10 @@ export const BottomNavigationBarContainer = ({
         handleCloseMenu();
 
         try {
-            // Trigger the logout API call
             await logout();
 
-            // Clear the user from global state and browser storage
             dispatch(clearUser());
 
-            // Show a green success banner
             dispatch(
                 showNotification({
                     message: 'Successfully logged out!',
@@ -67,7 +59,6 @@ export const BottomNavigationBarContainer = ({
 
             void navigate('/login');
         } catch (error) {
-            // Display an error if the logout request fails
             dispatch(
                 showNotification({
                     message:
@@ -115,45 +106,6 @@ export const BottomNavigationBarContainer = ({
         }
     };
 
-    // All the Bottom navigation items
-    const navItemsConfig: NavItemConfig[] = [
-        {
-            label: 'Home',
-            icon: <Home />,
-            action: 'home',
-            value: '/restaurant',
-            isVisible: true,
-        },
-        {
-            label: 'Cart',
-            icon: <ShoppingCart />,
-            action: 'cart',
-            value: '/cart',
-            isVisible: user?.role === 'USER' || !isUserActive,
-        },
-        {
-            label: 'Restaurant',
-            icon: <AddBox />,
-            action: 'addRestaurant',
-            value: '/add-restaurant',
-            isVisible: user?.role === 'RESTAURANT OWNER',
-        },
-        {
-            label: 'Orders',
-            icon: <Assignment />,
-            action: 'orders',
-            value: '/orders',
-            isVisible: true,
-        },
-        {
-            label: 'Profile',
-            icon: <AccountCircle />,
-            action: 'profile',
-            value: 'profile',
-            isVisible: true,
-        },
-    ];
-
     return (
         <BottomNavigationBar
             user={user}
@@ -162,7 +114,7 @@ export const BottomNavigationBarContainer = ({
             anchorEl={anchorEl}
             cartCount={cartCount}
             isMenuOpen={isMenuOpen}
-            navItems={navItemsConfig}
+            navItems={navItems}
             onClickAction={handleNavbarAction}
         />
     );

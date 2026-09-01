@@ -18,7 +18,10 @@ import {
     incrementCartItem,
     removeCartItem,
 } from '@/features/cartSlice';
+import { clearCart } from '@/features/cartSlice';
 import { showNotification } from '@/features/notificationSlice';
+import { addOrdersSuccess } from '@/features/orderSlice';
+import { placeOrder } from '@/services/order.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
 export const CartContainer = () => {
@@ -68,6 +71,49 @@ export const CartContainer = () => {
             dispatch(
                 showNotification({
                     message: 'Invalid coupon code. Try SAVE10',
+                    severity: 'error',
+                }),
+            );
+        }
+    };
+
+    const handleCheckout = async () => {
+        if (!user) {
+            dispatch(
+                showNotification({
+                    message: 'Please login to place an order.',
+                    severity: 'error',
+                }),
+            );
+            void navigate('/login');
+            return;
+        }
+
+        try {
+            const createdOrders = await placeOrder(cartItems, user);
+
+            // Update Redux state
+            dispatch(addOrdersSuccess(createdOrders));
+            dispatch(clearCart({ userEmail }));
+
+            // Notify user
+            dispatch(
+                showNotification({
+                    message: 'Order placed successfully!',
+                    severity: 'success',
+                }),
+            );
+
+            // Navigate to order history screen
+            void navigate('/order');
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'Failed to place order.';
+            dispatch(
+                showNotification({
+                    message,
                     severity: 'error',
                 }),
             );
@@ -134,7 +180,7 @@ export const CartContainer = () => {
                             discountAmount={discountAmount}
                             appliedPromoCode={appliedDiscount?.code || null}
                             onApplyPromo={handleApplyPromo}
-                            onCheckout={() => void navigate('/checkout')}
+                            onCheckout={() => void handleCheckout}
                         />
                     </Grid>
                 </Grid>

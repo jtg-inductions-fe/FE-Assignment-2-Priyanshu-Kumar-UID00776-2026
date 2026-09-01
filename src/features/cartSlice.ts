@@ -128,6 +128,13 @@ export const cartSlice = createSlice({
             );
             persistUserCartToStorage(userEmail, state.items);
         },
+
+        // Clear all items from the cart and reset storage
+        clearCart: (state, action: PayloadAction<{ userEmail: string }>) => {
+            const { userEmail } = action.payload;
+            state.items = [];
+            persistUserCartToStorage(userEmail, []);
+        },
     },
 });
 
@@ -138,6 +145,7 @@ export const {
     incrementCartItem,
     decrementCartItem,
     removeCartItem,
+    clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

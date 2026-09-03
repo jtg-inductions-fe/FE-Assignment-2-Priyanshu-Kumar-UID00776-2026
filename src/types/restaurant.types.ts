@@ -20,6 +20,7 @@ export type RestaurantItemTypes = {
     rating: number;
     deliveryTime: string;
     openingTime: string;
+    endTime: string;
     image: string;
     ownerId: string;
     menus: MenuItem[];
@@ -33,6 +34,7 @@ export type RestaurantFormData = {
     rating: number;
     deliveryTime: string;
     openingTime: string;
+    endTime: string;
 };
 
 // Redux store slice state holding the full restaurant list

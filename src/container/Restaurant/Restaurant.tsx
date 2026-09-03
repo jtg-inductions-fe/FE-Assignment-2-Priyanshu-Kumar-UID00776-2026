@@ -575,8 +575,10 @@ export const Restaurant = () => {
                                             label="Start Time"
                                             type="time"
                                             fullWidth
-                                            error={!!errors.endTime}
-                                            helperText={errors.endTime?.message}
+                                            error={!!errors.openingTime}
+                                            helperText={
+                                                errors.openingTime?.message
+                                            }
                                             slotProps={{
                                                 inputLabel: {
                                                     shrink: true,

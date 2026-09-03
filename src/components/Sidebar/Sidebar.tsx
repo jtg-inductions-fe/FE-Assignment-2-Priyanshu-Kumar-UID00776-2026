@@ -1,5 +1,6 @@
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import {
+    Box,
     IconButton,
     Stack,
     Typography,
@@ -8,10 +9,7 @@ import {
 } from '@mui/material';
 
 import {
-    DrawerContentContainer,
-    DrawerHeader,
     FilterItemLabel,
-    MobileDragHandle,
     StyledCheckbox,
     StyledDrawer,
 } from '@/components/Sidebar/Sidebar.styles';
@@ -34,10 +32,23 @@ export const RestaurantSidebar = ({
             open={open}
             onClose={onClose}
         >
-            <DrawerContentContainer>
-                <MobileDragHandle />
-
-                <DrawerHeader>
+            <Box
+                display="flex"
+                padding={{
+                    xs: theme.typography.pxToRem(12),
+                    sm: theme.typography.pxToRem(16),
+                }}
+                flexDirection="column"
+                gap={theme.typography.pxToRem(12)}
+            >
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    pt={3}
+                    pb={theme.typography.pxToRem(12)}
+                    borderBottom={`1px solid ${theme.palette.divider}`}
+                >
                     <Typography variant="h5">Filters</Typography>
 
                     <IconButton
@@ -47,7 +58,7 @@ export const RestaurantSidebar = ({
                     >
                         <CloseRoundedIcon fontSize="small" />
                     </IconButton>
-                </DrawerHeader>
+                </Box>
 
                 <Stack gap={theme.typography.pxToRem(4)}>
                     <Typography
@@ -81,7 +92,7 @@ export const RestaurantSidebar = ({
                         );
                     })}
                 </Stack>
-            </DrawerContentContainer>
+            </Box>
         </StyledDrawer>
     );
 };

@@ -5,14 +5,18 @@ import {
     LocationOnOutlined as LocationIcon,
     Star as StarIcon,
 } from '@mui/icons-material';
-import { Box, CardMedia, Chip, Stack, Typography } from '@mui/material';
+import {
+    Box,
+    CardMedia,
+    Chip,
+    Stack,
+    Typography,
+    useTheme,
+} from '@mui/material';
 
 import {
-    ImageWrapper,
     MetaItem,
     OwnerActionButton,
-    OwnerActionStack,
-    RatingBadge,
     StyledCard,
     StyledCardContent,
 } from '@/components/RestaurantCard/RestaurantCard.styles';
@@ -24,6 +28,8 @@ export const RestaurantCard = ({
     onEdit,
     onDelete,
 }: RestaurantCardProps) => {
+    const theme = useTheme();
+
     // Convert diet codes into display labels for badges
     const formatDietType = (type: string) => {
         if (type === 'nonVeg') return 'Non-Veg';
@@ -33,18 +39,29 @@ export const RestaurantCard = ({
 
     return (
         <StyledCard>
-            <ImageWrapper>
+            <Box position="relative">
                 <CardMedia
                     component="img"
                     height="180"
                     image={restaurant.image}
                     alt={restaurant.name}
                 />
-                <RatingBadge variant="body2">
+                <Box
+                    display="flex"
+                    position="absolute"
+                    top={theme.typography.pxToRem(12)}
+                    right={theme.typography.pxToRem(12)}
+                    bgcolor={theme.palette.secondary.main}
+                    padding={theme.typography.pxToRem(8)}
+                    borderRadius="20px"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={theme.typography.pxToRem(4)}
+                >
                     <StarIcon fontSize="inherit" color="warning" />
-                    {restaurant.rating}
-                </RatingBadge>
-            </ImageWrapper>
+                    <Typography variant="body2">{restaurant.rating}</Typography>
+                </Box>
+            </Box>
 
             <StyledCardContent>
                 <Box>
@@ -71,7 +88,10 @@ export const RestaurantCard = ({
 
                     <MetaItem variant="body2">
                         <AccessTimeIcon fontSize="inherit" />
-                        <span>{restaurant.openingTime}</span>
+                        <span>
+                            {restaurant.openingTime}
+                            {restaurant.endTime}
+                        </span>
                     </MetaItem>
 
                     <MetaItem variant="body2">
@@ -81,7 +101,11 @@ export const RestaurantCard = ({
                 </Box>
 
                 {isOwner && (
-                    <OwnerActionStack direction="row" spacing={1.5}>
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        marginTop={theme.typography.pxToRem(8)}
+                    >
                         <OwnerActionButton
                             variant="outlined"
                             fullWidth
@@ -101,7 +125,7 @@ export const RestaurantCard = ({
                         >
                             Delete
                         </OwnerActionButton>
-                    </OwnerActionStack>
+                    </Stack>
                 )}
             </StyledCardContent>
         </StyledCard>

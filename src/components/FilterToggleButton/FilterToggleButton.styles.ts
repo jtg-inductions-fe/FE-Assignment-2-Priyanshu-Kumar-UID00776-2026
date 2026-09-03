@@ -1,54 +1,39 @@
 import { Button, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import { StyledFilterButtonProps } from '@/types/filterToggleButton.types';
+
 export const StyledButtonGroup = styled(ButtonGroup)({
     borderRadius: '20px',
     overflow: 'hidden',
 });
 
-export const AllFilterButton = styled(Button)(({ theme }) => ({
-    textTransform: 'none',
-    fontWeight: theme.typography.fontWeightRegular,
-    padding: theme.spacing(2, 0),
-    borderTopLeftRadius: '20px',
-    borderBottomLeftRadius: '20px',
-    width: theme.typography.pxToRem(60),
-}));
+export const StyledFilterButton = styled(Button, {
+    shouldForwardProp: (prop) => prop !== 'isActive' && prop !== 'variantType',
+})<StyledFilterButtonProps>(({ isActive, variantType, theme }) => {
+    const palette =
+        variantType === 'veg' ? theme.palette.tertiary : theme.palette.primary;
 
-export const VegFilterButton = styled(Button, {
-    shouldForwardProp: (prop) => prop !== 'isActive',
-})<{ isActive?: boolean }>(({ isActive, theme }) => ({
-    textTransform: 'none',
-    fontWeight: theme.typography.fontWeightRegular,
-    color: isActive
-        ? theme.palette.secondary.light
-        : theme.palette.tertiary.main,
-    backgroundColor: isActive ? theme.palette.tertiary.light : 'transparent',
-    borderColor: theme.palette.tertiary.main,
-    '&:hover': {
-        backgroundColor: isActive
-            ? theme.palette.tertiary.light
-            : theme.palette.secondary.main,
-        borderColor: theme.palette.tertiary.main,
-    },
-}));
+    const activeBg =
+        variantType === 'all' ? theme.palette.primary.main : palette.light;
+    const inactiveText =
+        variantType === 'all' ? theme.palette.text.primary : palette.main;
 
-export const NonVegFilterButton = styled(Button, {
-    shouldForwardProp: (prop) => prop !== 'isActive',
-})<{ isActive?: boolean }>(({ isActive, theme }) => ({
-    textTransform: 'none',
-    fontWeight: theme.typography.fontWeightRegular,
-    color: isActive
-        ? theme.palette.secondary.light
-        : theme.palette.primary.light,
-    backgroundColor: isActive ? theme.palette.primary.light : 'transparent',
-    borderColor: theme.palette.primary.light,
-    borderTopRightRadius: '20px',
-    borderBottomRightRadius: '20px',
-    '&:hover': {
-        backgroundColor: isActive
-            ? theme.palette.primary.light
-            : theme.palette.secondary.main,
-        borderColor: theme.palette.primary.light,
-    },
-}));
+    return {
+        textTransform: 'none',
+        fontWeight: theme.typography.fontWeightRegular,
+        padding: theme.typography.pxToRem(10),
+        color: isActive ? theme.palette.secondary.light : inactiveText,
+        backgroundColor: isActive ? activeBg : 'transparent',
+        borderColor: variantType === 'all' ? 'none' : palette.main,
+        borderTopLeftRadius: variantType === 'all' ? '20px' : '0px',
+        borderBottomLeftRadius: variantType === 'all' ? '20px' : '0px',
+        borderTopRightRadius: variantType === 'nonVeg' ? '20px' : '0px',
+        borderBottomRightRadius: variantType === 'nonVeg' ? '20px' : '0px',
+
+        '&:hover': {
+            backgroundColor: isActive ? activeBg : theme.palette.secondary.main,
+            borderColor: variantType === 'all' ? undefined : palette.main,
+        },
+    };
+});

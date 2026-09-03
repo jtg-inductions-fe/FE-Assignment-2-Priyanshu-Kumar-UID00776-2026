@@ -10,7 +10,38 @@
         "endTime": "10:00 PM",
         "ownerId": "haldiram@gmail.com",
         "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
-        "menus": []
+        "menus": [
+            {
+                "id": "menu_1",
+                "name": "White Sauce Pasta",
+                "description": "Creamy and cheesy pasta tossed with Italian herbs and corn",
+                "rating": 4.5,
+                "price": 260,
+                "stock": 0,
+                "dietType": "nonVeg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_2",
+                "name": "Crispy Corn",
+                "description": "Fried corn kernels tossed with onions, peppers, and spices",
+                "rating": 4.2,
+                "price": 190,
+                "stock": 18,
+                "dietType": "veg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_3",
+                "name": "Garlic Bread",
+                "description": "Toasted baguette slices brushed with garlic butter and herbs",
+                "rating": 4.4,
+                "price": 140,
+                "stock": 22,
+                "dietType": "veg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
+        ]
     },
     {
         "id": "rest_2",
@@ -23,7 +54,48 @@
         "endTime": "11:00 PM",
         "ownerId": "haldiram@gmail.com",
         "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
-        "menus": []
+        "menus": [
+            {
+                "id": "menu_1",
+                "name": "Chowmin",
+                "description": "Highly spicy and best hakka noodles",
+                "rating": 4.8,
+                "price": 250,
+                "stock": 10,
+                "dietType": "veg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_2",
+                "name": "Paneer Tikka",
+                "description": "Marinated paneer cubes grilled in a traditional tandoor",
+                "rating": 4.6,
+                "price": 320,
+                "stock": 15,
+                "dietType": "veg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_3",
+                "name": "Spring Rolls",
+                "description": "Crispy fried rolls packed with seasoned minced vegetables",
+                "rating": 4.3,
+                "price": 180,
+                "stock": 20,
+                "dietType": "nonVeg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_4",
+                "name": "Manchurian",
+                "description": "Deep-fried veggie balls tossed in a tangy and savory sauce",
+                "rating": 4.5,
+                "price": 220,
+                "stock": 12,
+                "dietType": "veg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
+        ]
     },
     {
         "id": "rest_3",
@@ -36,6 +108,47 @@
         "endTime": "10:00 PM",
         "ownerId": "haldiram@gmail.com",
         "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
-        "menus": []
+        "menus": [
+            {
+                "id": "menu_1",
+                "name": "Chowmin",
+                "description": "Highly spciy and best hakka noodles",
+                "rating": 4.8,
+                "price": 250,
+                "stock": 10,
+                "dietType": "nonVeg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_2",
+                "name": "Fried Rice",
+                "description": "Fragrant basmati rice stir-fried with fresh garden veggies",
+                "rating": 4.4,
+                "price": 200,
+                "stock": 25,
+                "dietType": "nonVeg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_3",
+                "name": "Chilli Paneer",
+                "description": "Batter-fried paneer cubes coated in a spicy sweet chilli sauce",
+                "rating": 4.7,
+                "price": 290,
+                "stock": 8,
+                "dietType": "veg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            {
+                "id": "menu_4",
+                "name": "Momos",
+                "description": "Steamed dumplings filled with finely chopped spiced vegetables",
+                "rating": 4.9,
+                "price": 150,
+                "stock": 30,
+                "dietType": "veg",
+                "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
+        ]
     }
 ]

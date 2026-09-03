@@ -6,7 +6,9 @@ export type MenuItem = {
     id: string;
     name: string;
     description: string;
+    rating: number;
     price: number;
+    stock: number;
     dietType: DietType;
     image?: string;
 };
@@ -40,4 +42,32 @@ export type RestaurantFormData = {
 // Redux store slice state holding the full restaurant list
 export type RestaurantState = {
     restaurants: RestaurantItemTypes[];
+};
+
+// Local slice state holding a selected restaurant's menu
+export type MenuState = {
+    menu: MenuItem[];
+};
+
+// Modal for the menu form
+export type MenuFormData = {
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    rating: number;
+    dietType: DietType;
+};
+
+// Component props passed into the MenuItemCard
+export type MenuItemCardProps = {
+    item: MenuItem;
+    isOwner?: boolean;
+    quantity?: number;
+    onAction: (actionType: string, item: MenuItem) => void;
+    onAddToCart?: (item: MenuItem) => void;
+    onIncrement?: (item: MenuItem) => void;
+    onDecrement?: (item: MenuItem) => void;
+    onEdit?: (item: MenuItem) => void;
+    onDelete?: (id: string) => void;
 };

@@ -14,6 +14,7 @@ import {
     useTheme,
 } from '@mui/material';
 
+import { RatingBadge } from '@/components/MenuItemCard/MenuItemCard.styles';
 import {
     MetaItem,
     OwnerActionButton,
@@ -25,6 +26,7 @@ import type { RestaurantCardProps } from '@/types/restaurantCard.types';
 export const RestaurantCard = ({
     restaurant,
     isOwner = false,
+    onCardClick,
     onEdit,
     onDelete,
 }: RestaurantCardProps) => {
@@ -38,7 +40,7 @@ export const RestaurantCard = ({
     };
 
     return (
-        <StyledCard>
+        <StyledCard onClick={() => onCardClick?.(restaurant.id)}>
             <Box position="relative">
                 <CardMedia
                     component="img"
@@ -46,21 +48,19 @@ export const RestaurantCard = ({
                     image={restaurant.image}
                     alt={restaurant.name}
                 />
-                <Box
-                    display="flex"
+                <RatingBadge
                     position="absolute"
                     top={theme.typography.pxToRem(12)}
                     right={theme.typography.pxToRem(12)}
-                    bgcolor={theme.palette.secondary.main}
-                    padding={theme.typography.pxToRem(8)}
-                    borderRadius="20px"
-                    alignItems="center"
-                    justifyContent="center"
-                    gap={theme.typography.pxToRem(4)}
                 >
-                    <StarIcon fontSize="inherit" color="warning" />
-                    <Typography variant="body2">{restaurant.rating}</Typography>
-                </Box>
+                    <StarIcon />
+                    <Typography
+                        color={theme.palette.secondary.dark}
+                        variant="body2"
+                    >
+                        {restaurant.rating}
+                    </Typography>
+                </RatingBadge>
             </Box>
 
             <StyledCardContent>
@@ -89,8 +89,7 @@ export const RestaurantCard = ({
                     <MetaItem variant="body2">
                         <AccessTimeIcon fontSize="inherit" />
                         <span>
-                            {restaurant.openingTime}
-                            {restaurant.endTime}
+                            {restaurant.openingTime} - {restaurant.endTime}
                         </span>
                     </MetaItem>
 
@@ -111,7 +110,10 @@ export const RestaurantCard = ({
                             fullWidth
                             startIcon={<EditIcon />}
                             size="small"
-                            onClick={() => onEdit?.(restaurant)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onEdit?.(restaurant);
+                            }}
                         >
                             Edit
                         </OwnerActionButton>
@@ -121,7 +123,10 @@ export const RestaurantCard = ({
                             fullWidth
                             startIcon={<DeleteIcon />}
                             size="small"
-                            onClick={() => onDelete?.(restaurant.id)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete?.(restaurant.id);
+                            }}
                         >
                             Delete
                         </OwnerActionButton>

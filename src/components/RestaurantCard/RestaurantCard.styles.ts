@@ -8,6 +8,11 @@ export const StyledCard = styled(Card)({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    transition: 'transform 0.2s ease-in-out',
+    cursor: 'pointer',
+    '&:hover': {
+        transform: 'translateY(-4px)',
+    },
 });
 
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({

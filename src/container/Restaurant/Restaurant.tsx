@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import {
     Add as AddIcon,
@@ -65,6 +66,7 @@ import {
 
 export const Restaurant = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth.user);
     const isOwner = user?.role === 'RESTAURANT OWNER';
     const allRestaurants = useAppSelector(
@@ -464,11 +466,13 @@ export const Restaurant = () => {
                                 </StyledCard>
                             ))
                         ) : filteredRestaurants.length === 0 ? (
-                            <Box textAlign="center" py={6} gridColumn="1 / -1">
-                                <Typography variant="h6" color="text.secondary">
-                                    No restaurants found.
-                                </Typography>
-                            </Box>
+                            <Typography
+                                variant="h6"
+                                color="text.secondary"
+                                textAlign="center"
+                            >
+                                No restaurants found.
+                            </Typography>
                         ) : (
                             filteredRestaurants.map((restaurant) => (
                                 <RestaurantCard
@@ -476,6 +480,9 @@ export const Restaurant = () => {
                                     restaurant={restaurant}
                                     isOwner={isOwner}
                                     onEdit={handleOpenEditModal}
+                                    onCardClick={(id) =>
+                                        void navigate(`/restaurant/${id}`)
+                                    }
                                     onDelete={setDeleteTargetId}
                                 />
                             ))

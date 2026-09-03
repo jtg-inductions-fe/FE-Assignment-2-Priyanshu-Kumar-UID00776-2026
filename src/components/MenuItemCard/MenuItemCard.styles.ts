@@ -15,7 +15,7 @@ export const StyledMenuCard = styled(Card)(({ theme }) => ({
 }));
 
 export const MenuCardBody = styled(CardContent)(({ theme }) => ({
-    padding: theme.typography.pxToRem(8),
+    padding: theme.typography.pxToRem(10),
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -36,13 +36,13 @@ export const CounterButton = styled(IconButton)(({ theme }) => ({
 export const AddButton = styled(Button)(({ theme }) => ({
     borderRadius: '10px',
     textTransform: 'none',
-    padding: theme.typography.pxToRem(2),
+    padding: theme.typography.pxToRem(4),
 }));
 
 export const RatingBadge = styled(Box)(({ theme }) => ({
     display: 'flex',
     backgroundColor: theme.palette.secondary.main,
-    padding: theme.typography.pxToRem(2),
+    padding: theme.typography.pxToRem(4),
     borderRadius: '15px',
     alignItems: 'center',
     justifyContent: 'center',

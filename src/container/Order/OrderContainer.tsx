@@ -1,7 +1,6 @@
-import { Container, Stack, Typography } from '@mui/material';
+import { Box, Container, Stack, Typography, useTheme } from '@mui/material';
 
 import { OrderCard } from '@/components/OrderCard/OrderCard';
-import { OrdersPage } from '@/container/Order/OrderContainer.styles';
 import { showNotification } from '@/features/notificationSlice';
 import { updateOrderStatusSuccess } from '@/features/orderSlice';
 import { updateOrderStatus } from '@/services/order.service';
@@ -10,6 +9,7 @@ import { OrderStatus } from '@/types/order.types';
 
 export const OrderContainer = () => {
     const dispatch = useAppDispatch();
+    const theme = useTheme();
 
     const currentUser = useAppSelector((state) => state.auth.user);
     const restaurants = useAppSelector((state) => state.restaurant.restaurants);
@@ -53,13 +53,19 @@ export const OrderContainer = () => {
     };
 
     return (
-        <OrdersPage px={{ sm: 10 }}>
-            <Container maxWidth="sm" sx={{ mt: 3 }}>
+        <Box
+            px={{ sm: 10 }}
+            height="100vh"
+            maxHeight="100vh"
+            overflow="auto"
+            paddingBottom={theme.typography.pxToRem(150)}
+        >
+            <Container maxWidth="sm" sx={{ mt: 5 }}>
                 <Typography variant="h2">
                     {isOwner ? 'Order Management' : 'Your Orders'}
                 </Typography>
 
-                <Stack spacing={2} mt={2}>
+                <Stack spacing={2} mt={5}>
                     {visibleOrders.map((order) => (
                         <OrderCard
                             key={order.id}
@@ -82,6 +88,6 @@ export const OrderContainer = () => {
                     )}
                 </Stack>
             </Container>
-        </OrdersPage>
+        </Box>
     );
 };

@@ -12,7 +12,9 @@ export const RootLayout = () => (
     <Box
         component="main"
         maxWidth={{ xs: '100%', xl: '1900px' }}
-        sx={{ margin: '0 auto', height: '100vh', overflow: 'hidden' }}
+        margin="0 auto"
+        height="100vh"
+        overflow="hidden"
     >
         <Suspense fallback={<LoadingFallback />}>
             <NavbarContainer />

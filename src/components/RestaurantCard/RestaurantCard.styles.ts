@@ -1,11 +1,4 @@
-import {
-    Box,
-    Button,
-    CardActionArea,
-    CardContent,
-    Stack,
-    Typography,
-} from '@mui/material';
+import { Button, CardActionArea, CardContent, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const StyledCard = styled(CardActionArea)({
@@ -16,28 +9,11 @@ export const StyledCard = styled(CardActionArea)({
     flexDirection: 'column',
     justifyContent: 'space-between',
     transition: 'transform 0.2s ease-in-out',
+    cursor: 'pointer',
     '&:hover': {
         transform: 'translateY(-4px)',
     },
 });
-
-export const ImageWrapper = styled(Box)({
-    position: 'relative',
-    width: '100%',
-});
-
-export const RatingBadge = styled(Typography)(({ theme }) => ({
-    display: 'flex',
-    position: 'absolute',
-    top: theme.typography.pxToRem(12),
-    right: theme.typography.pxToRem(12),
-    backgroundColor: theme.palette.secondary.main,
-    padding: theme.typography.pxToRem(8),
-    borderRadius: '20px',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: theme.typography.pxToRem(4),
-}));
 
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     padding: theme.typography.pxToRem(20),
@@ -53,10 +29,6 @@ export const MetaItem = styled(Typography)(({ theme }) => ({
     alignItems: 'center',
     gap: theme.typography.pxToRem(4),
     marginTop: theme.typography.pxToRem(5),
-}));
-
-export const OwnerActionStack = styled(Stack)(({ theme }) => ({
-    marginTop: theme.typography.pxToRem(8),
 }));
 
 export const OwnerActionButton = styled(Button)({

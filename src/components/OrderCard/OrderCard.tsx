@@ -65,11 +65,7 @@ export const OrderCard = ({
                     <Typography variant="h6">{order.customerName}</Typography>
                 )}
 
-                <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mt: 0.5 }}
-                >
+                <Typography variant="body2" color="text.secondary" mt={1}>
                     {isOwner ? `${order.items.length} items` : ''}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -84,7 +80,7 @@ export const OrderCard = ({
                         direction="row"
                         justifyContent="space-between"
                         alignItems="center"
-                        sx={{ mt: 1.5 }}
+                        mt={2}
                     >
                         <Chip
                             label={order.status}

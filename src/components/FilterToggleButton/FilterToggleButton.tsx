@@ -1,9 +1,8 @@
 import {
-    AllFilterButton,
-    NonVegFilterButton,
     StyledButtonGroup,
-    VegFilterButton,
+    StyledFilterButton,
 } from '@/components/FilterToggleButton/FilterToggleButton.styles';
+import { FILTER_OPTIONS } from '@/constant/restaurantConstants';
 import { FoodVariantToggleProps } from '@/types/filterToggleButton.types';
 
 export const FoodVariantToggle = ({
@@ -12,33 +11,23 @@ export const FoodVariantToggle = ({
 }: FoodVariantToggleProps) => (
     <StyledButtonGroup
         variant="outlined"
-        aria-label="FIlter restaurants by diet"
+        aria-label="Filter restaurants by diet"
     >
-        <AllFilterButton
-            onClick={() => onFilterChange('all')}
-            variant={foodVariant === 'all' ? 'contained' : 'outlined'}
-            aria-pressed={foodVariant === 'all'}
-            color="primary"
-        >
-            All
-        </AllFilterButton>
+        {FILTER_OPTIONS.map(({ id, label }) => {
+            const isActive = foodVariant === id;
 
-        <VegFilterButton
-            onClick={() => onFilterChange('veg')}
-            variant={foodVariant === 'veg' ? 'contained' : 'outlined'}
-            aria-pressed={foodVariant === 'veg'}
-            isActive={foodVariant === 'veg'}
-        >
-            Veg
-        </VegFilterButton>
-
-        <NonVegFilterButton
-            onClick={() => onFilterChange('nonVeg')}
-            variant={foodVariant === 'nonVeg' ? 'contained' : 'outlined'}
-            aria-pressed={foodVariant === 'nonVeg'}
-            isActive={foodVariant === 'nonVeg'}
-        >
-            Non-Veg
-        </NonVegFilterButton>
+            return (
+                <StyledFilterButton
+                    key={id}
+                    onClick={() => onFilterChange(id)}
+                    variant={isActive ? 'contained' : 'outlined'}
+                    aria-pressed={isActive}
+                    variantType={id}
+                    isActive={isActive}
+                >
+                    {label}
+                </StyledFilterButton>
+            );
+        })}
     </StyledButtonGroup>
 );

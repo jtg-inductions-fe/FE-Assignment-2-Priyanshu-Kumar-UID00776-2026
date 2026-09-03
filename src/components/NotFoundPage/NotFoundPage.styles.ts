@@ -1,31 +1,5 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-export const ErrorPageContainer = styled(Box)(({ theme }) => ({
-    height: '100vh',
-    backgroundColor: theme.palette.background.default,
-    overflow: 'hidden',
-}));
-
-export const NotFoundContainer = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    textAlign: 'center',
-    padding: theme.typography.pxToRem(16),
-}));
-
-export const ErrorCode = styled(Typography)(({ theme }) => ({
-    color: theme.palette.primary.main,
-    marginBottom: theme.typography.pxToRem(4),
-}));
-
-export const MessageTitle = styled(Typography)(({ theme }) => ({
-    marginBottom: theme.typography.pxToRem(8),
-    color: theme.palette.text.primary,
-}));
 
 export const MessageSub = styled(Typography)(({ theme }) => ({
     color: theme.palette.text.secondary,
@@ -34,7 +8,7 @@ export const MessageSub = styled(Typography)(({ theme }) => ({
 }));
 
 export const AccountButton = styled(Button)(({ theme }) => ({
-    padding: theme.spacing(1.5, 4),
+    padding: theme.typography.pxToRem(8),
     borderRadius: '10px',
     textTransform: 'none',
     boxShadow: theme.shadows[2],

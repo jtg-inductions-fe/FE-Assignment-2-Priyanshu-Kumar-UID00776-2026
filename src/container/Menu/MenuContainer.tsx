@@ -389,7 +389,7 @@ export const MenuContainer = () => {
     }
 
     return (
-        <RestaurantContainer>
+        <RestaurantContainer px={{ sm: 10 }}>
             <MainContentLayout>
                 <RestaurantSidebar
                     open={isDrawerOpen}
@@ -416,7 +416,7 @@ export const MenuContainer = () => {
                             direction="row"
                             spacing={1.5}
                             alignItems="center"
-                            sx={{ display: { xs: 'none', sm: 'flex' } }}
+                            display={{ xs: 'none', sm: 'flex' }}
                         >
                             {isOwner ? (
                                 <AddRestaurantButton
@@ -472,13 +472,11 @@ export const MenuContainer = () => {
 
                         <Stack
                             direction="row"
-                            spacing={1.5}
+                            spacing={2}
                             alignItems="center"
                             justifyContent="space-between"
-                            sx={{
-                                width: '100%',
-                                display: { xs: 'flex', sm: 'none' },
-                            }}
+                            display={{ xs: 'flex', sm: 'none' }}
+                            width="100%"
                         >
                             {isOwner ? (
                                 <AddRestaurantButton

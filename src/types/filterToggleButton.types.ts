@@ -10,3 +10,8 @@ export type FoodVariantToggleProps = {
     foodVariant: FoodVariant;
     onFilterChange: (filter: FoodVariant) => void;
 };
+
+export type StyledFilterButtonProps = {
+    isActive?: boolean;
+    variantType: FoodVariant;
+};

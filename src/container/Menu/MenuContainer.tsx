@@ -352,7 +352,7 @@ export const MenuContainer = () => {
     }
 
     return (
-        <RestaurantContainer>
+        <RestaurantContainer px={{ sm: 10 }}>
             <MainContentLayout>
                 <RestaurantSidebar
                     open={isDrawerOpen}

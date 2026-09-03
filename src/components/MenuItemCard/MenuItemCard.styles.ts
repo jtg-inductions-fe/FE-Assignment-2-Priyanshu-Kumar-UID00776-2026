@@ -12,7 +12,7 @@ export const StyledMenuCard = styled(Card)(({ theme }) => ({
 }));
 
 export const MenuCardBody = styled(CardContent)(({ theme }) => ({
-    padding: theme.typography.pxToRem(8),
+    padding: theme.typography.pxToRem(10),
     flex: 1,
     display: 'flex',
     flexDirection: 'column',

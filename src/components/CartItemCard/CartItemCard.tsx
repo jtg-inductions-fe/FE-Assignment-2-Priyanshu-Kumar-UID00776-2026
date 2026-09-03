@@ -27,7 +27,7 @@ export const CartItemCard = ({ item, onCartAction }: CartItemCardProps) => {
                 alt={menuItem.name}
             />
 
-            <Box>
+            <Box width="100%">
                 <Stack
                     direction="row"
                     justifyContent="space-between"

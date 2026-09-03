@@ -1,3 +1,5 @@
 import { MenuContainer } from '@/container/Menu/MenuContainer';
 
-export const MenuPage = () => <MenuContainer />;
+const MenuPage = () => <MenuContainer />;
+
+export default MenuPage;

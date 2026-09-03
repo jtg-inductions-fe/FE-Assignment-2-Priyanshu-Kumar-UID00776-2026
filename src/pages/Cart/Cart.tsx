@@ -1,3 +1,5 @@
 import { CartContainer } from '@/container/Cart/CartContainer';
 
-export const CartPage = () => <CartContainer />;
+const CartPage = () => <CartContainer />;
+
+export default CartPage;

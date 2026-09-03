@@ -69,3 +69,10 @@ export type LoginData = {
     email: string;
     password: string;
 };
+
+/**
+ * Protected routes for the role based users
+ */
+export type ProtectedRouteProps = {
+    allowedRoles: UserRole[];
+};

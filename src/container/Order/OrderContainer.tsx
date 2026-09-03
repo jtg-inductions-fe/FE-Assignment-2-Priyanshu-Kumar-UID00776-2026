@@ -53,7 +53,7 @@ export const OrderContainer = () => {
     };
 
     return (
-        <OrdersPage>
+        <OrdersPage px={{ sm: 10 }}>
             <Container maxWidth="sm" sx={{ mt: 3 }}>
                 <Typography variant="h2">
                     {isOwner ? 'Order Management' : 'Your Orders'}

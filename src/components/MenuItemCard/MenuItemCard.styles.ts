@@ -33,13 +33,13 @@ export const CounterButton = styled(IconButton)(({ theme }) => ({
 export const AddButton = styled(Button)(({ theme }) => ({
     borderRadius: '10px',
     textTransform: 'none',
-    padding: theme.typography.pxToRem(2),
+    padding: theme.typography.pxToRem(4),
 }));
 
 export const RatingBadge = styled(Box)(({ theme }) => ({
     display: 'flex',
     backgroundColor: theme.palette.secondary.main,
-    padding: theme.typography.pxToRem(2),
+    padding: theme.typography.pxToRem(4),
     borderRadius: '15px',
     alignItems: 'center',
     justifyContent: 'center',

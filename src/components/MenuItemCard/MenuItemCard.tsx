@@ -29,7 +29,11 @@ export const MenuItemCard = ({
     return (
         <StyledMenuCard>
             <Box width={theme.typography.pxToRem(130)}>
-                <StyledCardMedia src={item.image} alt={item.name} />
+                <StyledCardMedia
+                    fetchPriority="high"
+                    src={item.image}
+                    alt={item.name}
+                />
             </Box>
 
             <MenuCardBody>
@@ -39,7 +43,9 @@ export const MenuItemCard = ({
                         justifyContent="space-between"
                         alignItems="flex-start"
                     >
-                        <Typography variant="h5">{item.name}</Typography>
+                        <Typography variant="h4" component="h3">
+                            {item.name}
+                        </Typography>
 
                         <RatingBadge>
                             <StarIcon />
@@ -89,7 +95,7 @@ export const MenuItemCard = ({
                     alignItems="center"
                     mt={3}
                 >
-                    <Typography variant="h6" color="primary.main">
+                    <Typography variant="body1" color="primary.main">
                         ₹{item.price.toFixed(2)}
                     </Typography>
 

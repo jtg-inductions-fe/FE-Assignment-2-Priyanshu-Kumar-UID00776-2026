@@ -35,7 +35,7 @@ export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
 export const ScrollableContent = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
-    padding: theme.spacing(0, 3, 35, 3),
+    padding: theme.spacing(5, 3, 35, 3),
     width: '100%',
     margin: '0 auto',
 }));
@@ -64,8 +64,8 @@ export const FilterButton = styled(Button)(({ theme }) => ({
 
 export const RestaurantGrid = styled(Box)(({ theme }) => ({
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-    gap: theme.typography.pxToRem(12),
+    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 2fr))',
+    gap: theme.typography.pxToRem(22),
     paddingBottom: theme.typography.pxToRem(8),
 }));
 

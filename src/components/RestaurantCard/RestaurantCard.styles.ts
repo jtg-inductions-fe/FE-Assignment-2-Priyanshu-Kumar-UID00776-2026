@@ -1,17 +1,17 @@
 import {
     Box,
     Button,
-    Card,
+    CardActionArea,
     CardContent,
     Stack,
     Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export const StyledCard = styled(Card)({
+export const StyledCard = styled(CardActionArea)({
     borderRadius: '20px',
     overflow: 'hidden',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.30)',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -23,6 +23,7 @@ export const StyledCard = styled(Card)({
 
 export const ImageWrapper = styled(Box)({
     position: 'relative',
+    width: '100%',
 });
 
 export const RatingBadge = styled(Typography)(({ theme }) => ({
@@ -40,8 +41,8 @@ export const RatingBadge = styled(Typography)(({ theme }) => ({
 
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     padding: theme.typography.pxToRem(20),
-    flex: 1,
     display: 'flex',
+    width: '100%',
     flexDirection: 'column',
     justifyContent: 'space-between',
 }));

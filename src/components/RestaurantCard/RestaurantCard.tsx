@@ -38,6 +38,7 @@ export const RestaurantCard = ({
                 <CardMedia
                     component="img"
                     height="180"
+                    fetchPriority="high"
                     image={restaurant.image}
                     alt={restaurant.name}
                 />

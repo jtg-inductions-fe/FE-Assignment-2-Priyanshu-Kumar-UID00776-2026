@@ -1,13 +1,32 @@
+import { lazy } from 'react';
+
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { Login } from '@/components/Auth/Login';
 import { SignUp } from '@/components/Auth/SignUp';
 import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
 import { RootLayout } from '@/layout/RootLayout';
-import { CartPage } from '@/pages/Cart/Cart';
-import { MenuPage } from '@/pages/Menu/Menu';
-import { OrderPage } from '@/pages/Order/order';
-import { RestaurantPage } from '@/pages/Restaurant/Restaurant';
+
+const RestaurantPage = lazy(() =>
+    import('@/pages/Restaurant/Restaurant').then((module) => ({
+        default: module.RestaurantPage,
+    })),
+);
+const MenuPage = lazy(() =>
+    import('@/pages/Menu/Menu').then((module) => ({
+        default: module.MenuPage,
+    })),
+);
+const CartPage = lazy(() =>
+    import('@/pages/Cart/Cart').then((module) => ({
+        default: module.CartPage,
+    })),
+);
+const OrderPage = lazy(() =>
+    import('@/pages/Order/order').then((module) => ({
+        default: module.OrderPage,
+    })),
+);
 
 export const AppRouter = createBrowserRouter([
     // Redirect the root path directly to the restaurant screen

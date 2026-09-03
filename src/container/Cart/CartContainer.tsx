@@ -27,6 +27,7 @@ export const CartContainer = () => {
 
     const user = useAppSelector((state) => state.auth.user);
     const cartItems = useAppSelector((state) => state.cart.items);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const userEmail = user?.email || '';
 
     const [appliedDiscount, setAppliedDiscount] = useState<{
@@ -91,7 +92,8 @@ export const CartContainer = () => {
         }
 
         try {
-            const createdOrders = await placeOrder(cartItems, user);
+            setIsLoading(true);
+            const createdOrders = await placeOrder(cartItems, user, totalPay);
 
             dispatch(addOrdersSuccess(createdOrders));
             dispatch(clearCart({ userEmail }));
@@ -115,6 +117,8 @@ export const CartContainer = () => {
                     severity: 'error',
                 }),
             );
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -148,7 +152,13 @@ export const CartContainer = () => {
     return (
         <PageRoot>
             <CartContainerArea maxWidth="lg">
-                <Typography variant="h2" py={3}>
+                <Typography
+                    textAlign="left"
+                    width="100%"
+                    variant="h2"
+                    py={3}
+                    gutterBottom
+                >
                     Your Cart
                 </Typography>
 
@@ -175,6 +185,7 @@ export const CartContainer = () => {
                             appliedPromoCode={appliedDiscount?.code || null}
                             onApplyPromo={handleApplyPromo}
                             onCheckout={() => void handleCheckout()}
+                            onCheckoutLoading={isLoading}
                         />
                     </Grid>
                 </Grid>

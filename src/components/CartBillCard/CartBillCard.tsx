@@ -20,6 +20,7 @@ export const CartBillCard = ({
     appliedPromoCode,
     onApplyPromo,
     onCheckout,
+    onCheckoutLoading,
 }: CartBill) => {
     const [couponInput, setCouponInput] = useState('');
     const theme = useTheme();
@@ -94,6 +95,7 @@ export const CartBillCard = ({
                 size="large"
                 endIcon={<ArrowForwardIcon />}
                 onClick={onCheckout}
+                loading={onCheckoutLoading}
             >
                 Go to Checkout
             </CheckoutSubmitButton>

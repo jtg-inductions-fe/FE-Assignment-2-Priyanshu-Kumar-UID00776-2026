@@ -1,6 +1,8 @@
 import type { RestaurantItemTypes } from '@/types/restaurant.types';
 
-// Restaurant card for showing the details
+/**
+ * Restaurant card for showing the details
+ */
 export type RestaurantCardProps = {
     restaurant: RestaurantItemTypes;
     isOwner?: boolean;

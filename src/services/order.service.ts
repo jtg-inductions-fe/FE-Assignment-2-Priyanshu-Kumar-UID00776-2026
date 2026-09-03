@@ -5,16 +5,32 @@ import { Order, OrderStatus } from '@/types/order.types';
 
 let mockOrders: Order[] = ordersData as Order[];
 
+/**
+ * Get stored orders
+ * @returns {Order[]}
+ */
 export const getStoredOrders = (): Order[] => [...mockOrders];
 
+/**
+ * Fetch all orders
+ * @returns {Promise<Order[]>}
+ */
 export const fetchOrders = async (): Promise<Order[]> => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     return getStoredOrders();
 };
 
+/**
+ * Place a new order
+ * @param {CartItem[]} cartItems
+ * @param {User} user
+ * @param {number} totalPay
+ * @returns {Promise<Order[]>}
+ */
 export const placeOrder = async (
     cartItems: CartItem[],
     user: User,
+    totalPay: number,
 ): Promise<Order[]> => {
     await new Promise((resolve) => setTimeout(resolve, 300));
 
@@ -37,32 +53,31 @@ export const placeOrder = async (
     );
 
     const newOrders: Order[] = Object.entries(groupedCart).map(
-        ([restaurantId, items]) => {
-            const restaurantTotal = items.reduce(
-                (sum, item) => sum + item.menuItem.price * item.quantity,
-                0,
-            );
-
-            return {
-                id: `ord_${crypto.randomUUID()}`,
-                checkoutId,
-                customerEmail: user.email.toLowerCase(),
-                customerName: user.fullName,
-                customerContact: user.contactNo,
-                restaurantId,
-                restaurantName: items[0].restaurantName,
-                items,
-                totalAmount: restaurantTotal,
-                status: 'Pending',
-                createdAt,
-            };
-        },
+        ([restaurantId, items]) => ({
+            id: `ord_${crypto.randomUUID()}`,
+            checkoutId,
+            customerEmail: user.email,
+            customerName: user.fullName,
+            customerContact: user.contactNo,
+            restaurantId,
+            restaurantName: items[0].restaurantName,
+            items,
+            totalAmount: totalPay,
+            status: 'Pending',
+            createdAt,
+        }),
     );
 
     mockOrders = [...mockOrders, ...newOrders];
     return newOrders;
 };
 
+/**
+ * Update the status of an order
+ * @param {string} orderId
+ * @param {OrderStatus} nextStatus
+ * @returns {Promise<Order>}
+ */
 export const updateOrderStatus = async (
     orderId: string,
     nextStatus: OrderStatus,

@@ -9,5 +9,8 @@ export const PageRoot = styled(Box)(({ theme }) => ({
 
 export const CartContainerArea = styled(Container)(({ theme }) => ({
     padding: theme.typography.pxToRem(10),
-    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
 }));

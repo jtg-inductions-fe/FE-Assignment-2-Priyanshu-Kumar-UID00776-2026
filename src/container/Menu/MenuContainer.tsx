@@ -164,7 +164,9 @@ export const MenuContainer = () => {
             }
 
             if (selectedRatings.length > 0 && item.rating) {
-                const passes = selectedRatings.some((r) => item.rating >= r);
+                const passes = selectedRatings.some(
+                    (restaurant) => item.rating >= restaurant,
+                );
                 if (!passes) return false;
             }
 
@@ -400,6 +402,7 @@ export const MenuContainer = () => {
                         <Stack direction="row" alignItems="center" spacing={1}>
                             <IconButton
                                 onClick={() => void navigate('/restaurant')}
+                                aria-label="Back to restaurant details"
                             >
                                 <ArrowBackIcon />
                             </IconButton>

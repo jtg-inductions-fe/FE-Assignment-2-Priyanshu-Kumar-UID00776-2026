@@ -1,5 +1,8 @@
 import { CartItem } from '@/types/cart.types';
 
+/**
+ * Lifecycle stages of an order
+ */
 export type OrderStatus =
     | 'Pending'
     | 'Accepted'
@@ -7,6 +10,9 @@ export type OrderStatus =
     | 'Out for Delivery'
     | 'Delivered';
 
+/**
+ * Order details and customer information
+ */
 export type Order = {
     id: string;
     checkoutId: string;
@@ -21,10 +27,16 @@ export type Order = {
     createdAt: string;
 };
 
+/**
+ * Order array saving orders state
+ */
 export type OrderState = {
     orders: Order[];
 };
 
+/**
+ * Order card props passed values
+ */
 export type OrderCardProps = {
     order: Order;
     isOwner?: boolean;

@@ -2,7 +2,9 @@ import React, { ReactNode } from 'react';
 
 import { User } from '@/types/auth.types';
 
-// Navbar action types for the clicks
+/**
+ * Navbar action types for the clicks
+ */
 export type NavbarAction =
     | 'home'
     | 'cart'
@@ -13,7 +15,9 @@ export type NavbarAction =
     | 'logout'
     | 'login';
 
-// Containes the item config for the Bottom navigation
+/**
+ * Containes the item config for the Bottom navigation
+ */
 export type NavItemConfig = {
     label: string;
     icon: ReactNode;
@@ -23,7 +27,9 @@ export type NavItemConfig = {
     isVisible: boolean;
 };
 
-// Bottom navigation props passes to the component
+/**
+ * Bottom navigation props passes to the component
+ */
 export type BottomNavigationBarProps = {
     user: User | null;
     isUserActive: boolean;

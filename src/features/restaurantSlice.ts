@@ -6,31 +6,49 @@ import {
 } from '@/types/restaurant.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Set up the default starting state with an empty list
+/**
+ * Set up the default starting state with an empty list
+ */
 const initialState: RestaurantState = {
     restaurants: restaurantData as RestaurantItemTypes[],
 };
 
-// Create the redux slice to manage restaurant state and actions
 export const restaurantSlice = createSlice({
     name: 'restaurants',
     initialState,
     reducers: {
-        // Replace the entire restaurant list with new data
+        /**
+         * Replace the entire restaurant list with new data
+         * @param {RestaurantState} state
+         * @param {PayloadAction<RestaurantItemTypes[]>} action
+         * @returns {void}
+         */
         setRestaurants: (
             state,
             action: PayloadAction<RestaurantItemTypes[]>,
         ) => {
             state.restaurants = action.payload;
         },
-        // Add a newly created restaurant to the end of the list
+
+        /**
+         * Add a newly created restaurant to the end of the list
+         * @param {RestaurantState} state
+         * @param {PayloadAction<RestaurantItemTypes>} action
+         * @returns {void}
+         */
         addRestaurantSuccess: (
             state,
             action: PayloadAction<RestaurantItemTypes>,
         ) => {
             state.restaurants.push(action.payload);
         },
-        // Find an existing restaurant by ID and update its details in place
+
+        /**
+         * Find an existing restaurant by ID and update its details in place
+         * @param {RestaurantState} state
+         * @param {PayloadAction<RestaurantItemTypes>} action
+         * @returns {void}
+         */
         editRestaurantSuccess: (
             state,
             action: PayloadAction<RestaurantItemTypes>,
@@ -43,13 +61,25 @@ export const restaurantSlice = createSlice({
                 state.restaurants[index] = action.payload;
             }
         },
-        // Remove a restaurant from the list using its unique ID
+
+        /**
+         * Remove a restaurant from the list using its unique ID
+         * @param {RestaurantState} state
+         * @param {PayloadAction<string>} action
+         * @returns {void}
+         */
         deleteRestaurantSuccess: (state, action: PayloadAction<string>) => {
             state.restaurants = state.restaurants.filter(
                 (restaurant) => restaurant.id !== action.payload,
             );
         },
-        // Add new menu item for the selected item
+
+        /**
+         * Add new menu item for the selected item
+         * @param {RestaurantState} state
+         * @param {PayloadAction<{ restaurantId: string; menuItem: MenuItem }>} action
+         * @returns {void}
+         */
         addMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
@@ -62,7 +92,13 @@ export const restaurantSlice = createSlice({
                 restaurants.menus.push(action.payload.menuItem);
             }
         },
-        // Edit menu item for the selected restaurant
+
+        /**
+         * Edit menu item for the selected restaurant
+         * @param {RestaurantState} state
+         * @param {PayloadAction<{ restaurantId: string; menuItem: MenuItem }>} action
+         * @returns {void}
+         */
         editMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuItem: MenuItem }>,
@@ -81,7 +117,13 @@ export const restaurantSlice = createSlice({
                 }
             }
         },
-        // Remove a menu item from the matching restaurant's menu list
+
+        /**
+         * Remove a menu item from the matching restaurant's menu list
+         * @param {RestaurantState} state
+         * @param {PayloadAction<{ restaurantId: string; menuId: string }>} action
+         * @returns {void}
+         */
         deleteMenuItemSuccess: (
             state,
             action: PayloadAction<{ restaurantId: string; menuId: string }>,

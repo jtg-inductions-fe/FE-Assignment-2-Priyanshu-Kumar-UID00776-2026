@@ -75,6 +75,9 @@ export const OrderCard = ({
                 <Typography variant="body2" color="text.secondary">
                     {formattedTime}
                 </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {`#${order.id}`}
+                </Typography>
 
                 {!isOwner && (
                     <Stack

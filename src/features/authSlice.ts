@@ -1,8 +1,10 @@
-// Import typescript interfaces and redux toolkit utilities
 import { AuthState, User } from '@/types/auth.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Retrieves and parses the persisted user from localStorage on initialization
+/**
+ * Retrieves and parses the persisted user from localStorage on initialization
+ * @returns {User | null}
+ */
 const getStoredUser = (): User | null => {
     try {
         const stored = localStorage.getItem('currentUser');
@@ -15,20 +17,29 @@ const getStoredUser = (): User | null => {
     }
 };
 
-// Initialize the user from local storage
+/**
+ * Initialize the user from local storage
+ */
 const initialUser = getStoredUser();
 
-// Redux initial state for AuthState
+/**
+ * Redux initial state for AuthState
+ */
 const initialState: AuthState = {
     user: initialUser,
     isAuthenticated: Boolean(initialUser),
 };
 
-// Authentication slice to manage the user login state and storage persistence
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        /**
+         * Set current authenticated user and persist to storage
+         * @param {AuthState} state
+         * @param {PayloadAction<User>} action
+         * @returns {void}
+         */
         setUser: (state, action: PayloadAction<User>) => {
             const safeUser: User = {
                 fullName: action.payload.fullName,
@@ -43,6 +54,11 @@ export const authSlice = createSlice({
             localStorage.setItem('currentUser', JSON.stringify(safeUser));
         },
 
+        /**
+         * Clear current authenticated user and remove from storage
+         * @param {AuthState} state
+         * @returns {void}
+         */
         clearUser: (state) => {
             state.user = null;
             state.isAuthenticated = false;

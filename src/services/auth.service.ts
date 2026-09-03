@@ -1,7 +1,10 @@
-// Import the neccessary types
 import { LoginData, SignupData, StoredUser, User } from '@/types/auth.types';
 
-// Function to convert the plain text password into hash password using the native browser crypto.subtle
+/**
+ * Function to convert the plain text password into hash password using the native browser crypto.subtle
+ * @param {string} password
+ * @returns {Promise<string>}
+ */
 const hashPassword = async (password: string): Promise<string> => {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -10,7 +13,10 @@ const hashPassword = async (password: string): Promise<string> => {
     return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('');
 };
 
-// Fetch and parse the list of all registered users saved in localStorage
+/**
+ * Fetch and parse the list of all registered users saved in localStorage
+ * @returns {StoredUser[]}
+ */
 const getUsers = (): StoredUser[] => {
     const storedUsers = localStorage.getItem('users');
 
@@ -21,7 +27,11 @@ const getUsers = (): StoredUser[] => {
     return JSON.parse(storedUsers) as StoredUser[];
 };
 
-// Register a new user, check for duplicates, hash their password, and save them
+/**
+ * Register a new user, check for duplicates, hash their password, and save them
+ * @param {SignupData} data
+ * @returns {Promise<User>}
+ */
 export const signup = async (data: SignupData): Promise<User> => {
     await new Promise((resolve) => {
         setTimeout(resolve, 2000);
@@ -61,7 +71,11 @@ export const signup = async (data: SignupData): Promise<User> => {
     return safeUser;
 };
 
-// Verify user credentials against stored accounts and return profile details on match
+/**
+ * Verify user credentials against stored accounts and return profile details on match
+ * @param {LoginData} data
+ * @returns {Promise<User>}
+ */
 export const login = async (data: LoginData): Promise<User> => {
     await new Promise((resolve) => {
         setTimeout(resolve, 2000);
@@ -92,6 +106,10 @@ export const login = async (data: LoginData): Promise<User> => {
     return safeUser;
 };
 
+/**
+ * Logout the current user
+ * @returns {Promise<void>}
+ */
 export const logout = async (): Promise<void> => {
     await new Promise((resolve) => {
         setTimeout(resolve, 1000);

@@ -2,7 +2,9 @@ import type React from 'react';
 
 import { User } from '@/types/auth.types';
 
-// Navbar all items actions
+/**
+ * Navbar all items actions
+ */
 export type NavbarAction =
     | 'logo'
     | 'order'
@@ -12,7 +14,9 @@ export type NavbarAction =
     | 'closeMenu'
     | 'logout';
 
-// Navbar props passed to the component
+/**
+ * Navbar props passed to the component
+ */
 export type NavbarProps = {
     user: User | null;
     isUserActive: boolean;

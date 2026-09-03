@@ -1,5 +1,8 @@
 import { User } from '@/types/auth.types';
 
+/**
+ * Profile menu component props
+ */
 export type ProfileMenuProps = {
     user: User | null;
     isUserActive: boolean;

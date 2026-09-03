@@ -4,11 +4,14 @@ import { styled } from '@mui/material/styles';
 export const StyledMenuCard = styled(Card)(({ theme }) => ({
     borderRadius: '20px',
     overflow: 'hidden',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
     display: 'flex',
     width: '100%',
     minWidth: theme.typography.pxToRem(350),
     backgroundColor: theme.palette.background.paper,
+    [theme.breakpoints.up('sm')]: {
+        minWidth: theme.typography.pxToRem(400),
+    },
 }));
 
 export const MenuCardBody = styled(CardContent)(({ theme }) => ({

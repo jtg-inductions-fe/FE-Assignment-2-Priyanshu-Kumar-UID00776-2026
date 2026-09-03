@@ -1,3 +1,4 @@
+import { FoodVariant } from '@/types/filterToggleButton.types';
 import { DietType } from '@/types/restaurant.types';
 
 export const DIET_TYPE_LABELS: Record<DietType, string> = {
@@ -12,4 +13,10 @@ export const DELIVERY_TIME_SLOTS: string[] = [
     '30-45 min',
     '45-60 min',
     '60+ min',
+];
+
+export const FILTER_OPTIONS: { id: FoodVariant; label: string }[] = [
+    { id: 'all', label: 'All' },
+    { id: 'veg', label: 'Veg' },
+    { id: 'nonVeg', label: 'Non-Veg' },
 ];

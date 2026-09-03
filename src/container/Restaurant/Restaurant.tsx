@@ -90,6 +90,7 @@ export const Restaurant = () => {
         rating: 4.5,
         deliveryTime: '',
         openingTime: '',
+        endTime: '',
     };
 
     const {
@@ -207,6 +208,7 @@ export const Restaurant = () => {
             rating: restaurant.rating,
             deliveryTime: restaurant.deliveryTime,
             openingTime: restaurant.openingTime,
+            endTime: restaurant.endTime,
         });
         setIsModalOpen(true);
     };
@@ -311,7 +313,7 @@ export const Restaurant = () => {
     };
 
     return (
-        <RestaurantContainer>
+        <RestaurantContainer px={{ sm: 10 }}>
             <MainContentLayout>
                 <RestaurantSidebar
                     open={isDrawerOpen}
@@ -642,30 +644,53 @@ export const Restaurant = () => {
                                     </TextField>
                                 )}
                             />
+                            <Box display="flex" gap={5} width="100%">
+                                <Controller
+                                    name="openingTime"
+                                    control={control}
+                                    rules={{
+                                        required: 'Start time is required',
+                                    }}
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            label="Start Time"
+                                            type="time"
+                                            fullWidth
+                                            error={!!errors.openingTime}
+                                            helperText={
+                                                errors.openingTime?.message
+                                            }
+                                            slotProps={{
+                                                inputLabel: {
+                                                    shrink: true,
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                />
 
-                            <Controller
-                                name="openingTime"
-                                control={control}
-                                rules={{ required: 'Opening time is required' }}
-                                render={({ field }) => (
-                                    <TextField
-                                        {...field}
-                                        label="Opening Hours (e.g. 9:00 AM - 10:00 PM)"
-                                        variant="outlined"
-                                        fullWidth
-                                        error={!!errors.openingTime}
-                                        helperText={errors.openingTime?.message}
-                                    />
-                                )}
-                            />
-
-                            <TextField
-                                label="Owner Email"
-                                variant="outlined"
-                                fullWidth
-                                disabled
-                                value={user?.email || ''}
-                            />
+                                <Controller
+                                    name="endTime"
+                                    control={control}
+                                    rules={{ required: 'End time is required' }}
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            label="End Time"
+                                            type="time"
+                                            fullWidth
+                                            error={!!errors.endTime}
+                                            helperText={errors.endTime?.message}
+                                            slotProps={{
+                                                inputLabel: {
+                                                    shrink: true,
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </Box>
                         </FormStack>
                     </DialogContent>
                     <StyledDialogActions>

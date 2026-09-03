@@ -52,11 +52,7 @@ export const MenuItemCard = ({
                         </RatingBadge>
                     </Stack>
 
-                    <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 2.5 }}
-                    >
+                    <Typography variant="body2" color="text.secondary" mt={3}>
                         {item.description}
                     </Typography>
 
@@ -64,7 +60,7 @@ export const MenuItemCard = ({
                         direction="row"
                         spacing={3}
                         alignItems="center"
-                        sx={{ mt: 2.5 }}
+                        mt={3}
                     >
                         <Chip
                             label={item.dietType === 'veg' ? 'Veg' : 'Non-Veg'}
@@ -72,12 +68,6 @@ export const MenuItemCard = ({
                             color={
                                 item.dietType === 'veg' ? 'success' : 'error'
                             }
-                            variant="filled"
-                        />
-                        <Chip
-                            label={`Stock: ${remainingStock}`}
-                            size="small"
-                            color={remainingStock > 0 ? 'primary' : 'default'}
                             variant="filled"
                         />
                     </Stack>
@@ -139,7 +129,7 @@ export const MenuItemCard = ({
                             disabled={remainingStock <= 0}
                             onClick={() => onAction('addToCart', item)}
                         >
-                            Add
+                            {item.stock === 0 ? 'Out of stock' : 'Add'}
                         </AddButton>
                     )}
                 </Stack>

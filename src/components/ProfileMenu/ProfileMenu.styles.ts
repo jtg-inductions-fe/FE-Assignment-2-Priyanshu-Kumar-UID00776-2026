@@ -11,18 +11,18 @@ export const StyledMenu = styled(Menu)(({ theme }) => ({
 }));
 
 export const ProfileInfo = styled(Box)(({ theme }) => ({
-    padding: theme.spacing(1.5, 2),
+    padding: theme.typography.pxToRem(8),
     minWidth: theme.typography.pxToRem(180),
     borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
 export const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
     color: theme.palette.error.main,
-    margin: theme.spacing(0.5, 1),
+    margin: theme.typography.pxToRem(4),
     borderRadius: '8px',
 }));
 
 export const LoginMenuItem = styled(MenuItem)(({ theme }) => ({
-    margin: theme.spacing(0.5, 1),
+    margin: theme.typography.pxToRem(4),
     borderRadius: '8px',
 }));

@@ -27,7 +27,7 @@ export const Navbar = ({
     onClickAction,
 }: NavbarProps) => (
     <NavbarContainer>
-        <LogoContainer onClick={() => onClickAction('logo')}>
+        <LogoContainer tabIndex={0} onClick={() => onClickAction('logo')}>
             <Logo>
                 <img
                     src={LogoImage}

@@ -6,7 +6,7 @@ import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigat
 import { navItemsConfig } from '@/configs/BottomNavigationConfigs';
 import { clearUser } from '@/features/authSlice';
 import { showNotification } from '@/features/notificationSlice';
-import { useActiveUserRoute } from '@/hooks/activeUserRoutes';
+import { useActiveUserRoute } from '@/hooks/useActiveUserRoutes';
 import { logout } from '@/services/auth.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { NavbarAction } from '@/types/bottomNavigation.types';

@@ -134,7 +134,7 @@ export const SignUp = () => {
         <PageContainer disableGutters maxWidth={false}>
             <HeroSection />
 
-            <FormSection>
+            <FormSection height={{ xs: '90%' }}>
                 <FormCard
                     noValidate
                     onSubmit={(e) => {

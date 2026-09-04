@@ -1,5 +1,12 @@
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material';
+import {
+    Box,
+    IconButton,
+    Stack,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
 
 import {
     FilterItemLabel,
@@ -16,11 +23,12 @@ export const RestaurantSidebar = ({
     onRatingToggle,
 }: RestaurantSidebarProps) => {
     const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <StyledDrawer
             variant="temporary"
-            anchor={theme.breakpoints.down('sm') ? 'bottom' : 'left'}
+            anchor={isMobile ? 'bottom' : 'left'}
             open={open}
             onClose={onClose}
         >
@@ -71,7 +79,7 @@ export const RestaurantSidebar = ({
                                     />
                                 }
                                 label={
-                                    <Stack direction="row" gap="4px">
+                                    <Stack direction="row" gap={4}>
                                         <Typography variant="body2">
                                             {rating === 5
                                                 ? '5.0'

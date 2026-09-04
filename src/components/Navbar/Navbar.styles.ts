@@ -2,7 +2,7 @@ import { Avatar, Box, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const NavbarContainer = styled(Box)(({ theme }) => ({
-    height: theme.typography.pxToRem(71),
+    height: theme.typography.pxToRem(60),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -45,7 +45,7 @@ export const NavIconButton = styled(IconButton)(({ theme }) => ({
     padding: theme.typography.pxToRem(8),
     display: 'flex',
     alignItems: 'center',
-    gap: theme.typography.pxToRem(4),
+    gap: theme.typography.pxToRem(10),
     color: theme.palette.text.primary,
     transition: 'all 0.2s ease-in-out',
     '&:hover': {

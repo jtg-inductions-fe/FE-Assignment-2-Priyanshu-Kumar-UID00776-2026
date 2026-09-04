@@ -6,8 +6,8 @@
         "dietType": "veg",
         "rating": 4.8,
         "deliveryTime": "20-30 min",
-        "openingTime": "9:00 AM",
-        "endTime": "10:00 PM",
+        "openingTime": "9:00",
+        "endTime": "10:00",
         "ownerId": "haldiram@gmail.com",
         "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
         "menus": [
@@ -50,13 +50,13 @@
         "dietType": "nonVeg",
         "rating": 4.5,
         "deliveryTime": "30-45 min",
-        "openingTime": "11:00 AM",
-        "endTime": "11:00 PM",
+        "openingTime": "11:00",
+        "endTime": "11:00",
         "ownerId": "haldiram@gmail.com",
         "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
         "menus": [
             {
-                "id": "menu_1",
+                "id": "menu_4",
                 "name": "Chowmin",
                 "description": "Highly spicy and best hakka noodles",
                 "rating": 4.8,
@@ -66,7 +66,7 @@
                 "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             {
-                "id": "menu_2",
+                "id": "menu_5",
                 "name": "Paneer Tikka",
                 "description": "Marinated paneer cubes grilled in a traditional tandoor",
                 "rating": 4.6,
@@ -76,7 +76,7 @@
                 "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             {
-                "id": "menu_3",
+                "id": "menu_6",
                 "name": "Spring Rolls",
                 "description": "Crispy fried rolls packed with seasoned minced vegetables",
                 "rating": 4.3,
@@ -86,7 +86,7 @@
                 "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             {
-                "id": "menu_4",
+                "id": "menu_7",
                 "name": "Manchurian",
                 "description": "Deep-fried veggie balls tossed in a tangy and savory sauce",
                 "rating": 4.5,
@@ -104,13 +104,13 @@
         "dietType": "both",
         "rating": 4.6,
         "deliveryTime": "15-20 min",
-        "openingTime": "10:00 AM",
-        "endTime": "10:00 PM",
+        "openingTime": "10:00",
+        "endTime": "10:00",
         "ownerId": "haldiram@gmail.com",
         "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
         "menus": [
             {
-                "id": "menu_1",
+                "id": "menu_8",
                 "name": "Chowmin",
                 "description": "Highly spciy and best hakka noodles",
                 "rating": 4.8,
@@ -120,7 +120,7 @@
                 "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             {
-                "id": "menu_2",
+                "id": "menu_9",
                 "name": "Fried Rice",
                 "description": "Fragrant basmati rice stir-fried with fresh garden veggies",
                 "rating": 4.4,
@@ -130,7 +130,7 @@
                 "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             {
-                "id": "menu_3",
+                "id": "menu_10",
                 "name": "Chilli Paneer",
                 "description": "Batter-fried paneer cubes coated in a spicy sweet chilli sauce",
                 "rating": 4.7,
@@ -140,7 +140,7 @@
                 "image": "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             {
-                "id": "menu_4",
+                "id": "menu_11",
                 "name": "Momos",
                 "description": "Steamed dumplings filled with finely chopped spiced vegetables",
                 "rating": 4.9,

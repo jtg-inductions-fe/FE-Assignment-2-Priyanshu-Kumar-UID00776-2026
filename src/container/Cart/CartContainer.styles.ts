@@ -1,13 +1,12 @@
 import { Box, Container, styled } from '@mui/material';
 
-export const PageRoot = styled(Box)(({ theme }) => ({
-    minHeight: '100vh',
+export const PageRoot = styled(Box)({
+    maxHeight: '100vh',
     display: 'flex',
+    overflow: 'scroll',
     flexDirection: 'column',
-    paddingBottom: theme.typography.pxToRem(64),
-}));
+});
 
-export const CartContainerArea = styled(Container)(({ theme }) => ({
-    padding: theme.typography.pxToRem(10),
+export const CartContainerArea = styled(Container)({
     flexGrow: 1,
-}));
+});

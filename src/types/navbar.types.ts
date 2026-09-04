@@ -1,5 +1,3 @@
-import type React from 'react';
-
 import { User } from '@/types/auth.types';
 
 // Navbar all items actions

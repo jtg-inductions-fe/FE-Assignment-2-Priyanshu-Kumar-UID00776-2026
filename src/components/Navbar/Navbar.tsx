@@ -4,7 +4,7 @@ import { Badge, Typography } from '@mui/material';
 
 import LogoImage from '@/assets/images/logo.avif';
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
-import type { NavbarProps } from '@/types/navbar.types';
+import { NavbarProps } from '@/types/navbar.types';
 
 import {
     LoginButton,

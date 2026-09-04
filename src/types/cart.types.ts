@@ -24,9 +24,3 @@ export type CartBill = {
     onApplyPromo: (code: string) => void;
     onCheckout: () => void;
 };
-
-// Cart item card props passed values
-export type CartItemCardProps = {
-    item: CartItem;
-    onCartAction: (actionType: string, itemId: string) => void;
-};

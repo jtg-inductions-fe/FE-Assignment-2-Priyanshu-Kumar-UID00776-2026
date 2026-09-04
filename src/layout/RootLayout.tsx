@@ -6,7 +6,12 @@ import { BottomNavigationBarContainer } from '@/container/BottomNavigationBar/Bo
 import { NavbarContainer } from '@/container/Navbar/NavbarContainer';
 
 export const RootLayout = () => (
-    <Box maxWidth={{ xs: '100%', xl: '1900px' }}>
+    <Box
+        maxWidth={{ xs: '100%', xl: '1900px' }}
+        margin="0 auto"
+        height="100vh"
+        overflow="hidden"
+    >
         <NavbarContainer />
         <Outlet />
         <BottomNavigationBarContainer />

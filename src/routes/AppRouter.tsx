@@ -2,8 +2,9 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { Login } from '@/components/Auth/Login';
 import { SignUp } from '@/components/Auth/SignUp';
+import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
 import { RootLayout } from '@/layout/RootLayout';
-import { Restaurant } from '@/pages/Restuarant/Restaurant';
+import { RestaurantPage } from '@/pages/Restaurant/Restaurant';
 
 export const AppRouter = createBrowserRouter([
     // Redirect the root path directly to the restaurant screen
@@ -28,13 +29,13 @@ export const AppRouter = createBrowserRouter([
         children: [
             {
                 path: 'restaurant',
-                element: <Restaurant />,
+                element: <RestaurantPage />,
             },
         ],
     },
     // Catch-all route to redirect any invalid or unknown URLs back to signup
     {
         path: '*',
-        element: <Navigate to="/signup" replace />,
+        element: <NotFoundPage />,
     },
 ]);

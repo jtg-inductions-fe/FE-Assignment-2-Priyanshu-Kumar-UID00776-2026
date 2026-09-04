@@ -1,0 +1,41 @@
+[
+    {
+        "id": "rest_1",
+        "name": "The Green Bowl",
+        "location": "Downtown Market",
+        "dietType": "veg",
+        "rating": 4.8,
+        "deliveryTime": "20-30 min",
+        "openingTime": "9:00 AM",
+        "endTime": "10:00 PM",
+        "ownerId": "haldiram@gmail.com",
+        "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
+        "menus": []
+    },
+    {
+        "id": "rest_2",
+        "name": "Burger & Grill",
+        "location": "City Center",
+        "dietType": "nonVeg",
+        "rating": 4.5,
+        "deliveryTime": "30-45 min",
+        "openingTime": "11:00 AM",
+        "endTime": "11:00 PM",
+        "ownerId": "haldiram@gmail.com",
+        "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
+        "menus": []
+    },
+    {
+        "id": "rest_3",
+        "name": "Spice Fusion",
+        "location": "Westside Avenue",
+        "dietType": "both",
+        "rating": 4.6,
+        "deliveryTime": "15-20 min",
+        "openingTime": "10:00 AM",
+        "endTime": "10:00 PM",
+        "ownerId": "haldiram@gmail.com",
+        "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
+        "menus": []
+    }
+]

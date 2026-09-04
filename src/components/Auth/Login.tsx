@@ -24,9 +24,10 @@ import {
     SubmitPaperWrapper,
 } from '@/components/Auth/Auth.styles';
 import { EMAIL_VALIDATION_REGEX } from '@/constant';
+import { setUser } from '@/features/authSlice';
+import { setUserCart } from '@/features/cartSlice';
+import { showNotification } from '@/features/notificationSlice';
 import { login } from '@/services/auth.service';
-import { setUser } from '@/slices/authSlice';
-import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch } from '@/store/store';
 import { LoginFormData } from '@/types/auth.types';
 
@@ -73,6 +74,11 @@ export const Login = () => {
 
             // Save the logged in user into the global Redux store
             dispatch(setUser(user));
+
+            // Sets the cart for the user if the role is of USER
+            if (user.role === 'USER') {
+                dispatch(setUserCart(user.cart || []));
+            }
 
             // Show a success banner to the user
             dispatch(

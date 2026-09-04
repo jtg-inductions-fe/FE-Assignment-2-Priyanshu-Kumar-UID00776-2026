@@ -1,7 +1,7 @@
-import { BottomNavigationAction } from '@mui/material';
+import { Badge, BottomNavigationAction } from '@mui/material';
 
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
-import type { BottomNavigationBarProps } from '@/types/bottomNavigation.types';
+import { BottomNavigationBarProps } from '@/types/bottomNavigation.types';
 
 import {
     BottomNavigationContainer,
@@ -15,6 +15,7 @@ export const BottomNavigationBar = ({
     anchorEl,
     isMenuOpen,
     navItems,
+    cartCount,
     onClickAction,
 }: BottomNavigationBarProps) => (
     <BottomNavigationContainer>
@@ -25,7 +26,15 @@ export const BottomNavigationBar = ({
                     <BottomNavigationAction
                         key={item.value}
                         label={item.label}
-                        icon={item.icon}
+                        icon={
+                            item.label === 'Cart' ? (
+                                <Badge badgeContent={cartCount} color="error">
+                                    {item.icon}
+                                </Badge>
+                            ) : (
+                                item.icon
+                            )
+                        }
                         onClick={(event) => onClickAction(item.action, event)}
                         value={item.value}
                     />

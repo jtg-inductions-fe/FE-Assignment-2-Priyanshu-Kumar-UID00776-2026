@@ -35,9 +35,9 @@ import {
     NUMBER_VALIDATION_REGEX,
     PASSWORD_VALIDATION_REGEX,
 } from '@/constant';
+import { setUser } from '@/features/authSlice';
+import { showNotification } from '@/features/notificationSlice';
 import { signup } from '@/services/auth.service';
-import { setUser } from '@/slices/authSlice';
-import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch } from '@/store/store';
 import { SignUpFormData } from '@/types/auth.types';
 
@@ -134,7 +134,7 @@ export const SignUp = () => {
         <PageContainer disableGutters maxWidth={false}>
             <HeroSection />
 
-            <FormSection>
+            <FormSection height={{ xs: '90%' }}>
                 <FormCard
                     noValidate
                     onSubmit={(e) => {

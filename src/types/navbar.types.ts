@@ -1,5 +1,3 @@
-import type React from 'react';
-
 import { User } from '@/types/auth.types';
 
 // Navbar all items actions
@@ -18,6 +16,7 @@ export type NavbarProps = {
     isUserActive: boolean;
     userInitial: string;
     anchorEl: null | HTMLElement;
+    cartCount: number;
     isMenuOpen: boolean;
     onClickAction: (
         action: NavbarAction,

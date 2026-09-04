@@ -45,6 +45,7 @@ export const signup = async (data: SignupData): Promise<User> => {
         contactNo: data.contactNo,
         role: data.role,
         password: hashedPassword,
+        cart: [],
     };
 
     localStorage.setItem('users', JSON.stringify([...users, newUser]));
@@ -54,6 +55,7 @@ export const signup = async (data: SignupData): Promise<User> => {
         email: newUser.email,
         contactNo: newUser.contactNo,
         role: newUser.role,
+        cart: newUser.cart,
     };
 
     return safeUser;
@@ -84,6 +86,7 @@ export const login = async (data: LoginData): Promise<User> => {
         email: user.email,
         contactNo: user.contactNo,
         role: user.role,
+        cart: user.cart,
     };
 
     return safeUser;

@@ -19,6 +19,7 @@ export type NavItemConfig = {
     icon: ReactNode;
     action: NavbarAction;
     value: string;
+    badgeContent?: number;
     isVisible: boolean;
 };
 

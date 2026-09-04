@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import { Navbar } from '@/components/Navbar/Navbar';
+import { clearUser } from '@/features/authSlice';
+import { showNotification } from '@/features/notificationSlice';
 import { logout } from '@/services/auth.service';
-import { clearUser } from '@/slices/authSlice';
-import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { NavbarAction } from '@/types/navbar.types';
 
@@ -15,6 +15,9 @@ export const NavbarContainer = () => {
 
     // Read the current logged in user details from the redux store
     const user = useAppSelector((state) => state.auth.user);
+
+    // Read the cart of the user
+    const cartItems = useAppSelector((state) => state.cart.items);
 
     // To check if the user has an active session or not
     const isUserActive = Boolean(user);
@@ -29,6 +32,15 @@ export const NavbarContainer = () => {
     const handleCloseMenu = () => {
         setAnchorEl(null);
     };
+
+    // Calculate total item quantity in cart
+    const cartCount = useMemo(
+        () =>
+            user?.role === 'USER'
+                ? cartItems.reduce((acc, item) => acc + item.quantity, 0)
+                : 0,
+        [cartItems, user],
+    );
 
     // Log the user out, clear their session, display an alert, and redirect to login
     const handleLogout = async () => {
@@ -102,6 +114,7 @@ export const NavbarContainer = () => {
             userInitial={userInitial}
             anchorEl={anchorEl}
             isMenuOpen={isMenuOpen}
+            cartCount={cartCount}
             onClickAction={handleNavbarAction}
         />
     );

@@ -2,7 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
 
-import { Add as AddIcon } from '@mui/icons-material';
+import {
+    Add as AddIcon,
+    FilterList as FilterListIcon,
+} from '@mui/icons-material';
 import {
     Box,
     Button,
@@ -15,12 +18,11 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
 import { RestaurantCard } from '@/components/RestaurantCard/RestaurantCard';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
+import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
 import {
     DELIVERY_TIME_SLOTS,
     DIET_TYPE_LABELS,
@@ -28,8 +30,10 @@ import {
 import {
     AddRestaurantButton,
     ControlsWrapper,
+    FilterButton,
     FormStack,
     HeaderButtonWrapper,
+    MainContentLayout,
     RestaurantContainer,
     RestaurantGrid,
     RestaurantHeaderSection,
@@ -61,20 +65,20 @@ import {
 
 export const Restaurant = () => {
     const dispatch = useAppDispatch();
-    const theme = useTheme();
     const user = useAppSelector((state) => state.auth.user);
     const isOwner = user?.role === 'RESTAURANT OWNER';
     const allRestaurants = useAppSelector(
         (state) => state.restaurant.restaurants,
     );
 
-    const isMobile = Boolean(useMediaQuery(theme.breakpoints.down('sm')));
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [dietFilter, setDietFilter] = useState<FoodVariant>('all');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRestaurant, setEditingRestaurant] =
         useState<RestaurantItemTypes | null>(null);
+    const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const EMPTY_RESTAURANT_FORM: RestaurantFormData = {
@@ -125,6 +129,14 @@ export const Restaurant = () => {
     // Delay updating the search query until the user stops typing
     const debouncedValue = useDebounce<string>(searchTerm);
 
+    const handleRatingToggle = (rating: number) => {
+        setSelectedRatings((prev) =>
+            prev.includes(rating)
+                ? prev.filter((r) => r !== rating)
+                : [...prev, rating],
+        );
+    };
+
     // Filter restaurants by owner permissions, search keywords, and veg/non-veg tags
     const filteredRestaurants = useMemo(
         () =>
@@ -157,9 +169,24 @@ export const Restaurant = () => {
                         return false;
                 }
 
+                if (selectedRatings.length > 0) {
+                    const meetsAnyRating = selectedRatings.some(
+                        (minRating) => restaurant.rating >= minRating,
+                    );
+                    if (!meetsAnyRating) return false;
+                }
+
+                // Include the restaurant if it passed all checks
                 return true;
             }),
-        [allRestaurants, isOwner, user?.email, debouncedValue, dietFilter],
+        [
+            allRestaurants,
+            isOwner,
+            user?.email,
+            debouncedValue,
+            dietFilter,
+            selectedRatings,
+        ],
     );
 
     // Open the creation dialog with clean default form fields
@@ -285,129 +312,177 @@ export const Restaurant = () => {
 
     return (
         <RestaurantContainer px={{ sm: 10 }}>
-            <RestaurantHeaderSection>
-                <HeaderButtonWrapper>
-                    <Typography variant="h1">
-                        {isOwner ? 'My Restaurants' : 'Restaurants'}
-                    </Typography>
-                    {!isMobile &&
-                        (isOwner ? (
-                            <AddRestaurantButton
-                                variant="contained"
-                                color="primary"
-                                startIcon={<AddIcon />}
-                                onClick={handleOpenAddModal}
-                            >
-                                Add Restaurant
-                            </AddRestaurantButton>
-                        ) : (
-                            <FoodVariantToggle
-                                foodVariant={dietFilter}
-                                onFilterChange={setDietFilter}
-                            />
-                        ))}
-                </HeaderButtonWrapper>
+            <MainContentLayout>
+                <RestaurantSidebar
+                    open={isDrawerOpen}
+                    onClose={() => setIsDrawerOpen(false)}
+                    selectedRatings={selectedRatings}
+                    onRatingToggle={handleRatingToggle}
+                />
+                <RestaurantHeaderSection>
+                    <HeaderButtonWrapper>
+                        <Typography variant="h1">
+                            {isOwner ? 'My Restaurants' : 'Restaurants'}
+                        </Typography>
 
-                <Typography variant="body1" color="text.secondary">
-                    {isOwner
-                        ? 'Manage your restaurants and update menu offerings.'
-                        : 'Discover restaurants and explore their menus.'}
-                </Typography>
-
-                <ControlsWrapper>
-                    <RestaurantSearch
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder={
-                            isOwner
-                                ? 'Search managed restaurants'
-                                : 'Search for restaurants'
-                        }
-                    />
-                </ControlsWrapper>
-                {isMobile &&
-                    (isOwner ? (
-                        <AddRestaurantButton
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddIcon />}
-                            onClick={handleOpenAddModal}
+                        <Stack
+                            direction="row"
+                            spacing={1.5}
+                            alignItems="center"
+                            sx={{ display: { xs: 'none', sm: 'flex' } }}
                         >
-                            Add Restaurant
-                        </AddRestaurantButton>
-                    ) : (
-                        <FoodVariantToggle
-                            foodVariant={dietFilter}
-                            onFilterChange={setDietFilter}
+                            {isOwner ? (
+                                <AddRestaurantButton
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpenAddModal}
+                                >
+                                    Add Restaurant
+                                </AddRestaurantButton>
+                            ) : (
+                                <>
+                                    <FoodVariantToggle
+                                        foodVariant={dietFilter}
+                                        onFilterChange={setDietFilter}
+                                    />
+                                    <FilterButton
+                                        variant="outlined"
+                                        startIcon={<FilterListIcon />}
+                                        onClick={() =>
+                                            setIsDrawerOpen((prev) => !prev)
+                                        }
+                                    >
+                                        Filters
+                                    </FilterButton>
+                                </>
+                            )}
+                        </Stack>
+                    </HeaderButtonWrapper>
+
+                    <Typography variant="body1" color="text.secondary">
+                        {isOwner
+                            ? 'Manage your restaurants and update menu offerings.'
+                            : 'Discover restaurants and explore their menus.'}
+                    </Typography>
+
+                    <ControlsWrapper>
+                        <RestaurantSearch
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder={
+                                isOwner
+                                    ? 'Search managed restaurants'
+                                    : 'Search for restaurants'
+                            }
                         />
-                    ))}
-            </RestaurantHeaderSection>
-            <ScrollableContent>
-                <RestaurantGrid>
-                    {isLoading ? (
-                        Array.from({ length: 6 }).map((_, index) => (
-                            <StyledCard key={index}>
-                                <Skeleton
-                                    variant="rectangular"
-                                    animation="wave"
-                                    height={180}
-                                />
-                                <StyledCardContent>
-                                    <Box>
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="center"
-                                            mb={1}
-                                        >
+
+                        <Box
+                            sx={{
+                                display: { xs: 'block', sm: 'none' },
+                                width: '100%',
+                            }}
+                        >
+                            {isOwner ? (
+                                <AddRestaurantButton
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpenAddModal}
+                                >
+                                    Add Restaurant
+                                </AddRestaurantButton>
+                            ) : (
+                                <Stack
+                                    direction="row"
+                                    alignItems="center"
+                                    justifyContent="space-between"
+                                    width="100%"
+                                >
+                                    <FoodVariantToggle
+                                        foodVariant={dietFilter}
+                                        onFilterChange={setDietFilter}
+                                    />
+                                    <FilterButton
+                                        variant="outlined"
+                                        startIcon={<FilterListIcon />}
+                                        onClick={() => setIsDrawerOpen(true)}
+                                    >
+                                        Filters
+                                    </FilterButton>
+                                </Stack>
+                            )}
+                        </Box>
+                    </ControlsWrapper>
+                </RestaurantHeaderSection>
+                <ScrollableContent>
+                    <RestaurantGrid>
+                        {isLoading ? (
+                            Array.from({ length: 6 }).map((_, index) => (
+                                <StyledCard key={index}>
+                                    <Skeleton
+                                        variant="rectangular"
+                                        animation="wave"
+                                        height={180}
+                                    />
+                                    <StyledCardContent>
+                                        <Box>
+                                            <Stack
+                                                direction="row"
+                                                justifyContent="space-between"
+                                                alignItems="center"
+                                                mb={1}
+                                            >
+                                                <Skeleton
+                                                    variant="text"
+                                                    animation="pulse"
+                                                    width="55%"
+                                                    height={30}
+                                                />
+                                                <Skeleton
+                                                    variant="rounded"
+                                                    animation="pulse"
+                                                    width={75}
+                                                    height={24}
+                                                />
+                                            </Stack>
                                             <Skeleton
                                                 variant="text"
                                                 animation="pulse"
-                                                width="55%"
-                                                height={30}
+                                                width="40%"
+                                                height={20}
                                             />
                                             <Skeleton
-                                                variant="rounded"
+                                                variant="text"
                                                 animation="pulse"
-                                                width={75}
-                                                height={24}
+                                                width="70%"
+                                                height={20}
                                             />
-                                        </Stack>
-                                        <Skeleton
-                                            variant="text"
-                                            animation="pulse"
-                                            width="40%"
-                                            height={20}
-                                        />
-                                        <Skeleton
-                                            variant="text"
-                                            animation="pulse"
-                                            width="70%"
-                                            height={20}
-                                        />
-                                    </Box>
-                                </StyledCardContent>
-                            </StyledCard>
-                        ))
-                    ) : filteredRestaurants.length === 0 ? (
-                        <Box textAlign="center" py={6} gridColumn="1 / -1">
-                            <Typography variant="h6" color="text.secondary">
-                                No restaurants found.
-                            </Typography>
-                        </Box>
-                    ) : (
-                        filteredRestaurants.map((restaurant) => (
-                            <RestaurantCard
-                                key={restaurant.id}
-                                restaurant={restaurant}
-                                isOwner={isOwner}
-                                onEdit={handleOpenEditModal}
-                                onDelete={setDeleteTargetId}
-                            />
-                        ))
-                    )}
-                </RestaurantGrid>
-            </ScrollableContent>
+                                        </Box>
+                                    </StyledCardContent>
+                                </StyledCard>
+                            ))
+                        ) : filteredRestaurants.length === 0 ? (
+                            <Box textAlign="center" py={6} gridColumn="1 / -1">
+                                <Typography variant="h6" color="text.secondary">
+                                    No restaurants found.
+                                </Typography>
+                            </Box>
+                        ) : (
+                            filteredRestaurants.map((restaurant) => (
+                                <RestaurantCard
+                                    key={restaurant.id}
+                                    restaurant={restaurant}
+                                    isOwner={isOwner}
+                                    onEdit={handleOpenEditModal}
+                                    onDelete={setDeleteTargetId}
+                                />
+                            ))
+                        )}
+                    </RestaurantGrid>
+                </ScrollableContent>
+            </MainContentLayout>
 
             <Dialog
                 open={isModalOpen}

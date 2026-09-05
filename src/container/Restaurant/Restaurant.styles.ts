@@ -9,6 +9,15 @@ export const RestaurantContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.light,
 }));
 
+export const MainContentLayout = styled(Box)({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    flex: 1,
+    overflow: 'hidden',
+    width: '100%',
+});
+
 export const RestaurantHeaderSection = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'flex-start',
@@ -45,6 +54,12 @@ export const AddRestaurantButton = styled(Button)(({ theme }) => ({
     textTransform: 'none',
     borderRadius: '10px',
     padding: theme.typography.pxToRem(10),
+}));
+
+export const FilterButton = styled(Button)(({ theme }) => ({
+    padding: theme.spacing(2, 3),
+    textTransform: 'none',
+    borderRadius: '20px',
 }));
 
 export const RestaurantGrid = styled(Box)(({ theme }) => ({

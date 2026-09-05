@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,6 +17,7 @@ import {
     DialogContent,
     DialogTitle,
     IconButton,
+    Skeleton,
     Stack,
     TextField,
     ToggleButton,
@@ -51,12 +52,14 @@ import {
     addMenuItemSuccess,
     deleteMenuItemSuccess,
     editMenuItemSuccess,
+    setRestaurants,
 } from '@/features/restaurantSlice';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
     addMenuItem,
     deleteMenuItem,
     editMenuItem,
+    fetchRestaurants,
 } from '@/services/restaurant.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { MenuFormData, MenuItem } from '@/types/restaurant.types';
@@ -76,6 +79,7 @@ export const MenuContainer = () => {
     );
 
     const cartItems = useAppSelector((state) => state.cart.items);
+    const [isLoading, setIsLoading] = useState(true);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -85,6 +89,31 @@ export const MenuContainer = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                setIsLoading(true);
+                const data = await fetchRestaurants();
+                dispatch(setRestaurants(data));
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to load restaurant data';
+                dispatch(
+                    showNotification({
+                        message,
+                        severity: 'error',
+                    }),
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        void loadInitialData();
+    }, [dispatch]);
 
     const handleMenuAction = (actionType: string, item: MenuItem) => {
         switch (actionType) {
@@ -120,7 +149,7 @@ export const MenuContainer = () => {
             stock: 0,
             dietType: 'veg',
         },
-        mode: 'onTouched',
+        mode: 'onChange',
     });
 
     // Debounce search input to prevent unnecessary re-renders on every keystroke
@@ -371,6 +400,32 @@ export const MenuContainer = () => {
         }
     };
 
+    if (isLoading) {
+        return (
+            <RestaurantContainer px={{ xs: 2, sm: 10 }}>
+                <Box py={5}>
+                    <Skeleton variant="text" width="30%" height={50} />
+                    <Skeleton
+                        variant="text"
+                        width="20%"
+                        height={30}
+                        sx={{ mb: 4 }}
+                    />
+                    <RestaurantGrid>
+                        {Array.from({ length: 6 }).map((_, index) => (
+                            <Skeleton
+                                key={index}
+                                variant="rounded"
+                                height={220}
+                                animation="wave"
+                            />
+                        ))}
+                    </RestaurantGrid>
+                </Box>
+            </RestaurantContainer>
+        );
+    }
+
     if (!selectedRestaurant) {
         return (
             <RestaurantContainer>
@@ -468,17 +523,15 @@ export const MenuContainer = () => {
                 </ControlsWrapper>
 
                 <ScrollableContent pb={10}>
-                    <RestaurantGrid>
-                        {filteredMenuItems.length === 0 ? (
-                            <Typography
-                                variant="h6"
-                                color="text.secondary"
-                                textAlign="center"
-                            >
-                                No menu items found for this restaurant.
+                    {filteredMenuItems.length === 0 ? (
+                        <Box textAlign="center" py={8} width="100%">
+                            <Typography variant="h6" color="text.secondary">
+                                No menu items found.
                             </Typography>
-                        ) : (
-                            filteredMenuItems.map((item) => (
+                        </Box>
+                    ) : (
+                        <RestaurantGrid>
+                            {filteredMenuItems.map((item) => (
                                 <MenuItemCard
                                     key={item.id}
                                     item={item}
@@ -486,9 +539,9 @@ export const MenuContainer = () => {
                                     quantity={cartQuantities[item.id] || 0}
                                     onAction={handleMenuAction}
                                 />
-                            ))
-                        )}
-                    </RestaurantGrid>
+                            ))}
+                        </RestaurantGrid>
+                    )}
                 </ScrollableContent>
             </MainContentLayout>
 
@@ -518,6 +571,7 @@ export const MenuContainer = () => {
                                     />
                                 )}
                             />
+
                             <Controller
                                 name="description"
                                 control={control}
@@ -535,56 +589,92 @@ export const MenuContainer = () => {
                                 )}
                             />
                             <Controller
-                                name="price"
-                                control={control}
-                                rules={{ required: 'Price is required' }}
-                                render={({ field }) => (
-                                    <TextField
-                                        {...field}
-                                        type="number"
-                                        label="Price (₹)"
-                                        fullWidth
-                                        error={!!errors.price}
-                                        helperText={errors.price?.message}
-                                        onChange={(e) =>
-                                            field.onChange(
-                                                parseFloat(e.target.value),
-                                            )
-                                        }
-                                    />
-                                )}
-                            />
-                            <Controller
                                 name="stock"
                                 control={control}
                                 rules={{
-                                    required: 'Stock is required',
-                                    min: 0,
+                                    validate: (val) =>
+                                        val > 0 ||
+                                        'Stock must be greater than 0',
                                 }}
                                 render={({ field }) => (
                                     <TextField
                                         {...field}
+                                        value={
+                                            field.value === 0 ? '' : field.value
+                                        }
                                         type="number"
                                         label="Stock Quantity"
                                         fullWidth
                                         error={!!errors.stock}
                                         helperText={errors.stock?.message}
-                                        onChange={(e) =>
+                                        slotProps={{
+                                            htmlInput: { min: 1 },
+                                        }}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
                                             field.onChange(
-                                                parseInt(e.target.value, 10),
-                                            )
-                                        }
+                                                val === ''
+                                                    ? 0
+                                                    : parseInt(val, 10),
+                                            );
+                                        }}
                                     />
                                 )}
                             />
+
                             <Controller
-                                name="rating"
+                                name="price"
                                 control={control}
-                                rules={{ min: 1, max: 5 }}
+                                rules={{
+                                    validate: (val) =>
+                                        val > 0 ||
+                                        'Price must be greater than 0',
+                                }}
                                 render={({ field }) => (
                                     <TextField
                                         {...field}
+                                        value={
+                                            field.value === 0 ? '' : field.value
+                                        }
                                         type="number"
+                                        label="Price (₹)"
+                                        fullWidth
+                                        error={!!errors.price}
+                                        helperText={errors.price?.message}
+                                        slotProps={{
+                                            htmlInput: { min: 1 },
+                                        }}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            field.onChange(
+                                                val === ''
+                                                    ? 0
+                                                    : parseFloat(val),
+                                            );
+                                        }}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="rating"
+                                control={control}
+                                rules={{
+                                    validate: (val) =>
+                                        (val >= 1 && val <= 5) ||
+                                        'Rating must be between 1.0 and 5.0',
+                                }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        value={
+                                            field.value === 0 ? '' : field.value
+                                        }
+                                        type="number"
+                                        label="Rating"
+                                        fullWidth
+                                        error={!!errors.rating}
+                                        helperText={errors.rating?.message}
                                         slotProps={{
                                             htmlInput: {
                                                 step: 0.1,
@@ -592,19 +682,22 @@ export const MenuContainer = () => {
                                                 max: 5,
                                             },
                                         }}
-                                        label="Rating (1.0 - 5.0)"
-                                        fullWidth
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+                                            const val = e.target.value;
                                             field.onChange(
-                                                parseFloat(e.target.value),
-                                            )
-                                        }
+                                                val === ''
+                                                    ? 0
+                                                    : parseFloat(val),
+                                            );
+                                        }}
                                     />
                                 )}
                             />
+
                             <Controller
                                 name="dietType"
                                 control={control}
+                                rules={{ required: 'Diet type is required' }}
                                 render={({ field: { value, onChange } }) => (
                                     <Box width="100%" textAlign="left">
                                         <Typography
@@ -619,7 +712,9 @@ export const MenuContainer = () => {
                                             value={value}
                                             exclusive
                                             fullWidth
-                                            onChange={(_, val) => onChange(val)}
+                                            onChange={(_, val) => {
+                                                if (val !== null) onChange(val);
+                                            }}
                                         >
                                             <ToggleButton value="veg">
                                                 VEG

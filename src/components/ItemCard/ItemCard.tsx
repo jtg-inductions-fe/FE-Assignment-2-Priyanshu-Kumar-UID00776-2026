@@ -11,6 +11,7 @@ import {
     Chip,
     IconButton,
     Stack,
+    Tooltip,
     Typography,
     useTheme,
 } from '@mui/material';
@@ -112,20 +113,24 @@ export const MenuItemCard = ({
 
                     {isOwner ? (
                         <Stack direction="row" spacing={1}>
-                            <AddButton
-                                variant="outlined"
-                                size="small"
-                                onClick={() => onAction('edit', item)}
-                            >
-                                <EditIcon fontSize="small" />
-                            </AddButton>
-                            <AddButton
-                                variant="outlined"
-                                color="error"
-                                onClick={() => onAction('delete', item)}
-                            >
-                                <DeleteIcon fontSize="small" />
-                            </AddButton>
+                            <Tooltip title="Edit">
+                                <AddButton
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() => onAction('edit', item)}
+                                >
+                                    <EditIcon fontSize="small" />
+                                </AddButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <AddButton
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => onAction('delete', item)}
+                                >
+                                    <DeleteIcon fontSize="small" />
+                                </AddButton>
+                            </Tooltip>
                         </Stack>
                     ) : quantity > 0 ? (
                         <Stack

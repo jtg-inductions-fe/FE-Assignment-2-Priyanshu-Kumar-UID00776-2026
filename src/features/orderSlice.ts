@@ -1,12 +1,11 @@
 import { Order, OrderState } from '@/container/Order/order.types';
-import { getStoredOrders } from '@/services/order.service';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**
  * Initial state of the orders
  */
 const initialState: OrderState = {
-    orders: getStoredOrders(),
+    orders: [],
 };
 
 export const orderSlice = createSlice({

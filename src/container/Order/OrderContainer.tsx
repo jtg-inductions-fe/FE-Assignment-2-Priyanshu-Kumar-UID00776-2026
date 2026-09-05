@@ -1,10 +1,19 @@
-import { Box, Container, Stack, Typography, useTheme } from '@mui/material';
+import { useEffect, useState } from 'react';
+
+import {
+    Box,
+    Container,
+    Skeleton,
+    Stack,
+    Typography,
+    useTheme,
+} from '@mui/material';
 
 import { OrderCard } from '@/components/OrderCard/OrderCard';
 import { OrderStatus } from '@/container/Order/order.types';
 import { showNotification } from '@/features/notificationSlice';
-import { updateOrderStatusSuccess } from '@/features/orderSlice';
-import { updateOrderStatus } from '@/services/order.service';
+import { setOrders, updateOrderStatusSuccess } from '@/features/orderSlice';
+import { fetchOrders, updateOrderStatus } from '@/services/order.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
 export const OrderContainer = () => {
@@ -14,9 +23,35 @@ export const OrderContainer = () => {
     const currentUser = useAppSelector((state) => state.auth.user);
     const restaurants = useAppSelector((state) => state.restaurant.restaurants);
     const allOrders = useAppSelector((state) => state.order.orders);
+    const [isLoading, setIsLoading] = useState(true);
 
     const isOwner = currentUser?.role === 'RESTAURANT OWNER';
     const userEmail = currentUser?.email;
+
+    useEffect(() => {
+        const loadOrders = async () => {
+            try {
+                setIsLoading(true);
+                const data = await fetchOrders();
+                dispatch(setOrders(data));
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to fetch orders';
+                dispatch(
+                    showNotification({
+                        message,
+                        severity: 'error',
+                    }),
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        void loadOrders();
+    }, [dispatch]);
 
     const ownedRestaurant = restaurants
         .filter((restaurant) => restaurant.ownerId === userEmail)
@@ -71,17 +106,27 @@ export const OrderContainer = () => {
                 </Typography>
 
                 <Stack spacing={2} mt={5}>
-                    {visibleOrders.map((order) => (
-                        <OrderCard
-                            key={order.id}
-                            order={order}
-                            isOwner={isOwner}
-                            onStatusChange={(orderId, status) => {
-                                void handleStatusUpdate(orderId, status);
-                            }}
-                        />
-                    ))}
-                    {visibleOrders.length === 0 && (
+                    {isLoading ? (
+                        Array.from({ length: 4 }).map((_, index) => (
+                            <Skeleton
+                                key={index}
+                                variant="rounded"
+                                height={150}
+                                animation="wave"
+                            />
+                        ))
+                    ) : visibleOrders.length > 0 ? (
+                        visibleOrders.map((order) => (
+                            <OrderCard
+                                key={order.id}
+                                order={order}
+                                isOwner={isOwner}
+                                onStatusChange={(orderId, status) => {
+                                    void handleStatusUpdate(orderId, status);
+                                }}
+                            />
+                        ))
+                    ) : (
                         <Typography
                             variant="body2"
                             color="text.secondary"

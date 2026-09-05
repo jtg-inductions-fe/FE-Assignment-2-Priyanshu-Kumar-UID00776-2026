@@ -1,13 +1,12 @@
 import {
     AccountCircle,
-    AddBox,
     Assignment,
     Home,
     ShoppingCart,
 } from '@mui/icons-material';
 
-import { User } from '@/types/auth.types';
-import { NavItemConfig } from '@/types/bottomNavigation.types';
+import { User } from '@/components/Auth/auth.types';
+import { NavItemConfig } from '@/container/BottomNavigationBar/bottomNavigation.types';
 
 export const navItemsConfig = (
     user: User | null,
@@ -26,13 +25,6 @@ export const navItemsConfig = (
         action: 'cart',
         value: '/cart',
         isVisible: user?.role === 'USER' || !isUserActive,
-    },
-    {
-        label: 'Restaurant',
-        icon: <AddBox />,
-        action: 'addRestaurant',
-        value: '/add-restaurant',
-        isVisible: user?.role === 'RESTAURANT OWNER',
     },
     {
         label: 'Orders',

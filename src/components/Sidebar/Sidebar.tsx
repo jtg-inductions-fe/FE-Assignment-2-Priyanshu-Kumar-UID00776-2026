@@ -13,8 +13,8 @@ import {
     StyledCheckbox,
     StyledDrawer,
 } from '@/components/Sidebar/Sidebar.styles';
+import { RestaurantSidebarProps } from '@/components/Sidebar/sidebarFilter.types';
 import { RATING_OPTIONS } from '@/constant/ratingConstants';
-import { RestaurantSidebarProps } from '@/types/sidebarFilter.types';
 
 export const RestaurantSidebar = ({
     open,
@@ -79,7 +79,7 @@ export const RestaurantSidebar = ({
                                     />
                                 }
                                 label={
-                                    <Stack direction="row" gap="4px">
+                                    <Stack direction="row" gap={4}>
                                         <Typography variant="body2">
                                             {rating === 5
                                                 ? '5.0'

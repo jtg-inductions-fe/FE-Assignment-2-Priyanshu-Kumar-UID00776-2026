@@ -1,7 +1,7 @@
 import {
     NotificationSeverity,
     NotificationState,
-} from '@/types/notification.types';
+} from '@/container/SnackBar/notification.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**

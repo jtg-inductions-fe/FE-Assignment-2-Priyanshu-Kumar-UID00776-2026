@@ -14,14 +14,14 @@ import {
     useTheme,
 } from '@mui/material';
 
-import { RatingBadge } from '@/components/MenuItemCard/MenuItemCard.styles';
+import { RatingBadge } from '@/components/ItemCard/ItemCard.styles';
 import {
     MetaItem,
     OwnerActionButton,
     StyledCard,
     StyledCardContent,
 } from '@/components/RestaurantCard/RestaurantCard.styles';
-import type { RestaurantCardProps } from '@/types/restaurantCard.types';
+import { RestaurantCardProps } from '@/components/RestaurantCard/restaurantCard.types';
 
 export const RestaurantCard = ({
     restaurant,
@@ -54,7 +54,7 @@ export const RestaurantCard = ({
                     top={theme.typography.pxToRem(12)}
                     right={theme.typography.pxToRem(12)}
                 >
-                    <StarIcon />
+                    <StarIcon fontSize="small" sx={{ mb: 0.5 }} />
                     <Typography
                         color={theme.palette.secondary.dark}
                         variant="body2"
@@ -90,7 +90,8 @@ export const RestaurantCard = ({
                     <MetaItem variant="body2">
                         <AccessTimeIcon fontSize="inherit" />
                         <span>
-                            {restaurant.openingTime} - {restaurant.endTime}
+                            {restaurant.openingTime} AM - {restaurant.endTime}{' '}
+                            PM
                         </span>
                     </MetaItem>
 

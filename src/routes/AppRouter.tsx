@@ -7,6 +7,7 @@ import { SignUp } from '@/components/Auth/SignUp';
 import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
 import { RootLayout } from '@/layout/RootLayout';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
+import { PublicRoute } from '@/routes/PublicRoute';
 
 const RestaurantPage = lazy(() => import('@/pages/Restaurant/Restaurant'));
 const MenuPage = lazy(() => import('@/pages/Menu/Menu'));
@@ -22,18 +23,20 @@ export const AppRouter = createBrowserRouter([
         element: <Navigate to="/restaurant" replace />,
     },
     /**
-     * Render the account registration page
+     * Public routes for the users
      */
     {
-        path: '/signup',
-        element: <SignUp />,
-    },
-    /**
-     * Render the user login page
-     */
-    {
-        path: '/login',
-        element: <Login />,
+        element: <PublicRoute />,
+        children: [
+            {
+                path: '/signup',
+                element: <SignUp />,
+            },
+            {
+                path: '/login',
+                element: <Login />,
+            },
+        ],
     },
     /**
      * Children routes renderes inside the outlet under the root layout

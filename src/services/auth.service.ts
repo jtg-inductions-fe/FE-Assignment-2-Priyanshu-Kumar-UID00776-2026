@@ -1,4 +1,9 @@
-import { LoginData, SignupData, StoredUser, User } from '@/types/auth.types';
+import {
+    LoginData,
+    SignupData,
+    StoredUser,
+    User,
+} from '@/components/Auth/auth.types';
 
 /**
  * Function to convert the plain text password into hash password using the native browser crypto.subtle

@@ -1,5 +1,5 @@
-import { StoredUser, User } from '@/types/auth.types';
-import { CartItem } from '@/types/cart.types';
+import { StoredUser, User } from '@/components/Auth/auth.types';
+import { CartItem } from '@/container/Cart/cart.types';
 
 /**
  * To fetch the record of the current user form the localStorage

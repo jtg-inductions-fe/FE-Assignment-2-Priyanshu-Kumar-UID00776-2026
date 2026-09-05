@@ -17,27 +17,28 @@ import {
     DialogContent,
     DialogTitle,
     IconButton,
-    MenuItem as SelectMenuItem,
     Stack,
     TextField,
+    ToggleButton,
     Typography,
 } from '@mui/material';
 
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
-import { MenuItemCard } from '@/components/MenuItemCard/MenuItemCard';
+import { FoodVariant } from '@/components/FilterToggleButton/filterToggleButton.types';
+import { MenuItemCard } from '@/components/ItemCard/ItemCard';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
 import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
 import {
     AddRestaurantButton,
     ControlsWrapper,
-    FilterButton,
+    FilterSlideModal,
     FormStack,
-    HeaderButtonWrapper,
     MainContentLayout,
     RestaurantContainer,
     RestaurantGrid,
     RestaurantHeaderSection,
     ScrollableContent,
+    SelectedToggleButton,
     StyledDialogActions,
 } from '@/container/Restaurant/Restaurant.styles';
 import {
@@ -58,7 +59,6 @@ import {
     editMenuItem,
 } from '@/services/restaurant.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { FoodVariant } from '@/types/filterToggleButton.types';
 import { MenuFormData, MenuItem } from '@/types/restaurant.types';
 
 export const MenuContainer = () => {
@@ -398,116 +398,76 @@ export const MenuContainer = () => {
                     onRatingToggle={handleRatingToggle}
                 />
                 <RestaurantHeaderSection>
-                    <HeaderButtonWrapper>
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                            <IconButton
-                                onClick={() => void navigate('/restaurant')}
-                                aria-label="Back to restaurant details"
-                            >
-                                <ArrowBackIcon />
-                            </IconButton>
-
-                            <Typography variant="h1">
-                                {selectedRestaurant.name}
-                            </Typography>
-                        </Stack>
-
-                        <Stack
-                            direction="row"
-                            spacing={1.5}
-                            alignItems="center"
-                            display={{ xs: 'none', sm: 'flex' }}
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <IconButton
+                            onClick={() => void navigate('/restaurant')}
                         >
-                            {isOwner ? (
-                                <AddRestaurantButton
-                                    variant="contained"
-                                    color="primary"
-                                    startIcon={<AddIcon />}
-                                    onClick={handleOpenAddModal}
-                                >
-                                    Add Menu Item
-                                </AddRestaurantButton>
-                            ) : (
-                                <>
-                                    <FoodVariantToggle
-                                        foodVariant={dietFilter}
-                                        onFilterChange={setDietFilter}
-                                    />
-                                    <FilterButton
-                                        variant="outlined"
-                                        startIcon={<FilterListIcon />}
-                                        onClick={() =>
-                                            setIsDrawerOpen((prev) => !prev)
-                                        }
-                                    >
-                                        Filters
-                                    </FilterButton>
-                                </>
-                            )}
-                        </Stack>
-                    </HeaderButtonWrapper>
-                    {user?.role === 'USER' && (
-                        <>
-                            <Stack direction="row" spacing={1}>
-                                <Clock color="primary" />
-                                <Typography variant="body1">
-                                    {selectedRestaurant.location}
-                                </Typography>
-                            </Stack>
-                            <Stack direction="row" spacing={1}>
-                                <Location color="primary" />
-                                <Typography variant="body1">
-                                    {selectedRestaurant.deliveryTime}
-                                </Typography>
-                            </Stack>
-                        </>
-                    )}
+                            <ArrowBackIcon />
+                        </IconButton>
 
-                    <ControlsWrapper>
-                        <RestaurantSearch
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search dishes in this restaurant..."
-                        />
-
-                        <Stack
-                            direction="row"
-                            spacing={2}
-                            alignItems="center"
-                            justifyContent="space-between"
-                            display={{ xs: 'flex', sm: 'none' }}
-                            width="100%"
-                        >
-                            {isOwner ? (
-                                <AddRestaurantButton
-                                    variant="contained"
-                                    color="primary"
-                                    fullWidth
-                                    startIcon={<AddIcon />}
-                                    onClick={handleOpenAddModal}
-                                >
-                                    Add Menu Item
-                                </AddRestaurantButton>
-                            ) : (
-                                <>
-                                    <FoodVariantToggle
-                                        foodVariant={dietFilter}
-                                        onFilterChange={setDietFilter}
-                                    />
-                                    <FilterButton
-                                        variant="outlined"
-                                        startIcon={<FilterListIcon />}
-                                        onClick={() => setIsDrawerOpen(true)}
-                                    >
-                                        Filters
-                                    </FilterButton>
-                                </>
-                            )}
-                        </Stack>
-                    </ControlsWrapper>
+                        <Typography variant="h1">
+                            {selectedRestaurant.name}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="row" spacing={1}>
+                        <Clock color="primary" />
+                        <Typography variant="body1">
+                            {selectedRestaurant.deliveryTime}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="row" spacing={1}>
+                        <Location color="primary" />
+                        <Typography variant="body1">
+                            {selectedRestaurant.location}
+                        </Typography>
+                    </Stack>
                 </RestaurantHeaderSection>
+                <ControlsWrapper
+                    flexDirection={{ xs: 'column', sm: 'row' }}
+                    padding={{ xs: 3, sm: 1 }}
+                >
+                    <RestaurantSearch
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Search dishes in this restaurant..."
+                    />
 
-                <ScrollableContent>
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={5}
+                        justifyContent={{ xs: 'space-between', sm: 'flex-end' }}
+                        width="100%"
+                    >
+                        {isOwner ? (
+                            <AddRestaurantButton
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                startIcon={<AddIcon />}
+                                onClick={handleOpenAddModal}
+                            >
+                                Add Menu Item
+                            </AddRestaurantButton>
+                        ) : (
+                            <>
+                                <FoodVariantToggle
+                                    foodVariant={dietFilter}
+                                    onFilterChange={setDietFilter}
+                                />
+                                <FilterSlideModal
+                                    variant="outlined"
+                                    startIcon={<FilterListIcon />}
+                                    onClick={() => setIsDrawerOpen(true)}
+                                >
+                                    Filters
+                                </FilterSlideModal>
+                            </>
+                        )}
+                    </Stack>
+                </ControlsWrapper>
+
+                <ScrollableContent pb={10}>
                     <RestaurantGrid>
                         {filteredMenuItems.length === 0 ? (
                             <Typography
@@ -645,20 +605,30 @@ export const MenuContainer = () => {
                             <Controller
                                 name="dietType"
                                 control={control}
-                                render={({ field }) => (
-                                    <TextField
-                                        {...field}
-                                        select
-                                        label="Diet Type"
-                                        fullWidth
-                                    >
-                                        <SelectMenuItem value="veg">
-                                            VEG
-                                        </SelectMenuItem>
-                                        <SelectMenuItem value="nonVeg">
-                                            NON VEG
-                                        </SelectMenuItem>
-                                    </TextField>
+                                render={({ field: { value, onChange } }) => (
+                                    <Box width="100%" textAlign="left">
+                                        <Typography
+                                            variant="caption"
+                                            color="text.secondary"
+                                            display="block"
+                                            mb={1}
+                                        >
+                                            Diet Type
+                                        </Typography>
+                                        <SelectedToggleButton
+                                            value={value}
+                                            exclusive
+                                            fullWidth
+                                            onChange={(_, val) => onChange(val)}
+                                        >
+                                            <ToggleButton value="veg">
+                                                VEG
+                                            </ToggleButton>
+                                            <ToggleButton value="nonVeg">
+                                                NON VEG
+                                            </ToggleButton>
+                                        </SelectedToggleButton>
+                                    </Box>
                                 )}
                             />
                         </FormStack>

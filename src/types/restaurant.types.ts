@@ -78,12 +78,8 @@ export type MenuFormData = {
  */
 export type MenuItemCardProps = {
     item: MenuItem;
+    variant?: string;
     isOwner?: boolean;
-    quantity?: number;
+    quantity: number;
     onAction: (actionType: string, item: MenuItem) => void;
-    onAddToCart?: (item: MenuItem) => void;
-    onIncrement?: (item: MenuItem) => void;
-    onDecrement?: (item: MenuItem) => void;
-    onEdit?: (item: MenuItem) => void;
-    onDelete?: (id: string) => void;
 };

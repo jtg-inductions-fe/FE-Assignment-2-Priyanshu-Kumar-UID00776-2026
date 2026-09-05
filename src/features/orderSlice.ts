@@ -1,5 +1,5 @@
+import { Order, OrderState } from '@/container/Order/order.types';
 import { getStoredOrders } from '@/services/order.service';
-import { Order, OrderState } from '@/types/order.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**

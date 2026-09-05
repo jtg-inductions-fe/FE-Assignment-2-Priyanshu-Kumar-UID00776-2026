@@ -1,4 +1,4 @@
-import { CartItem } from '@/types/cart.types';
+import { CartItem } from '@/container/Cart/cart.types';
 
 /**
  * Allowed user roles

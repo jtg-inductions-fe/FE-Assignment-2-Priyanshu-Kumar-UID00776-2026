@@ -31,11 +31,3 @@ export type CartBill = {
     onCheckout: () => void;
     onCheckoutLoading: boolean;
 };
-
-/**
- * Cart item card props passed values
- */
-export type CartItemCardProps = {
-    item: CartItem;
-    onCartAction: (actionType: string, itemId: string) => void;
-};

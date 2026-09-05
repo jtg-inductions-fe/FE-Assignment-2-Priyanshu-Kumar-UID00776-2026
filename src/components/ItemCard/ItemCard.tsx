@@ -1,11 +1,19 @@
 import {
     Add as AddIcon,
+    Close as CloseIcon,
     Delete as DeleteIcon,
     Edit as EditIcon,
     Remove as RemoveIcon,
     Star as StarIcon,
 } from '@mui/icons-material';
-import { Box, Chip, Stack, Typography, useTheme } from '@mui/material';
+import {
+    Box,
+    Chip,
+    IconButton,
+    Stack,
+    Typography,
+    useTheme,
+} from '@mui/material';
 
 import {
     AddButton,
@@ -14,17 +22,19 @@ import {
     RatingBadge,
     StyledCardMedia,
     StyledMenuCard,
-} from '@/components/MenuItemCard/MenuItemCard.styles';
-import type { MenuItemCardProps } from '@/types/restaurant.types';
+} from '@/components/ItemCard/ItemCard.styles';
+import { MenuItemCardProps } from '@/types/restaurant.types';
 
 export const MenuItemCard = ({
     item,
+    variant = 'menu',
     isOwner = false,
     quantity = 0,
     onAction,
 }: MenuItemCardProps) => {
     const remainingStock = Math.max(0, (item.stock || 0) - quantity);
     const theme = useTheme();
+    const isCart = variant === 'cart';
 
     return (
         <StyledMenuCard>
@@ -47,18 +57,29 @@ export const MenuItemCard = ({
                             {item.name}
                         </Typography>
 
-                        <RatingBadge>
-                            <StarIcon />
-                            <Typography
-                                variant="body2"
-                                color={theme.palette.secondary.dark}
+                        {isCart ? (
+                            <IconButton
+                                size="small"
+                                onClick={() => onAction('remove', item)}
                             >
-                                {item.rating}
-                            </Typography>
-                        </RatingBadge>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        ) : (
+                            item.rating !== undefined && (
+                                <RatingBadge>
+                                    <StarIcon />
+                                    <Typography
+                                        variant="body2"
+                                        color={theme.palette.secondary.dark}
+                                    >
+                                        {item.rating}
+                                    </Typography>
+                                </RatingBadge>
+                            )
+                        )}
                     </Stack>
 
-                    <Typography variant="body2" color="text.secondary" mt={3}>
+                    <Typography variant="body2" color="text.secondary" mt={2}>
                         {item.description}
                     </Typography>
 
@@ -66,7 +87,7 @@ export const MenuItemCard = ({
                         direction="row"
                         spacing={3}
                         alignItems="center"
-                        mt={3}
+                        mt={2}
                     >
                         <Chip
                             label={item.dietType === 'veg' ? 'Veg' : 'Non-Veg'}

@@ -1,4 +1,4 @@
-import { OrderStatus } from '@/types/order.types';
+import { OrderStatus } from '@/container/Order/order.types';
 
 export const ORDER_STATUS_OPTIONS: OrderStatus[] = [
     'Pending',

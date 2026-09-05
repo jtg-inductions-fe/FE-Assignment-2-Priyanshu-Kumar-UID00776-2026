@@ -19,7 +19,7 @@ import {
     OrderStyledCard,
 } from '@/components/OrderCard/OrderCard.styles';
 import { ORDER_STATUS_OPTIONS } from '@/constant/orderStateConstants';
-import { OrderCardProps, OrderStatus } from '@/types/order.types';
+import { OrderCardProps, OrderStatus } from '@/container/Order/order.types';
 
 export const OrderCard = ({
     order,
@@ -66,13 +66,13 @@ export const OrderCard = ({
                 )}
 
                 <Typography variant="body2" color="text.secondary" mt={1}>
-                    {isOwner ? `${order.items.length} items` : ''}
+                    {isOwner && `${order.items.length} items`}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {formattedTime}
+                    Ordered at: {formattedTime}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {`#${order.id}`}
+                    Order ID: {`#${order.id}`}
                 </Typography>
 
                 {!isOwner && (

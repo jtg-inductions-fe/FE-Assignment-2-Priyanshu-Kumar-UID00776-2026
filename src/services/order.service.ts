@@ -1,7 +1,7 @@
+import { User } from '@/components/Auth/auth.types';
+import { CartItem } from '@/container/Cart/cart.types';
+import { Order, OrderStatus } from '@/container/Order/order.types';
 import ordersData from '@/mockData/orders.json';
-import { User } from '@/types/auth.types';
-import { CartItem } from '@/types/cart.types';
-import { Order, OrderStatus } from '@/types/order.types';
 
 let mockOrders: Order[] = ordersData as Order[];
 
@@ -16,7 +16,7 @@ export const getStoredOrders = (): Order[] => [...mockOrders];
  * @returns {Promise<Order[]>}
  */
 export const fetchOrders = async (): Promise<Order[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return getStoredOrders();
 };
 

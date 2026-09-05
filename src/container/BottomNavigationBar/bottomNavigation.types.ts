@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { User } from '@/types/auth.types';
+import { User } from '@/components/Auth/auth.types';
 
 /**
  * Navbar action types for the clicks
@@ -8,7 +8,6 @@ import { User } from '@/types/auth.types';
 export type NavbarAction =
     | 'home'
     | 'cart'
-    | 'addRestaurant'
     | 'order'
     | 'profile'
     | 'closeMenu'

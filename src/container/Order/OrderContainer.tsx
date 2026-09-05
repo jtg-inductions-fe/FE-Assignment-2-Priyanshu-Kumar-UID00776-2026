@@ -1,11 +1,11 @@
 import { Box, Container, Stack, Typography, useTheme } from '@mui/material';
 
 import { OrderCard } from '@/components/OrderCard/OrderCard';
+import { OrderStatus } from '@/container/Order/order.types';
 import { showNotification } from '@/features/notificationSlice';
 import { updateOrderStatusSuccess } from '@/features/orderSlice';
 import { updateOrderStatus } from '@/services/order.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { OrderStatus } from '@/types/order.types';
 
 export const OrderContainer = () => {
     const dispatch = useAppDispatch();
@@ -54,15 +54,20 @@ export const OrderContainer = () => {
 
     return (
         <Box
-            px={{ sm: 10 }}
+            px={{ xs: 1, sm: 10 }}
             height="100vh"
             maxHeight="100vh"
             overflow="auto"
             paddingBottom={theme.typography.pxToRem(150)}
         >
-            <Container maxWidth="sm" sx={{ mt: 5 }}>
-                <Typography variant="h2">
+            <Container maxWidth="xl" sx={{ mt: 5 }}>
+                <Typography variant="h1">
                     {isOwner ? 'Order Management' : 'Your Orders'}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                    {isOwner
+                        ? 'Manage and update incoming orders.'
+                        : 'View your live and past orders.'}
                 </Typography>
 
                 <Stack spacing={2} mt={5}>

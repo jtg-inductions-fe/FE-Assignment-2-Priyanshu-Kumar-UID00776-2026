@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Grid, Stack, Typography } from '@mui/material';
 
 import { CartBillCard } from '@/components/CartBillCard/CartBillCard';
-import { CartItemCard } from '@/components/CartItemCard/CartItemCard';
+import { MenuItemCard } from '@/components/ItemCard/ItemCard';
 import {
     CartContainerArea,
     PageRoot,
@@ -20,6 +20,7 @@ import { showNotification } from '@/features/notificationSlice';
 import { addOrdersSuccess } from '@/features/orderSlice';
 import { placeOrder } from '@/services/order.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { MenuItem } from '@/types/restaurant.types';
 
 export const CartContainer = () => {
     const navigate = useNavigate();
@@ -39,21 +40,21 @@ export const CartContainer = () => {
         (sum, item) => sum + item.menuItem.price * item.quantity,
         0,
     );
-    const bookingFee = 20;
+    const bookingFee = Math.max(subtotal * 0.01, 20);
     const discountAmount = appliedDiscount?.amount || 0;
     const taxes = subtotal * 0.02;
     const totalPay = subtotal - discountAmount + bookingFee + taxes;
 
-    const handleCartAction = (action: string, menuItemId: string) => {
+    const handleCartAction = (action: string, item: MenuItem) => {
         switch (action) {
             case 'increment':
-                dispatch(incrementCartItem({ userEmail, menuItemId }));
+                dispatch(incrementCartItem({ userEmail, menuItemId: item.id }));
                 break;
             case 'decrement':
-                dispatch(decrementCartItem({ userEmail, menuItemId }));
+                dispatch(decrementCartItem({ userEmail, menuItemId: item.id }));
                 break;
             case 'remove':
-                dispatch(removeCartItem({ userEmail, menuItemId }));
+                dispatch(removeCartItem({ userEmail, menuItemId: item.id }));
                 break;
             default:
                 break;
@@ -124,52 +125,59 @@ export const CartContainer = () => {
 
     if (cartItems.length === 0) {
         return (
-            <PageRoot>
-                <CartContainerArea maxWidth="md">
-                    <Typography textAlign="center" variant="h4" pb={3}>
-                        Your Cart is Empty
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                        color="text.secondary"
-                        textAlign="center"
-                        gutterBottom
-                    >
-                        Explore menus and add your favorite dishes.
-                    </Typography>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => void navigate('/restaurant')}
-                    >
-                        Browse Restaurants
-                    </Button>
-                </CartContainerArea>
+            <PageRoot height="100%" alignItems="center" justifyContent="center">
+                <Typography textAlign="center" variant="h4" pb={3}>
+                    Your Cart is Empty
+                </Typography>
+                <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    textAlign="center"
+                    gutterBottom
+                >
+                    Explore menus and add your favorite dishes.
+                </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => void navigate('/restaurant')}
+                >
+                    Browse Restaurants
+                </Button>
             </PageRoot>
         );
     }
 
     return (
-        <PageRoot>
+        <PageRoot
+            overflow={{ xs: 'auto' }}
+            px={{ xs: 1 }}
+            pb={{ xs: 35, sm: 20 }}
+        >
             <CartContainerArea maxWidth="lg">
                 <Typography
                     textAlign="left"
                     width="100%"
-                    variant="h2"
-                    py={3}
+                    variant="h1"
+                    pt={3}
                     gutterBottom
                 >
-                    Your Cart
+                    Cart
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                    Manage your cart and update the items quantity.
                 </Typography>
 
-                <Grid container spacing={4}>
+                <Grid container spacing={5} mt={1}>
                     <Grid item xs={12} md={7}>
                         <Stack spacing={2}>
                             {cartItems.map((item) => (
-                                <CartItemCard
+                                <MenuItemCard
                                     key={item.menuItem.id}
-                                    item={item}
-                                    onCartAction={handleCartAction}
+                                    item={item.menuItem}
+                                    variant="cart"
+                                    quantity={item.quantity}
+                                    onAction={handleCartAction}
                                 />
                             ))}
                         </Stack>

@@ -1,8 +1,8 @@
+import { CartItem, CartState } from '@/container/Cart/cart.types';
 import {
     getCurrentUserFromStorage,
     persistUserCartToStorage,
 } from '@/services/cart.service';
-import { CartItem, CartState } from '@/types/cart.types';
 import { MenuItem } from '@/types/restaurant.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 

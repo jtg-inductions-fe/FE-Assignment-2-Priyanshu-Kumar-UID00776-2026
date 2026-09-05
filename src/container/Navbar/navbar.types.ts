@@ -1,6 +1,4 @@
-import type React from 'react';
-
-import { User } from '@/types/auth.types';
+import { User } from '@/components/Auth/auth.types';
 
 /**
  * Navbar all items actions

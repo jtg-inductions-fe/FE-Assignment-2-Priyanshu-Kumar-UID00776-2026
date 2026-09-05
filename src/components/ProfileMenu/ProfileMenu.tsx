@@ -6,7 +6,7 @@ import {
     ProfileInfo,
     StyledMenu,
 } from '@/components/ProfileMenu/ProfileMenu.styles';
-import { ProfileMenuProps } from '@/types/profileMenu.types';
+import { ProfileMenuProps } from '@/components/ProfileMenu/profileMenu.types';
 
 export const ProfileMenu = ({
     user,

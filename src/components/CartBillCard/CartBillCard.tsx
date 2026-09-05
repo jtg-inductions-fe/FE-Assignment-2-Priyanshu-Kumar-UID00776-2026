@@ -9,7 +9,7 @@ import {
     CheckoutSubmitButton,
     SummaryCard,
 } from '@/components/CartBillCard/CartBillCard.styles';
-import { CartBill } from '@/types/cart.types';
+import { CartBill } from '@/container/Cart/cart.types';
 
 export const CartBillCard = ({
     subtotal,

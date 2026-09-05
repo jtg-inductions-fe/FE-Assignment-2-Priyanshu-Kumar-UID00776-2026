@@ -3,11 +3,11 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Navbar } from '@/components/Navbar/Navbar';
+import { NavbarAction } from '@/container/Navbar/navbar.types';
 import { clearUser } from '@/features/authSlice';
 import { showNotification } from '@/features/notificationSlice';
 import { logout } from '@/services/auth.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { NavbarAction } from '@/types/navbar.types';
 
 export const NavbarContainer = () => {
     const dispatch = useAppDispatch();
@@ -81,8 +81,8 @@ export const NavbarContainer = () => {
             case 'logo':
                 void navigate('/');
                 break;
-            case 'orders':
-                void navigate('/orders');
+            case 'order':
+                void navigate('/order');
                 break;
             case 'cart':
                 void navigate('/cart');

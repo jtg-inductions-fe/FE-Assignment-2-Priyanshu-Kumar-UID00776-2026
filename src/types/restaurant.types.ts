@@ -1,7 +1,11 @@
-// Allowed food categories for filtering and tags
+/**
+ * Allowed food categories for filtering and tags
+ */
 export type DietType = 'veg' | 'nonVeg' | 'both';
 
-// Individual dish details in a restaurant's menu
+/**
+ * Individual dish details in a restaurant's menu
+ */
 export type MenuItem = {
     id: string;
     name: string;
@@ -13,7 +17,9 @@ export type MenuItem = {
     image?: string;
 };
 
-// Complete restaurant entity stored in the database and state
+/**
+ * Complete restaurant entity stored in the database and state
+ */
 export type RestaurantItemTypes = {
     id: string;
     name: string;
@@ -28,7 +34,9 @@ export type RestaurantItemTypes = {
     menus: MenuItem[];
 };
 
-// Editable fields submitted in the Add/Edit restaurant form
+/**
+ * Editable fields submitted in the Add/Edit restaurant form
+ */
 export type RestaurantFormData = {
     name: string;
     location: string;
@@ -39,17 +47,23 @@ export type RestaurantFormData = {
     endTime: string;
 };
 
-// Redux store slice state holding the full restaurant list
+/**
+ * Redux store slice state holding the full restaurant list
+ */
 export type RestaurantState = {
     restaurants: RestaurantItemTypes[];
 };
 
-// Local slice state holding a selected restaurant's menu
+/**
+ * Local slice state holding a selected restaurant's menu
+ */
 export type MenuState = {
     menu: MenuItem[];
 };
 
-// Modal for the menu form
+/**
+ * Modal for the menu form
+ */
 export type MenuFormData = {
     name: string;
     description: string;
@@ -60,7 +74,7 @@ export type MenuFormData = {
 };
 
 /**
- * Menu item card props
+ * Component props passed into the MenuItemCard
  */
 export type MenuItemCardProps = {
     item: MenuItem;

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Grid, Stack, Typography } from '@mui/material';
 
 import { CartBillCard } from '@/components/CartBillCard/CartBillCard';
-// import { CartItemCard } from '@/components/CartItemCard/CartItemCard';
 import { MenuItemCard } from '@/components/ItemCard/ItemCard';
 import {
     CartContainerArea,
@@ -16,7 +15,10 @@ import {
     incrementCartItem,
     removeCartItem,
 } from '@/features/cartSlice';
+import { clearCart } from '@/features/cartSlice';
 import { showNotification } from '@/features/notificationSlice';
+import { addOrdersSuccess } from '@/features/orderSlice';
+import { placeOrder } from '@/services/order.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { MenuItem } from '@/types/restaurant.types';
 
@@ -26,6 +28,7 @@ export const CartContainer = () => {
 
     const user = useAppSelector((state) => state.auth.user);
     const cartItems = useAppSelector((state) => state.cart.items);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const userEmail = user?.email || '';
 
     const [appliedDiscount, setAppliedDiscount] = useState<{
@@ -37,7 +40,7 @@ export const CartContainer = () => {
         (sum, item) => sum + item.menuItem.price * item.quantity,
         0,
     );
-    const bookingFee = 20;
+    const bookingFee = Math.max(subtotal * 0.01, 20);
     const discountAmount = appliedDiscount?.amount || 0;
     const taxes = subtotal * 0.02;
     const totalPay = subtotal - discountAmount + bookingFee + taxes;
@@ -77,9 +80,52 @@ export const CartContainer = () => {
         }
     };
 
+    const handleCheckout = async () => {
+        if (!user) {
+            dispatch(
+                showNotification({
+                    message: 'Please login to place an order.',
+                    severity: 'error',
+                }),
+            );
+            void navigate('/login');
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+            const createdOrders = await placeOrder(cartItems, user, totalPay);
+
+            dispatch(addOrdersSuccess(createdOrders));
+            dispatch(clearCart({ userEmail }));
+
+            dispatch(
+                showNotification({
+                    message: 'Order placed successfully!',
+                    severity: 'success',
+                }),
+            );
+
+            void navigate('/order');
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'Failed to place order.';
+            dispatch(
+                showNotification({
+                    message,
+                    severity: 'error',
+                }),
+            );
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     if (cartItems.length === 0) {
         return (
-            <PageRoot alignItems="center" justifyContent="center">
+            <PageRoot height="100%" alignItems="center" justifyContent="center">
                 <Typography textAlign="center" variant="h4" pb={3}>
                     Your Cart is Empty
                 </Typography>
@@ -103,13 +149,26 @@ export const CartContainer = () => {
     }
 
     return (
-        <PageRoot overflow={{ xs: 'auto' }} pb={{ xs: 35, sm: 20 }}>
+        <PageRoot
+            overflow={{ xs: 'auto' }}
+            px={{ xs: 1 }}
+            pb={{ xs: 35, sm: 20 }}
+        >
             <CartContainerArea maxWidth="lg">
-                <Typography variant="h2" py={4}>
-                    Your Cart
+                <Typography
+                    textAlign="left"
+                    width="100%"
+                    variant="h1"
+                    pt={3}
+                    gutterBottom
+                >
+                    Cart
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                    Manage your cart and update the items quantity.
                 </Typography>
 
-                <Grid container spacing={4}>
+                <Grid container spacing={5} mt={1}>
                     <Grid item xs={12} md={7}>
                         <Stack spacing={2}>
                             {cartItems.map((item) => (
@@ -133,7 +192,8 @@ export const CartContainer = () => {
                             discountAmount={discountAmount}
                             appliedPromoCode={appliedDiscount?.code || null}
                             onApplyPromo={handleApplyPromo}
-                            onCheckout={() => void navigate('/checkout')}
+                            onCheckout={() => void handleCheckout()}
+                            onCheckoutLoading={isLoading}
                         />
                     </Grid>
                 </Grid>

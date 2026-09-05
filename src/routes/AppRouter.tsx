@@ -1,30 +1,46 @@
+import { lazy } from 'react';
+
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { Login } from '@/components/Auth/Login';
 import { SignUp } from '@/components/Auth/SignUp';
 import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
 import { RootLayout } from '@/layout/RootLayout';
-import { CartPage } from '@/pages/Cart/Cart';
-import { MenuPage } from '@/pages/Menu/Menu';
-import { RestaurantPage } from '@/pages/Restaurant/Restaurant';
+import { ProtectedRoute } from '@/routes/ProtectedRoute';
+import { PublicRoute } from '@/routes/PublicRoute';
+
+const RestaurantPage = lazy(() => import('@/pages/Restaurant/Restaurant'));
+const MenuPage = lazy(() => import('@/pages/Menu/Menu'));
+const CartPage = lazy(() => import('@/pages/Cart/Cart'));
+const OrderPage = lazy(() => import('@/pages/Order/order'));
 
 export const AppRouter = createBrowserRouter([
-    // Redirect the root path directly to the restaurant screen
+    /**
+     * Redirect the root path directly to the restaurant screen
+     */
     {
         path: '/',
         element: <Navigate to="/restaurant" replace />,
     },
-    // Render the account registration page
+    /**
+     * Public routes for the users
+     */
     {
-        path: '/signup',
-        element: <SignUp />,
+        element: <PublicRoute />,
+        children: [
+            {
+                path: '/signup',
+                element: <SignUp />,
+            },
+            {
+                path: '/login',
+                element: <Login />,
+            },
+        ],
     },
-    // Render the user login page
-    {
-        path: '/login',
-        element: <Login />,
-    },
-    // Dynamic route for the menu related to particular restaurant
+    /**
+     * Children routes renderes inside the outlet under the root layout
+     */
     {
         path: '/',
         element: <RootLayout />,
@@ -38,12 +54,23 @@ export const AppRouter = createBrowserRouter([
                 element: <MenuPage />,
             },
             {
-                path: '/cart',
-                element: <CartPage />,
+                path: 'order',
+                element: <OrderPage />,
+            },
+            {
+                element: <ProtectedRoute allowedRoles={['USER']} />,
+                children: [
+                    {
+                        path: 'cart',
+                        element: <CartPage />,
+                    },
+                ],
             },
         ],
     },
-    // Catch-all route to redirect any invalid or unknown URLs back to signup
+    /**
+     * Catch-all route to redirect any invalid or unknown URLs back to signup
+     */
     {
         path: '*',
         element: <NotFoundPage />,

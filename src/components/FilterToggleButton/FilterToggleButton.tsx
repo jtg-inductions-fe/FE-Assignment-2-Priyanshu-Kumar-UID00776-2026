@@ -2,8 +2,8 @@ import {
     StyledButtonGroup,
     StyledFilterButton,
 } from '@/components/FilterToggleButton/FilterToggleButton.styles';
+import { FoodVariantToggleProps } from '@/components/FilterToggleButton/filterToggleButton.types';
 import { FILTER_OPTIONS } from '@/constant/restaurantConstants';
-import { FoodVariantToggleProps } from '@/types/filterToggleButton.types';
 
 export const FoodVariantToggle = ({
     foodVariant,

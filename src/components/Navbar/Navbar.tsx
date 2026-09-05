@@ -4,7 +4,7 @@ import { Badge, Typography } from '@mui/material';
 
 import LogoImage from '@/assets/images/logo.avif';
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
-import { NavbarProps } from '@/types/navbar.types';
+import { NavbarProps } from '@/container/Navbar/navbar.types';
 
 import {
     LoginButton,
@@ -27,7 +27,7 @@ export const Navbar = ({
     onClickAction,
 }: NavbarProps) => (
     <NavbarContainer>
-        <LogoContainer onClick={() => onClickAction('logo')}>
+        <LogoContainer tabIndex={0} onClick={() => onClickAction('logo')}>
             <Logo>
                 <img
                     src={LogoImage}
@@ -46,7 +46,7 @@ export const Navbar = ({
             {isUserActive ? (
                 <>
                     <NavIconButton
-                        onClick={() => onClickAction('orders')}
+                        onClick={() => onClickAction('order')}
                         aria-label="orders"
                     >
                         <ReceiptLongOutlinedIcon fontSize="small" />

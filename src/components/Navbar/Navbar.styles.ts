@@ -14,8 +14,9 @@ export const NavbarContainer = styled(Box)(({ theme }) => ({
     zIndex: 1,
 }));
 
-export const LogoContainer = styled(Box)(({ theme }) => ({
+export const LogoContainer = styled(Button)(({ theme }) => ({
     display: 'flex',
+    textTransform: 'none',
     alignItems: 'center',
     gap: theme.typography.pxToRem(6),
     cursor: 'pointer',

@@ -4,12 +4,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { BottomNavigationBar } from '@/components/BottomNavigation/BottomNavigation';
 import { navItemsConfig } from '@/configs/BottomNavigationConfigs';
+import { NavbarAction } from '@/container/BottomNavigationBar/bottomNavigation.types';
 import { clearUser } from '@/features/authSlice';
 import { showNotification } from '@/features/notificationSlice';
 import { useActiveUserRoute } from '@/hooks/useActiveUserRoutes';
 import { logout } from '@/services/auth.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { NavbarAction } from '@/types/bottomNavigation.types';
 
 export const BottomNavigationBarContainer = () => {
     const navigate = useNavigate();
@@ -91,11 +91,8 @@ export const BottomNavigationBarContainer = () => {
             case 'cart':
                 handleUserRoute('/cart', '/login');
                 break;
-            case 'addRestaurant':
-                handleUserRoute('/add-restaurant', '/login');
-                break;
-            case 'orders':
-                handleUserRoute('/orders', '/login');
+            case 'order':
+                handleUserRoute('/order', '/login');
                 break;
             case 'profile':
                 if (event) setAnchorEl(event.currentTarget);
@@ -105,9 +102,6 @@ export const BottomNavigationBarContainer = () => {
                 break;
             case 'logout':
                 void handleLogout();
-                break;
-            case 'login':
-                void navigate('/login');
                 break;
             default:
                 break;

@@ -1,3 +1,5 @@
 import { Restaurant } from '@/container/Restaurant/Restaurant';
 
-export const RestaurantPage = () => <Restaurant />;
+const RestaurantPage = () => <Restaurant />;
+
+export default RestaurantPage;

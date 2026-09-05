@@ -1,21 +1,28 @@
 import {
     NotificationSeverity,
     NotificationState,
-} from '@/types/notification.types';
+} from '@/container/SnackBar/notification.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Initial state of the notification
+/**
+ * Initial state of the notification
+ */
 const initialState: NotificationState = {
     open: false,
     message: '',
     severity: 'info',
 };
 
-// Notification slice that handles opening, closing and updating notification
 const notificationSlice = createSlice({
     name: 'notification',
     initialState,
     reducers: {
+        /**
+         * Open and update notification alert
+         * @param {NotificationState} state
+         * @param {PayloadAction<{ message: string; severity: NotificationSeverity }>} action
+         * @returns {void}
+         */
         showNotification: (
             state,
             action: PayloadAction<{
@@ -28,7 +35,11 @@ const notificationSlice = createSlice({
             state.severity = action.payload.severity;
         },
 
-        // Dismiss the alert from the screen
+        /**
+         * Dismiss the alert from the screen
+         * @param {NotificationState} state
+         * @returns {void}
+         */
         hideNotification: (state) => {
             state.open = false;
         },

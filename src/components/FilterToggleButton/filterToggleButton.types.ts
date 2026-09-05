@@ -1,6 +1,11 @@
-// Types of the food category
+/**
+ * Types of the food category
+ */
 export type FoodVariant = 'all' | 'veg' | 'nonVeg';
 
+/**
+ * Props for the FoodVariantToggle component
+ */
 export type FoodVariantToggleProps = {
     foodVariant: FoodVariant;
     onFilterChange: (filter: FoodVariant) => void;

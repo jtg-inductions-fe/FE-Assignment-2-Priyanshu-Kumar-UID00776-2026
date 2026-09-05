@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 
 import { FoodVariantToggle } from '@/components/FilterToggleButton/FilterToggleButton';
+import { FoodVariant } from '@/components/FilterToggleButton/filterToggleButton.types';
 import { RestaurantCard } from '@/components/RestaurantCard/RestaurantCard';
 import { RestaurantSearch } from '@/components/SearchBar/SearchBar';
 import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
@@ -57,7 +58,6 @@ import {
     fetchRestaurants,
 } from '@/services/restaurant.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { FoodVariant } from '@/types/filterToggleButton.types';
 import {
     RestaurantFormData,
     RestaurantItemTypes,

@@ -1,4 +1,4 @@
-import { FoodVariant } from '@/types/filterToggleButton.types';
+import { FoodVariant } from '@/components/FilterToggleButton/filterToggleButton.types';
 import { DietType } from '@/types/restaurant.types';
 
 export const DIET_TYPE_LABELS: Record<DietType, string> = {

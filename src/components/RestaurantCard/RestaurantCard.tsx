@@ -21,7 +21,7 @@ import {
     StyledCard,
     StyledCardContent,
 } from '@/components/RestaurantCard/RestaurantCard.styles';
-import { RestaurantCardProps } from '@/types/restaurantCard.types';
+import { RestaurantCardProps } from '@/components/RestaurantCard/restaurantCard.types';
 
 export const RestaurantCard = ({
     restaurant,
@@ -41,10 +41,11 @@ export const RestaurantCard = ({
 
     return (
         <StyledCard onClick={() => onCardClick?.(restaurant.id)}>
-            <Box position="relative">
+            <Box position="relative" width="100%">
                 <CardMedia
                     component="img"
                     height="180"
+                    fetchPriority="high"
                     image={restaurant.image}
                     alt={restaurant.name}
                 />

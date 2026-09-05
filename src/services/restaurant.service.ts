@@ -11,13 +11,21 @@ let mockRestaurants: RestaurantItemTypes[] = [
     ...(restaurantData as RestaurantItemTypes[]),
 ];
 
-// Simulate fetching all restaurants with a 3-second network delay
+/**
+ * Simulate fetching all restaurants with a 3-second network delay
+ * @returns {Promise<RestaurantItemTypes[]>}
+ */
 export const fetchRestaurants = async (): Promise<RestaurantItemTypes[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return [...mockRestaurants];
 };
 
-// Create a new restaurant record and append it to storage
+/**
+ * Create a new restaurant record and append it to storage
+ * @param {RestaurantFormData} data
+ * @param {string} ownerEmail
+ * @returns {Promise<RestaurantItemTypes>}
+ */
 export const addRestaurant = async (
     data: RestaurantFormData,
     ownerEmail: string,
@@ -36,7 +44,13 @@ export const addRestaurant = async (
     return newRestaurant;
 };
 
-// Update an existing restaurant details
+/**
+ * Update an existing restaurant details
+ * @param {string} id
+ * @param {RestaurantFormData} data
+ * @param {string} ownerEmail
+ * @returns {Promise<RestaurantItemTypes>}
+ */
 export const editRestaurant = async (
     id: string,
     data: RestaurantFormData,
@@ -64,6 +78,12 @@ export const editRestaurant = async (
     return updatedRestaurant;
 };
 
+/**
+ * Delete a restaurant record
+ * @param {string} id
+ * @param {string} ownerEmail
+ * @returns {Promise<string>}
+ */
 export const deleteRestaurant = async (
     id: string,
     ownerEmail: string,
@@ -85,7 +105,13 @@ export const deleteRestaurant = async (
     return id;
 };
 
-// Add a menu item directly to a restaurant's existing menus
+/**
+ * Add a menu item directly to a restaurant's existing menus
+ * @param {string} restaurantId
+ * @param {MenuFormData} menuData
+ * @param {string} ownerEmail
+ * @returns {Promise<{ restaurantId: string; menuItem: MenuItem }>}
+ */
 export const addMenuItem = async (
     restaurantId: string,
     menuData: MenuFormData,
@@ -118,7 +144,14 @@ export const addMenuItem = async (
     return { restaurantId, menuItem: newMenuItem };
 };
 
-// Edit an existing menu item inside the target restaurant
+/**
+ * Edit an existing menu item inside the target restaurant
+ * @param {string} restaurantId
+ * @param {string} menuId
+ * @param {MenuFormData} menuData
+ * @param {string} ownerEmail
+ * @returns {Promise<{ restaurantId: string; menuItem: MenuItem }>}
+ */
 export const editMenuItem = async (
     restaurantId: string,
     menuId: string,
@@ -157,7 +190,13 @@ export const editMenuItem = async (
     return { restaurantId, menuItem: updatedMenuItem };
 };
 
-// Delete a menu item from the restaurant's menus array
+/**
+ * Delete a menu item from the restaurant's menus array
+ * @param {string} restaurantId
+ * @param {string} menuId
+ * @param {string} ownerEmail
+ * @returns {Promise<{ restaurantId: string; menuId: string }>}
+ */
 export const deleteMenuItem = async (
     restaurantId: string,
     menuId: string,

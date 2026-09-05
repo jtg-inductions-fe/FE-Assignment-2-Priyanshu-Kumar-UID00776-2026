@@ -9,7 +9,7 @@ import {
     CheckoutSubmitButton,
     SummaryCard,
 } from '@/components/CartBillCard/CartBillCard.styles';
-import { CartBill } from '@/types/cart.types';
+import { CartBill } from '@/container/Cart/cart.types';
 
 export const CartBillCard = ({
     subtotal,
@@ -20,6 +20,7 @@ export const CartBillCard = ({
     appliedPromoCode,
     onApplyPromo,
     onCheckout,
+    onCheckoutLoading,
 }: CartBill) => {
     const [couponInput, setCouponInput] = useState('');
     const theme = useTheme();
@@ -94,6 +95,7 @@ export const CartBillCard = ({
                 size="large"
                 endIcon={<ArrowForwardIcon />}
                 onClick={onCheckout}
+                loading={onCheckoutLoading}
             >
                 Go to Checkout
             </CheckoutSubmitButton>

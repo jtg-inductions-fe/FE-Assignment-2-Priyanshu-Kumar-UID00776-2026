@@ -13,8 +13,8 @@ import {
     StyledCheckbox,
     StyledDrawer,
 } from '@/components/Sidebar/Sidebar.styles';
+import { RestaurantSidebarProps } from '@/components/Sidebar/sidebarFilter.types';
 import { RATING_OPTIONS } from '@/constant/ratingConstants';
-import { RestaurantSidebarProps } from '@/types/sidebarFilter.types';
 
 export const RestaurantSidebar = ({
     open,

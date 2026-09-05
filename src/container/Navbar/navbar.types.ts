@@ -1,16 +1,20 @@
-import { User } from '@/types/auth.types';
+import { User } from '@/components/Auth/auth.types';
 
-// Navbar all items actions
+/**
+ * Navbar all items actions
+ */
 export type NavbarAction =
     | 'logo'
-    | 'orders'
+    | 'order'
     | 'cart'
     | 'profile'
     | 'login'
     | 'closeMenu'
     | 'logout';
 
-// Navbar props passed to the component
+/**
+ * Navbar props passed to the component
+ */
 export type NavbarProps = {
     user: User | null;
     isUserActive: boolean;

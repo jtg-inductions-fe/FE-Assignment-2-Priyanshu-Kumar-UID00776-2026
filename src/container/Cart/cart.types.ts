@@ -1,6 +1,8 @@
 import { MenuItem } from '@/types/restaurant.types';
 
-// Each specific cart item for the user
+/**
+ * Each specific cart item for the user
+ */
 export type CartItem = {
     menuItem: MenuItem;
     restaurantId: string;
@@ -8,12 +10,16 @@ export type CartItem = {
     quantity: number;
 };
 
-// Cart array saving items
+/**
+ * Cart array saving items
+ */
 export type CartState = {
     items: CartItem[];
 };
 
-// Cart bill card summary
+/**
+ * Cart bill card summary
+ */
 export type CartBill = {
     subtotal: number;
     bookingFee: number;
@@ -23,4 +29,5 @@ export type CartBill = {
     appliedPromoCode: string | null;
     onApplyPromo: (code: string) => void;
     onCheckout: () => void;
+    onCheckoutLoading: boolean;
 };

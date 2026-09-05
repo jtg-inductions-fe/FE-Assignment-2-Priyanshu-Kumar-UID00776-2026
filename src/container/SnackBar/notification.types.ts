@@ -1,7 +1,11 @@
-// Defined the allowed alert styles
+/**
+ * Defined the allowed alert styles
+ */
 export type NotificationSeverity = 'success' | 'error' | 'warning' | 'info';
 
-// Notification state
+/**
+ * Notification state
+ */
 export type NotificationState = {
     open: boolean;
     message: string;

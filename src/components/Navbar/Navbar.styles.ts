@@ -41,14 +41,16 @@ export const NavbarActions = styled(Box)(({ theme }) => ({
     },
 }));
 
-export const NavIconButton = styled(IconButton)(({ theme }) => ({
+export const NavIconButton = styled(IconButton, {
+    shouldForwardProp: (prop) => prop !== 'active',
+})<{ active?: boolean }>(({ theme, active }) => ({
     borderRadius: '12px',
     padding: theme.typography.pxToRem(8),
     display: 'flex',
     alignItems: 'center',
     gap: theme.typography.pxToRem(10),
-    color: theme.palette.text.primary,
-    transition: 'all 0.2s ease-in-out',
+    color: active ? theme.palette.primary.main : theme.palette.text.primary,
+
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
         color: theme.palette.primary.main,

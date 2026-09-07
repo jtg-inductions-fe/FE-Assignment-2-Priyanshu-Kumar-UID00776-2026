@@ -62,7 +62,6 @@ export const authSlice = createSlice({
         clearUser: (state) => {
             state.user = null;
             state.isAuthenticated = false;
-            localStorage.removeItem('currentUser');
         },
     },
 });

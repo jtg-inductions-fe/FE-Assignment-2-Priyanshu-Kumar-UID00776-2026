@@ -28,6 +28,7 @@ import { RestaurantSidebar } from '@/components/Sidebar/Sidebar';
 import {
     DELIVERY_TIME_SLOTS,
     DIET_TYPE_LABELS,
+    EMPTY_RESTAURANT_FORM,
 } from '@/constant/restaurantConstants';
 import {
     AddRestaurantButton,
@@ -82,15 +83,6 @@ export const Restaurant = () => {
     const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    const EMPTY_RESTAURANT_FORM: RestaurantFormData = {
-        name: '',
-        location: '',
-        dietType: 'both',
-        rating: 4.5,
-        deliveryTime: '',
-        openingTime: '',
-        endTime: '',
-    };
 
     const {
         control,
@@ -177,7 +169,6 @@ export const Restaurant = () => {
                     if (!meetsAnyRating) return false;
                 }
 
-                // Include the restaurant if it passed all checks
                 return true;
             }),
         [
@@ -203,6 +194,8 @@ export const Restaurant = () => {
         reset({
             name: restaurant.name,
             location: restaurant.location,
+            locationLink: restaurant.locationLink,
+            image: restaurant.image,
             dietType: restaurant.dietType,
             rating: restaurant.rating,
             deliveryTime: restaurant.deliveryTime,
@@ -322,7 +315,7 @@ export const Restaurant = () => {
     }
 
     return (
-        <RestaurantContainer px={{ sm: 10 }}>
+        <RestaurantContainer px={{ sm: 10, md: 40 }}>
             <MainContentLayout>
                 <RestaurantSidebar
                     open={isDrawerOpen}
@@ -507,6 +500,42 @@ export const Restaurant = () => {
                                         fullWidth
                                         error={!!errors.location}
                                         helperText={errors.location?.message}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="locationLink"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Location Link"
+                                        variant="outlined"
+                                        fullWidth
+                                        placeholder="https://maps.google.com/..."
+                                        error={!!errors.locationLink}
+                                        helperText={
+                                            errors.locationLink?.message
+                                        }
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="image"
+                                control={control}
+                                rules={{
+                                    required: 'Image is required',
+                                }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Restaurant Image URL"
+                                        variant="outlined"
+                                        fullWidth
+                                        placeholder="https://example.com/restaurant-image.jpg"
+                                        error={!!errors.image}
+                                        helperText={errors.image?.message}
                                     />
                                 )}
                             />

@@ -19,6 +19,8 @@ import { setOrders, updateOrderStatusSuccess } from '@/features/orderSlice';
 import { fetchOrders, updateOrderStatus } from '@/services/order.service';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
+import { PageRoot } from '../Cart/CartContainer.styles';
+
 export const OrderContainer = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -91,6 +93,32 @@ export const OrderContainer = () => {
         }
     };
 
+    if (!visibleOrders) {
+        return (
+            <PageRoot height="100%" alignItems="center" justifyContent="center">
+                <Typography textAlign="center" variant="h4" pb={3}>
+                    Your Order is Empty
+                </Typography>
+                <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    textAlign="center"
+                    mb={4}
+                    gutterBottom
+                >
+                    Explore menus and add your favorite dishes.
+                </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => void navigate('/restaurant')}
+                >
+                    Browse Restaurants
+                </Button>
+            </PageRoot>
+        );
+    }
+
     return (
         <Box
             px={{ xs: 1, sm: 10 }}
@@ -110,55 +138,31 @@ export const OrderContainer = () => {
                 </Typography>
 
                 <Stack spacing={2} mt={5}>
-                    {isLoading ? (
-                        Array.from({ length: 4 }).map((_, index) => (
-                            <Box borderRadius={8} overflow="hidden" key={index}>
-                                <Skeleton
-                                    variant="rounded"
-                                    height={150}
-                                    animation="wave"
-                                />
-                            </Box>
-                        ))
-                    ) : visibleOrders.length > 0 ? (
-                        visibleOrders.map((order) => (
-                            <OrderCard
-                                key={order.id}
-                                order={order}
-                                isOwner={isOwner}
-                                onStatusChange={(orderId, status) => {
-                                    void handleStatusUpdate(orderId, status);
-                                }}
-                            />
-                        ))
-                    ) : (
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            gap={5}
-                            alignItems="center"
-                            justifyContent="center"
-                        >
-                            <Typography textAlign="center" variant="h4" pb={3}>
-                                Your Order is Empty
-                            </Typography>
-                            <Typography
-                                variant="body1"
-                                color="text.secondary"
-                                textAlign="center"
-                                gutterBottom
-                            >
-                                Explore menus and add your favorite dishes.
-                            </Typography>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => void navigate('/restaurant')}
-                            >
-                                Browse Restaurants
-                            </Button>
-                        </Box>
-                    )}
+                    {isLoading
+                        ? Array.from({ length: 4 }).map((_, index) => (
+                              <Box
+                                  borderRadius={8}
+                                  overflow="hidden"
+                                  key={index}
+                              >
+                                  <Skeleton
+                                      variant="rounded"
+                                      height={150}
+                                      animation="wave"
+                                  />
+                              </Box>
+                          ))
+                        : visibleOrders.length > 0 &&
+                          visibleOrders.map((order) => (
+                              <OrderCard
+                                  key={order.id}
+                                  order={order}
+                                  isOwner={isOwner}
+                                  onStatusChange={(orderId, status) => {
+                                      void handleStatusUpdate(orderId, status);
+                                  }}
+                              />
+                          ))}
                 </Stack>
             </Container>
         </Box>

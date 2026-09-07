@@ -133,6 +133,7 @@ export const CartContainer = () => {
                     variant="body1"
                     color="text.secondary"
                     textAlign="center"
+                    mb={4}
                     gutterBottom
                 >
                     Explore menus and add your favorite dishes.

@@ -3,13 +3,16 @@ import {
     Delete as DeleteIcon,
     Edit as EditIcon,
     LocationOnOutlined as LocationIcon,
+    OpenInNew as OpenInNewIcon,
     Star as StarIcon,
 } from '@mui/icons-material';
 import {
     Box,
     CardMedia,
     Chip,
+    IconButton,
     Stack,
+    Tooltip,
     Typography,
     useTheme,
 } from '@mui/material';
@@ -106,6 +109,27 @@ export const RestaurantCard = ({
                     <MetaItem variant="body2">
                         <LocationIcon fontSize="inherit" />
                         <span>{restaurant.location}</span>
+
+                        {restaurant.locationLink && (
+                            <Tooltip title="Open location in Google Maps">
+                                <IconButton
+                                    size="small"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        window.open(
+                                            restaurant.locationLink,
+                                            '_blank',
+                                            'noopener,noreferrer',
+                                        );
+                                    }}
+                                >
+                                    <OpenInNewIcon
+                                        htmlColor={theme.palette.primary.main}
+                                        fontSize="small"
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                     </MetaItem>
                 </Box>
 

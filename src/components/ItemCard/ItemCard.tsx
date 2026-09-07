@@ -1,6 +1,5 @@
 import {
     Add as AddIcon,
-    Close as CloseIcon,
     Delete as DeleteIcon,
     Edit as EditIcon,
     Remove as RemoveIcon,
@@ -59,12 +58,17 @@ export const MenuItemCard = ({
                         </Typography>
 
                         {isCart ? (
-                            <IconButton
-                                size="small"
-                                onClick={() => onAction('remove', item)}
-                            >
-                                <CloseIcon fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Delete">
+                                <IconButton
+                                    size="small"
+                                    onClick={() => onAction('remove', item)}
+                                >
+                                    <DeleteIcon
+                                        htmlColor={theme.palette.primary.main}
+                                        fontSize="small"
+                                    />
+                                </IconButton>
+                            </Tooltip>
                         ) : (
                             item.rating !== undefined && (
                                 <RatingBadge>
@@ -113,6 +117,7 @@ export const MenuItemCard = ({
                         color="primary.main"
                     >
                         ₹{item.price.toFixed(2)}
+                        {isCart && ` x ${quantity}`}
                     </Typography>
 
                     {isOwner ? (

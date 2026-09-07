@@ -14,7 +14,7 @@ export type MenuItem = {
     price: number;
     stock: number;
     dietType: DietType;
-    image?: string;
+    image: string;
 };
 
 /**
@@ -24,6 +24,7 @@ export type RestaurantItemTypes = {
     id: string;
     name: string;
     location: string;
+    locationLink?: string;
     dietType: DietType;
     rating: number;
     deliveryTime: string;
@@ -40,6 +41,8 @@ export type RestaurantItemTypes = {
 export type RestaurantFormData = {
     name: string;
     location: string;
+    locationLink?: string;
+    image: string;
     dietType: DietType;
     rating: number;
     deliveryTime: string;
@@ -67,6 +70,7 @@ export type MenuState = {
 export type MenuFormData = {
     name: string;
     description: string;
+    image: string;
     price: number;
     stock: number;
     rating: number;

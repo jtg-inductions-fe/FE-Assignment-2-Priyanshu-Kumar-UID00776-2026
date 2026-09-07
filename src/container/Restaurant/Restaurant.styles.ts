@@ -90,6 +90,7 @@ export const RestaurantGrid = styled(Box)(({ theme }) => ({
     paddingBottom: theme.typography.pxToRem(90),
     [theme.breakpoints.up('sm')]: {
         marginRight: theme.typography.pxToRem(15),
+        gridTemplateColumns: 'repeat(auto-fill, minmax(450px, 1fr))',
     },
 }));
 

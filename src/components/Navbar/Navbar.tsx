@@ -1,3 +1,6 @@
+import { useLocation } from 'react-router-dom';
+
+import HomeIcon from '@mui/icons-material/Home';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { Badge, Typography } from '@mui/material';
@@ -25,72 +28,86 @@ export const Navbar = ({
     isMenuOpen,
     cartCount = 0,
     onClickAction,
-}: NavbarProps) => (
-    <NavbarContainer>
-        <LogoContainer tabIndex={0} onClick={() => onClickAction('logo')}>
-            <Logo>
-                <img
-                    src={LogoImage}
-                    height="100%"
-                    width="100%"
-                    alt="Khana Peena Logo"
-                />
-            </Logo>
+}: NavbarProps) => {
+    const location = useLocation();
 
-            <Typography color="primary.main" variant="h5">
-                Khana Peena
-            </Typography>
-        </LogoContainer>
+    return (
+        <NavbarContainer>
+            <LogoContainer tabIndex={0} onClick={() => onClickAction('logo')}>
+                <Logo>
+                    <img
+                        src={LogoImage}
+                        height="100%"
+                        width="100%"
+                        alt="Khana Peena Logo"
+                    />
+                </Logo>
 
-        <NavbarActions>
-            {isUserActive ? (
-                <>
-                    <NavIconButton
-                        onClick={() => onClickAction('order')}
-                        aria-label="orders"
-                    >
-                        <ReceiptLongOutlinedIcon fontSize="small" />
-                        <Typography variant="body1">Orders</Typography>
-                    </NavIconButton>
+                <Typography color="primary.main" variant="h5">
+                    Khana Peena
+                </Typography>
+            </LogoContainer>
 
-                    {user?.role === 'USER' && (
+            <NavbarActions>
+                {isUserActive ? (
+                    <>
                         <NavIconButton
-                            onClick={() => onClickAction('cart')}
-                            aria-label="cart"
+                            active={location.pathname === '/restaurant'}
+                            onClick={() => onClickAction('logo')}
+                            aria-label="orders"
                         >
-                            <Badge badgeContent={cartCount} color="error">
-                                <ShoppingCartOutlinedIcon fontSize="small" />
-                            </Badge>
-                            <Typography variant="body1">Cart</Typography>
+                            <HomeIcon fontSize="small" />
+                            <Typography variant="body1">Home</Typography>
                         </NavIconButton>
-                    )}
+                        <NavIconButton
+                            active={location.pathname === '/order'}
+                            onClick={() => onClickAction('order')}
+                            aria-label="orders"
+                        >
+                            <ReceiptLongOutlinedIcon fontSize="small" />
+                            <Typography variant="body1">Orders</Typography>
+                        </NavIconButton>
 
-                    <ProfileIconButton
-                        onClick={(event) => onClickAction('profile', event)}
-                        size="medium"
-                        aria-label="account settings"
+                        {user?.role === 'USER' && (
+                            <NavIconButton
+                                active={location.pathname === '/cart'}
+                                onClick={() => onClickAction('cart')}
+                                aria-label="cart"
+                            >
+                                <Badge badgeContent={cartCount} color="error">
+                                    <ShoppingCartOutlinedIcon fontSize="small" />
+                                </Badge>
+                                <Typography variant="body1">Cart</Typography>
+                            </NavIconButton>
+                        )}
+
+                        <ProfileIconButton
+                            onClick={(event) => onClickAction('profile', event)}
+                            size="medium"
+                            aria-label="account settings"
+                        >
+                            <StyledAvatar>{userInitial}</StyledAvatar>
+                        </ProfileIconButton>
+                    </>
+                ) : (
+                    <LoginButton
+                        onClick={() => onClickAction('login')}
+                        variant="outlined"
                     >
-                        <StyledAvatar>{userInitial}</StyledAvatar>
-                    </ProfileIconButton>
-                </>
-            ) : (
-                <LoginButton
-                    onClick={() => onClickAction('login')}
-                    variant="outlined"
-                >
-                    Login
-                </LoginButton>
-            )}
+                        Login
+                    </LoginButton>
+                )}
 
-            <ProfileMenu
-                user={user}
-                isUserActive={isUserActive}
-                anchorEl={anchorEl}
-                isMenuOpen={isMenuOpen}
-                onCloseMenu={() => onClickAction('closeMenu')}
-                onLogoutClick={() => onClickAction('logout')}
-                onLoginClick={() => onClickAction('login')}
-            />
-        </NavbarActions>
-    </NavbarContainer>
-);
+                <ProfileMenu
+                    user={user}
+                    isUserActive={isUserActive}
+                    anchorEl={anchorEl}
+                    isMenuOpen={isMenuOpen}
+                    onCloseMenu={() => onClickAction('closeMenu')}
+                    onLogoutClick={() => onClickAction('logout')}
+                    onLoginClick={() => onClickAction('login')}
+                />
+            </NavbarActions>
+        </NavbarContainer>
+    );
+};

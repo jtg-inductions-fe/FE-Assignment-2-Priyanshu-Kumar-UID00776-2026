@@ -2,8 +2,12 @@ import { useState } from 'react';
 
 import {
     Box,
+    Button,
     Chip,
     Collapse,
+    Dialog,
+    DialogContent,
+    DialogTitle,
     Divider,
     FormControl,
     MenuItem,
@@ -20,6 +24,7 @@ import {
 } from '@/components/OrderCard/OrderCard.styles';
 import { ORDER_STATUS_OPTIONS } from '@/constant/orderStateConstants';
 import { OrderCardProps, OrderStatus } from '@/container/Order/order.types';
+import { StyledDialogActions } from '@/container/Restaurant/Restaurant.styles';
 
 export const OrderCard = ({
     order,
@@ -27,14 +32,20 @@ export const OrderCard = ({
     onStatusChange,
 }: OrderCardProps) => {
     const [expanded, setExpanded] = useState(false);
+    const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
     const theme = useTheme();
 
     const formattedTime = new Date(order.createdAt).toLocaleTimeString();
 
     const handleSelectChange = (e: SelectChangeEvent) => {
-        if (onStatusChange) {
-            onStatusChange(order.id, e.target.value as OrderStatus);
+        const status = e.target.value as OrderStatus;
+
+        if (status === 'Rejected') {
+            setIsRejectDialogOpen(true);
+            return;
         }
+
+        onStatusChange?.(order.id, status);
     };
 
     return (
@@ -180,6 +191,42 @@ export const OrderCard = ({
                     </FormControl>
                 </Box>
             )}
+            <Dialog
+                open={isRejectDialogOpen}
+                onClose={() => setIsRejectDialogOpen(false)}
+                maxWidth="xs"
+                fullWidth
+            >
+                <DialogTitle variant="h4">Reject Order?</DialogTitle>
+
+                <DialogContent>
+                    <Typography variant="body2" color="text.secondary">
+                        Are you sure you want to reject this order? This action
+                        cannot be undone.
+                    </Typography>
+                </DialogContent>
+
+                <StyledDialogActions>
+                    <Button
+                        variant="contained"
+                        color="inherit"
+                        onClick={() => setIsRejectDialogOpen(false)}
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                            setIsRejectDialogOpen(false);
+                            onStatusChange?.(order.id, 'Rejected');
+                        }}
+                    >
+                        Reject
+                    </Button>
+                </StyledDialogActions>
+            </Dialog>
         </OrderStyledCard>
     );
 };

@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
     AccessTime as Clock,
     Add as AddIcon,
-    ArrowBack as ArrowBackIcon,
     FilterList as FilterListIcon,
     Place as Location,
 } from '@mui/icons-material';
@@ -16,7 +15,6 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
-    IconButton,
     Skeleton,
     Stack,
     TextField,
@@ -145,6 +143,7 @@ export const MenuContainer = () => {
         defaultValues: {
             name: '',
             description: '',
+            image: '',
             price: 0,
             rating: 0,
             stock: 0,
@@ -167,11 +166,11 @@ export const MenuContainer = () => {
     );
 
     // Toggle star rating filters in the sidebar
-    const handleRatingToggle = (rating: number) => {
+    const handleRatingToggle = (ratingValue: number) => {
         setSelectedRatings((prev) =>
-            prev.includes(rating)
-                ? prev.filter((restaurant) => restaurant !== rating)
-                : [...prev, rating],
+            prev.includes(ratingValue)
+                ? prev.filter((rating) => rating !== ratingValue)
+                : [...prev, ratingValue],
         );
     };
 
@@ -203,7 +202,7 @@ export const MenuContainer = () => {
 
             if (selectedRatings.length > 0 && item.rating) {
                 const passes = selectedRatings.some(
-                    (restaurant) => item.rating >= restaurant,
+                    (rating) => item.rating >= rating,
                 );
                 if (!passes) return false;
             }
@@ -299,6 +298,7 @@ export const MenuContainer = () => {
         reset({
             name: item.name,
             description: item.description,
+            image: item.image,
             price: item.price,
             stock: item.stock || 0,
             rating: item.rating || 0,
@@ -434,7 +434,7 @@ export const MenuContainer = () => {
     }
 
     return (
-        <RestaurantContainer px={{ sm: 10 }}>
+        <RestaurantContainer px={{ sm: 10, md: 40 }}>
             <MainContentLayout>
                 <RestaurantSidebar
                     open={isDrawerOpen}
@@ -447,13 +447,6 @@ export const MenuContainer = () => {
                 />
                 <RestaurantHeaderSection>
                     <Stack direction="row" alignItems="center" spacing={2}>
-                        <IconButton
-                            sx={{ display: { xs: 'flex', sm: 'none' } }}
-                            onClick={() => void navigate('/restaurant')}
-                        >
-                            <ArrowBackIcon />
-                        </IconButton>
-
                         <Typography variant="h1">
                             {selectedRestaurant.name}
                         </Typography>
@@ -584,7 +577,14 @@ export const MenuContainer = () => {
                             <Controller
                                 name="description"
                                 control={control}
-                                rules={{ required: 'Description is required' }}
+                                rules={{
+                                    required: 'Description is required',
+                                    maxLength: {
+                                        value: 100,
+                                        message:
+                                            'Description cannot exceed 100 characters',
+                                    },
+                                }}
                                 render={({ field }) => (
                                     <TextField
                                         {...field}
@@ -592,8 +592,31 @@ export const MenuContainer = () => {
                                         multiline
                                         rows={2}
                                         fullWidth
+                                        slotProps={{
+                                            htmlInput: {
+                                                maxLength: 100,
+                                            },
+                                        }}
                                         error={!!errors.description}
-                                        helperText={errors.description?.message}
+                                        helperText={
+                                            errors.description?.message ||
+                                            `${field.value?.length || 0}/100`
+                                        }
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="image"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="Image URL"
+                                        variant="outlined"
+                                        fullWidth
+                                        placeholder="https://example.com/restaurant-image.jpg"
+                                        error={!!errors.image}
+                                        helperText={errors.image?.message}
                                     />
                                 )}
                             />

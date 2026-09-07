@@ -27,6 +27,7 @@ export const CartBillCard = ({
 
     return (
         <SummaryCard>
+            <Typography variant="h4">Bill Details</Typography>
             <Stack direction="row" gap={theme.typography.pxToRem(20)} py={3}>
                 <TextField
                     size="small"
@@ -42,8 +43,6 @@ export const CartBillCard = ({
                     Apply
                 </ApplyPromoButton>
             </Stack>
-
-            <Typography variant="h4">Bill Details</Typography>
 
             <Stack spacing={3}>
                 <BillRow>

@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 export const StyledMenuCard = styled(Card)(({ theme }) => ({
     borderRadius: '20px',
     overflow: 'hidden',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
     display: 'flex',
     width: '100%',
     minWidth: theme.typography.pxToRem(350),

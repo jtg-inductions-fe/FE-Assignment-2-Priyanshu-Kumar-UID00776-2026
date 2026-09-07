@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import {
     Box,
+    Button,
     Container,
     Skeleton,
     Stack,
@@ -18,6 +21,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 
 export const OrderContainer = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const theme = useTheme();
 
     const currentUser = useAppSelector((state) => state.auth.user);
@@ -108,12 +112,13 @@ export const OrderContainer = () => {
                 <Stack spacing={2} mt={5}>
                     {isLoading ? (
                         Array.from({ length: 4 }).map((_, index) => (
-                            <Skeleton
-                                key={index}
-                                variant="rounded"
-                                height={150}
-                                animation="wave"
-                            />
+                            <Box borderRadius={8} overflow="hidden" key={index}>
+                                <Skeleton
+                                    variant="rounded"
+                                    height={150}
+                                    animation="wave"
+                                />
+                            </Box>
                         ))
                     ) : visibleOrders.length > 0 ? (
                         visibleOrders.map((order) => (
@@ -127,14 +132,32 @@ export const OrderContainer = () => {
                             />
                         ))
                     ) : (
-                        <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            textAlign="center"
-                            py={6}
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            gap={5}
+                            alignItems="center"
+                            justifyContent="center"
                         >
-                            No orders found.
-                        </Typography>
+                            <Typography textAlign="center" variant="h4" pb={3}>
+                                Your Order is Empty
+                            </Typography>
+                            <Typography
+                                variant="body1"
+                                color="text.secondary"
+                                textAlign="center"
+                                gutterBottom
+                            >
+                                Explore menus and add your favorite dishes.
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => void navigate('/restaurant')}
+                            >
+                                Browse Restaurants
+                            </Button>
+                        </Box>
                     )}
                 </Stack>
             </Container>

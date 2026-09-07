@@ -14,13 +14,16 @@ import {
     StyledDrawer,
 } from '@/components/Sidebar/Sidebar.styles';
 import { RestaurantSidebarProps } from '@/components/Sidebar/sidebarFilter.types';
-import { RATING_OPTIONS } from '@/constant/ratingConstants';
+import { PRICE_OPTIONS, RATING_OPTIONS } from '@/constant/filterConstants';
 
 export const RestaurantSidebar = ({
     open,
     onClose,
     selectedRatings,
+    selectedPrices,
     onRatingToggle,
+    onPriceToggle,
+    isPriceFilterVisible = false,
 }: RestaurantSidebarProps) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -59,39 +62,80 @@ export const RestaurantSidebar = ({
                         <CloseRoundedIcon fontSize="small" />
                     </IconButton>
                 </Box>
-
-                <Stack gap={theme.typography.pxToRem(4)}>
-                    <Typography
-                        color={theme.palette.secondary.dark}
-                        variant="h6"
-                    >
-                        Customer Rating
-                    </Typography>
-                    {RATING_OPTIONS.map((rating) => {
-                        const isSelected = selectedRatings.includes(rating);
-                        return (
-                            <FilterItemLabel
-                                key={rating}
-                                control={
-                                    <StyledCheckbox
-                                        checked={isSelected}
-                                        onChange={() => onRatingToggle(rating)}
+                <Box
+                    display="flex"
+                    gap={10}
+                    justifyContent="center"
+                    flexDirection="column"
+                >
+                    <Stack gap={theme.typography.pxToRem(4)}>
+                        <Typography
+                            color={theme.palette.primary.main}
+                            variant="h6"
+                        >
+                            Customer Rating
+                        </Typography>
+                        {RATING_OPTIONS.map((rating) => {
+                            const isSelected = selectedRatings.includes(rating);
+                            return (
+                                <FilterItemLabel
+                                    key={rating}
+                                    control={
+                                        <StyledCheckbox
+                                            checked={isSelected}
+                                            onChange={() =>
+                                                onRatingToggle(rating)
+                                            }
+                                        />
+                                    }
+                                    label={
+                                        <Stack direction="row" gap={4}>
+                                            <Typography variant="body2">
+                                                {rating === 5
+                                                    ? '5.0'
+                                                    : `${rating.toFixed(1)} & above`}
+                                            </Typography>
+                                        </Stack>
+                                    }
+                                    labelPlacement="start"
+                                />
+                            );
+                        })}
+                    </Stack>
+                    {isPriceFilterVisible && (
+                        <Stack gap={theme.typography.pxToRem(4)}>
+                            <Typography
+                                color={theme.palette.primary.main}
+                                variant="h6"
+                            >
+                                Price Range
+                            </Typography>
+                            {PRICE_OPTIONS.map((price) => {
+                                const isSelected =
+                                    selectedPrices?.includes(price);
+                                return (
+                                    <FilterItemLabel
+                                        key={price}
+                                        control={
+                                            <StyledCheckbox
+                                                checked={isSelected}
+                                                onChange={() =>
+                                                    onPriceToggle?.(price)
+                                                }
+                                            />
+                                        }
+                                        label={
+                                            <Typography variant="body2">
+                                                ₹{price} & below
+                                            </Typography>
+                                        }
+                                        labelPlacement="start"
                                     />
-                                }
-                                label={
-                                    <Stack direction="row" gap={4}>
-                                        <Typography variant="body2">
-                                            {rating === 5
-                                                ? '5.0'
-                                                : `${rating.toFixed(1)} & above`}
-                                        </Typography>
-                                    </Stack>
-                                }
-                                labelPlacement="start"
-                            />
-                        );
-                    })}
-                </Stack>
+                                );
+                            })}
+                        </Stack>
+                    )}
+                </Box>
             </Box>
         </StyledDrawer>
     );

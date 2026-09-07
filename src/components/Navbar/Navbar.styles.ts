@@ -75,7 +75,6 @@ export const StyledAvatar = styled(Avatar)(({ theme }) => ({
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
     transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
     '&:hover': {
-        transform: 'scale(1.06)',
         boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
     },
 }));

@@ -145,19 +145,37 @@ export const OrderCard = ({
                     )}
                 </Box>
             </Collapse>
-
             {isOwner && (
                 <Box padding={theme.typography.pxToRem(20)}>
                     <FormControl fullWidth size="small">
                         <Select
                             value={order.status}
                             onChange={handleSelectChange}
+                            disabled={order.status === 'Rejected'}
                         >
-                            {ORDER_STATUS_OPTIONS.map((status) => (
-                                <MenuItem key={status} value={status}>
-                                    {status}
-                                </MenuItem>
-                            ))}
+                            {ORDER_STATUS_OPTIONS.map((status, index) => {
+                                const currentIndex =
+                                    ORDER_STATUS_OPTIONS.indexOf(order.status);
+                                const isRejected = order.status === 'Rejected';
+                                const isPreviousStep = index < currentIndex;
+                                const isInvalidRejection =
+                                    status === 'Rejected' &&
+                                    order.status === 'Delivered';
+                                const isDisabled =
+                                    isRejected ||
+                                    isPreviousStep ||
+                                    isInvalidRejection;
+
+                                return (
+                                    <MenuItem
+                                        key={status}
+                                        value={status}
+                                        disabled={isDisabled}
+                                    >
+                                        {status}
+                                    </MenuItem>
+                                );
+                            })}
                         </Select>
                     </FormControl>
                 </Box>

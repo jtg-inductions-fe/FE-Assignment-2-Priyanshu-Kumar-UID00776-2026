@@ -133,7 +133,7 @@ export const Restaurant = () => {
     const handleRatingToggle = (rating: number) => {
         setSelectedRatings((prev) =>
             prev.includes(rating)
-                ? prev.filter((r) => r !== rating)
+                ? prev.filter((restaurant) => restaurant !== rating)
                 : [...prev, rating],
         );
     };

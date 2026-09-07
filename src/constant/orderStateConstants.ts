@@ -6,4 +6,5 @@ export const ORDER_STATUS_OPTIONS: OrderStatus[] = [
     'Preparing',
     'Out for Delivery',
     'Delivered',
+    'Rejected',
 ];

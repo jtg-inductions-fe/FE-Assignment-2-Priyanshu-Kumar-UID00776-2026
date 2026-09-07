@@ -154,14 +154,8 @@ export const CartContainer = () => {
             px={{ xs: 1 }}
             pb={{ xs: 35, sm: 20 }}
         >
-            <CartContainerArea maxWidth="lg">
-                <Typography
-                    textAlign="left"
-                    width="100%"
-                    variant="h1"
-                    pt={3}
-                    gutterBottom
-                >
+            <CartContainerArea maxWidth="xl">
+                <Typography textAlign="left" width="100%" variant="h1" pt={3}>
                     Cart
                 </Typography>
                 <Typography variant="body1" color="text.secondary">

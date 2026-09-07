@@ -85,6 +85,7 @@ export const MenuContainer = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [dietFilter, setDietFilter] = useState<FoodVariant>('all');
     const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+    const [selectedPrices, setSelectedPrices] = useState<number[]>([]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
@@ -174,6 +175,14 @@ export const MenuContainer = () => {
         );
     };
 
+    const handlePriceToggle = (priceValue: number) => {
+        setSelectedPrices((prev) =>
+            prev.includes(priceValue)
+                ? prev.filter((price) => price !== priceValue)
+                : [...prev, priceValue],
+        );
+    };
+
     // Filter menu items by search query, diet type, and minimum rating
     const filteredMenuItems = useMemo(() => {
         if (!selectedRestaurant?.menus) return [];
@@ -199,6 +208,12 @@ export const MenuContainer = () => {
                 if (!passes) return false;
             }
 
+            if (selectedPrices.length > 0 && item.price) {
+                const price = Math.max(...selectedPrices);
+
+                if (item.price > price) return false;
+            }
+
             return true;
         });
     }, [
@@ -206,6 +221,7 @@ export const MenuContainer = () => {
         debouncedSearch,
         dietFilter,
         selectedRatings,
+        selectedPrices,
     ]);
 
     // Dispatch adding an item to the user cart in redux and localStorage
@@ -400,32 +416,6 @@ export const MenuContainer = () => {
         }
     };
 
-    if (isLoading) {
-        return (
-            <RestaurantContainer px={{ xs: 2, sm: 10 }}>
-                <Box py={5}>
-                    <Skeleton variant="text" width="30%" height={50} />
-                    <Skeleton
-                        variant="text"
-                        width="20%"
-                        height={30}
-                        sx={{ mb: 4 }}
-                    />
-                    <RestaurantGrid>
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <Skeleton
-                                key={index}
-                                variant="rounded"
-                                height={220}
-                                animation="wave"
-                            />
-                        ))}
-                    </RestaurantGrid>
-                </Box>
-            </RestaurantContainer>
-        );
-    }
-
     if (!selectedRestaurant) {
         return (
             <RestaurantContainer>
@@ -450,11 +440,15 @@ export const MenuContainer = () => {
                     open={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
                     selectedRatings={selectedRatings}
+                    selectedPrices={selectedPrices}
                     onRatingToggle={handleRatingToggle}
+                    onPriceToggle={handlePriceToggle}
+                    isPriceFilterVisible={true}
                 />
                 <RestaurantHeaderSection>
                     <Stack direction="row" alignItems="center" spacing={2}>
                         <IconButton
+                            sx={{ display: { xs: 'flex', sm: 'none' } }}
                             onClick={() => void navigate('/restaurant')}
                         >
                             <ArrowBackIcon />
@@ -521,9 +515,24 @@ export const MenuContainer = () => {
                         )}
                     </Stack>
                 </ControlsWrapper>
-
                 <ScrollableContent pb={10}>
-                    {filteredMenuItems.length === 0 ? (
+                    {isLoading ? (
+                        <RestaurantGrid>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <Box
+                                    key={index}
+                                    borderRadius={5}
+                                    overflow="hidden"
+                                >
+                                    <Skeleton
+                                        variant="rounded"
+                                        height={220}
+                                        animation="wave"
+                                    />
+                                </Box>
+                            ))}
+                        </RestaurantGrid>
+                    ) : filteredMenuItems.length === 0 ? (
                         <Box textAlign="center" py={8} width="100%">
                             <Typography variant="h6" color="text.secondary">
                                 No menu items found.

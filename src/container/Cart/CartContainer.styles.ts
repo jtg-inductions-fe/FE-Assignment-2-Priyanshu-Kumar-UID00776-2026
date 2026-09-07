@@ -5,6 +5,7 @@ export const PageRoot = styled(Box)({
     display: 'flex',
     overflow: 'scroll',
     flexDirection: 'column',
+    width: '100%',
 });
 
 export const CartContainerArea = styled(Container)({

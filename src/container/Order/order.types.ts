@@ -8,7 +8,8 @@ export type OrderStatus =
     | 'Accepted'
     | 'Preparing'
     | 'Out for Delivery'
-    | 'Delivered';
+    | 'Delivered'
+    | 'Rejected';
 
 /**
  * Order details and customer information

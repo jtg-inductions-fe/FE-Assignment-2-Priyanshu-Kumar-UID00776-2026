@@ -3,7 +3,7 @@ import { Button, Card, Stack, styled } from '@mui/material';
 export const SummaryCard = styled(Card)(({ theme }) => ({
     padding: theme.typography.pxToRem(15),
     borderRadius: '20px',
-    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.6)',
+    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.3)',
 }));
 
 export const ApplyPromoButton = styled(Button)(({ theme }) => ({

@@ -40,7 +40,15 @@ export const RestaurantCard = ({
     };
 
     return (
-        <StyledCard onClick={() => onCardClick?.(restaurant.id)}>
+        <StyledCard
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    onCardClick?.(restaurant.id);
+                }
+            }}
+            onClick={() => onCardClick?.(restaurant.id)}
+        >
             <Box position="relative" width="100%">
                 <CardMedia
                     component="img"

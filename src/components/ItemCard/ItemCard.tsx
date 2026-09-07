@@ -107,7 +107,11 @@ export const MenuItemCard = ({
                     alignItems="center"
                     mt={3}
                 >
-                    <Typography variant="body1" color="primary.main">
+                    <Typography
+                        padding={1}
+                        variant="body1"
+                        color="primary.main"
+                    >
                         ₹{item.price.toFixed(2)}
                     </Typography>
 

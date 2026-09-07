@@ -86,10 +86,10 @@ export const FilterSlideModal = styled(Button)(({ theme }) => ({
 export const RestaurantGrid = styled(Box)(({ theme }) => ({
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-    gap: theme.typography.pxToRem(12),
+    gap: theme.typography.pxToRem(15),
     paddingBottom: theme.typography.pxToRem(90),
     [theme.breakpoints.up('sm')]: {
-        marginRight: theme.typography.pxToRem(40),
+        marginRight: theme.typography.pxToRem(15),
     },
 }));
 

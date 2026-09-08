@@ -1,8 +1,9 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import authReducer from '@/slices/authSlice';
-import notificationReducer from '@/slices/notificationSlice';
-import restaurantReducer from '@/slices/restaurantSlice';
+import authReducer from '@/features/authSlice';
+import cartReducer from '@/features/cartSlice';
+import notificationReducer from '@/features/notificationSlice';
+import restaurantReducer from '@/features/restaurantSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
 // Combine all slice reducers into the centralized redux store
@@ -11,6 +12,7 @@ export const store = configureStore({
         auth: authReducer,
         notification: notificationReducer,
         restaurant: restaurantReducer,
+        cart: cartReducer,
     },
 });
 

@@ -4,7 +4,8 @@
         "email": "priyanshu@gmail.com",
         "contactNo": "9835180994",
         "role": "USER",
-        "password": "4848615ba55e5be5e25f1a8406ed9cb26fbbd888469d7ba46bb22aeec74899cb"
+        "password": "4848615ba55e5be5e25f1a8406ed9cb26fbbd888469d7ba46bb22aeec74899cb",
+        "cart": []
     },
     {
         "fullName": "Haldiram",

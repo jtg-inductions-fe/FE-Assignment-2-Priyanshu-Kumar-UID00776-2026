@@ -39,7 +39,7 @@ export const AddButton = styled(Button)(({ theme }) => ({
 export const RatingBadge = styled(Box)(({ theme }) => ({
     display: 'flex',
     backgroundColor: theme.palette.secondary.main,
-    padding: theme.typography.pxToRem(4),
+    padding: theme.typography.pxToRem(6),
     borderRadius: '15px',
     alignItems: 'center',
     justifyContent: 'center',

@@ -1,3 +1,4 @@
+import restaurantData from '@/mockData/restaurant.json';
 import {
     MenuItem,
     RestaurantItemTypes,
@@ -7,7 +8,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Set up the default starting state with an empty list
 const initialState: RestaurantState = {
-    restaurants: [],
+    restaurants: restaurantData as RestaurantItemTypes[],
 };
 
 // Create the redux slice to manage restaurant state and actions

@@ -4,6 +4,7 @@ import { Login } from '@/components/Auth/Login';
 import { SignUp } from '@/components/Auth/SignUp';
 import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
 import { RootLayout } from '@/layout/RootLayout';
+import { CartPage } from '@/pages/Cart/Cart';
 import { MenuPage } from '@/pages/Menu/Menu';
 import { RestaurantPage } from '@/pages/Restaurant/Restaurant';
 
@@ -23,7 +24,7 @@ export const AppRouter = createBrowserRouter([
         path: '/login',
         element: <Login />,
     },
-    // Children for the pages
+    // Dynamic route for the menu related to particular restaurant
     {
         path: '/',
         element: <RootLayout />,
@@ -35,6 +36,10 @@ export const AppRouter = createBrowserRouter([
             {
                 path: 'restaurant/:restaurantId',
                 element: <MenuPage />,
+            },
+            {
+                path: '/cart',
+                element: <CartPage />,
             },
         ],
     },

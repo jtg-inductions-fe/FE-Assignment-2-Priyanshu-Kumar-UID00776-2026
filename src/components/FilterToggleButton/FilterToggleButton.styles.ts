@@ -3,10 +3,11 @@ import { styled } from '@mui/material/styles';
 
 import { StyledFilterButtonProps } from '@/types/filterToggleButton.types';
 
-export const StyledButtonGroup = styled(ButtonGroup)({
+export const StyledButtonGroup = styled(ButtonGroup)(({ theme }) => ({
     borderRadius: '20px',
     overflow: 'hidden',
-});
+    padding: theme.typography.pxToRem(5),
+}));
 
 export const StyledFilterButton = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'isActive' && prop !== 'variantType',
@@ -21,8 +22,7 @@ export const StyledFilterButton = styled(Button, {
 
     return {
         textTransform: 'none',
-        fontWeight: theme.typography.fontWeightRegular,
-        padding: theme.typography.pxToRem(10),
+        padding: theme.typography.pxToRem(9),
         color: isActive ? theme.palette.secondary.light : inactiveText,
         backgroundColor: isActive ? activeBg : 'transparent',
         borderColor: variantType === 'all' ? 'none' : palette.main,

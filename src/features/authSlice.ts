@@ -35,6 +35,7 @@ export const authSlice = createSlice({
                 email: action.payload.email,
                 contactNo: action.payload.contactNo,
                 role: action.payload.role,
+                cart: action.payload.cart,
             };
 
             state.user = safeUser;

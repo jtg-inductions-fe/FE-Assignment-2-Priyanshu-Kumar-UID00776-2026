@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Alert, Snackbar } from '@mui/material';
 
-import { hideNotification } from '@/slices/notificationSlice';
+import { hideNotification } from '@/features/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
 export const GlobalSnackbar = () => {

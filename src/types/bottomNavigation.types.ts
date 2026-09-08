@@ -27,6 +27,7 @@ export type BottomNavigationBarProps = {
     user: User | null;
     isUserActive: boolean;
     pathname: string;
+    cartCount?: number;
     anchorEl: null | HTMLElement;
     isMenuOpen: boolean;
     navItems: NavItemConfig[];

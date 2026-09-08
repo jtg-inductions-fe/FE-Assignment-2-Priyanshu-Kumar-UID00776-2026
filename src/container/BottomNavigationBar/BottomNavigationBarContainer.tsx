@@ -11,7 +11,11 @@ import { showNotification } from '@/slices/notificationSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { NavbarAction } from '@/types/bottomNavigation.types';
 
-export const BottomNavigationBarContainer = () => {
+export const BottomNavigationBarContainer = ({
+    cartCount = 0,
+}: {
+    cartCount?: number;
+}) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const location = useLocation();
@@ -108,6 +112,7 @@ export const BottomNavigationBarContainer = () => {
             isUserActive={isUserActive}
             pathname={location.pathname}
             anchorEl={anchorEl}
+            cartCount={cartCount}
             isMenuOpen={isMenuOpen}
             navItems={navItems}
             onClickAction={handleNavbarAction}

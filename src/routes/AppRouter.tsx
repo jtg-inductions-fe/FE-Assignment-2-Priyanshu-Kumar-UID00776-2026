@@ -4,6 +4,7 @@ import { Login } from '@/components/Auth/Login';
 import { SignUp } from '@/components/Auth/SignUp';
 import { NotFoundPage } from '@/components/NotFoundPage/NotFoundPage';
 import { RootLayout } from '@/layout/RootLayout';
+import { MenuPage } from '@/pages/Menu/Menu';
 import { RestaurantPage } from '@/pages/Restaurant/Restaurant';
 
 export const AppRouter = createBrowserRouter([
@@ -30,6 +31,10 @@ export const AppRouter = createBrowserRouter([
             {
                 path: 'restaurant',
                 element: <RestaurantPage />,
+            },
+            {
+                path: 'restaurant/:restaurantId',
+                element: <MenuPage />,
             },
         ],
     },

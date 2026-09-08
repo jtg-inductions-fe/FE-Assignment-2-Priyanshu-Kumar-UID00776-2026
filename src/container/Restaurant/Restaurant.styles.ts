@@ -43,7 +43,7 @@ export const ControlsWrapper = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.typography.pxToRem(10),
+    gap: theme.typography.pxToRem(20),
     marginTop: theme.typography.pxToRem(10),
     marginBottom: theme.typography.pxToRem(10),
     flexWrap: 'wrap',

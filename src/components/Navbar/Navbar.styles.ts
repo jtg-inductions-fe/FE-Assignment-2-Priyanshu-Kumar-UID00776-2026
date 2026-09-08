@@ -14,8 +14,9 @@ export const NavbarContainer = styled(Box)(({ theme }) => ({
     zIndex: 1,
 }));
 
-export const LogoContainer = styled(Box)(({ theme }) => ({
+export const LogoContainer = styled(Button)(({ theme }) => ({
     display: 'flex',
+    textTransform: 'none',
     alignItems: 'center',
     gap: theme.typography.pxToRem(6),
     cursor: 'pointer',
@@ -40,14 +41,16 @@ export const NavbarActions = styled(Box)(({ theme }) => ({
     },
 }));
 
-export const NavIconButton = styled(IconButton)(({ theme }) => ({
+export const NavIconButton = styled(IconButton, {
+    shouldForwardProp: (prop) => prop !== 'active',
+})<{ active?: boolean }>(({ theme, active }) => ({
     borderRadius: '12px',
     padding: theme.typography.pxToRem(8),
     display: 'flex',
     alignItems: 'center',
     gap: theme.typography.pxToRem(10),
-    color: theme.palette.text.primary,
-    transition: 'all 0.2s ease-in-out',
+    color: active ? theme.palette.primary.main : theme.palette.text.primary,
+
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
         color: theme.palette.primary.main,
@@ -74,7 +77,6 @@ export const StyledAvatar = styled(Avatar)(({ theme }) => ({
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
     transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
     '&:hover': {
-        transform: 'scale(1.06)',
         boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
     },
 }));

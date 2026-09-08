@@ -1,0 +1,170 @@
+import { useEffect, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+
+import {
+    Box,
+    Button,
+    Container,
+    Skeleton,
+    Stack,
+    Typography,
+    useTheme,
+} from '@mui/material';
+
+import { OrderCard } from '@/components/OrderCard/OrderCard';
+import { OrderStatus } from '@/container/Order/order.types';
+import { showNotification } from '@/features/notificationSlice';
+import { setOrders, updateOrderStatusSuccess } from '@/features/orderSlice';
+import { fetchOrders, updateOrderStatus } from '@/services/order.service';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+
+import { PageRoot } from '../Cart/CartContainer.styles';
+
+export const OrderContainer = () => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const theme = useTheme();
+
+    const currentUser = useAppSelector((state) => state.auth.user);
+    const restaurants = useAppSelector((state) => state.restaurant.restaurants);
+    const allOrders = useAppSelector((state) => state.order.orders);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const isOwner = currentUser?.role === 'RESTAURANT OWNER';
+    const userEmail = currentUser?.email;
+
+    useEffect(() => {
+        const loadOrders = async () => {
+            try {
+                setIsLoading(true);
+                const data = await fetchOrders();
+                dispatch(setOrders(data));
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to fetch orders';
+                dispatch(
+                    showNotification({
+                        message,
+                        severity: 'error',
+                    }),
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        void loadOrders();
+    }, [dispatch]);
+
+    const ownedRestaurant = restaurants
+        .filter((restaurant) => restaurant.ownerId === userEmail)
+        .map((restaurant) => restaurant.id);
+
+    const ownerOrders = allOrders.filter((order) =>
+        ownedRestaurant.includes(order.restaurantId),
+    );
+
+    const visibleOrders = isOwner
+        ? ownerOrders
+        : allOrders.filter((order) => order.customerEmail === userEmail);
+
+    const handleStatusUpdate = async (orderId: string, status: OrderStatus) => {
+        try {
+            const updated = await updateOrderStatus(orderId, status);
+            dispatch(updateOrderStatusSuccess(updated));
+            dispatch(
+                showNotification({
+                    message: `Status updated to ${status}`,
+                    severity: 'success',
+                }),
+            );
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error ? err.message : 'Update failed';
+            dispatch(
+                showNotification({
+                    message,
+                    severity: 'error',
+                }),
+            );
+        }
+    };
+
+    if (visibleOrders.length === 0) {
+        return (
+            <PageRoot height="100%" alignItems="center" justifyContent="center">
+                <Typography textAlign="center" variant="h4" pb={3}>
+                    Your Order is Empty
+                </Typography>
+                <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    textAlign="center"
+                    mb={4}
+                    gutterBottom
+                >
+                    Explore menus and add your favorite dishes.
+                </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => void navigate('/restaurant')}
+                >
+                    Browse Restaurants
+                </Button>
+            </PageRoot>
+        );
+    }
+
+    return (
+        <Box
+            px={{ xs: 1, sm: 10 }}
+            height="100vh"
+            maxHeight="100vh"
+            overflow="auto"
+            paddingBottom={theme.typography.pxToRem(150)}
+        >
+            <Container maxWidth="xl" sx={{ mt: 5 }}>
+                <Typography variant="h1">
+                    {isOwner ? 'Order Management' : 'Your Orders'}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                    {isOwner
+                        ? 'Manage and update incoming orders.'
+                        : 'View your live and past orders.'}
+                </Typography>
+
+                <Stack spacing={2} mt={5}>
+                    {isLoading
+                        ? Array.from({ length: 4 }).map((_, index) => (
+                              <Box
+                                  borderRadius={8}
+                                  overflow="hidden"
+                                  key={index}
+                              >
+                                  <Skeleton
+                                      variant="rounded"
+                                      height={150}
+                                      animation="wave"
+                                  />
+                              </Box>
+                          ))
+                        : visibleOrders.length > 0 &&
+                          visibleOrders.map((order) => (
+                              <OrderCard
+                                  key={order.id}
+                                  order={order}
+                                  isOwner={isOwner}
+                                  onStatusChange={(orderId, status) => {
+                                      void handleStatusUpdate(orderId, status);
+                                  }}
+                              />
+                          ))}
+                </Stack>
+            </Container>
+        </Box>
+    );
+};

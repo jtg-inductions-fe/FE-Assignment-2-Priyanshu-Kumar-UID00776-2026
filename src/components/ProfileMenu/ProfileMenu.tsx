@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import {
     LoginMenuItem,
@@ -6,7 +6,7 @@ import {
     ProfileInfo,
     StyledMenu,
 } from '@/components/ProfileMenu/ProfileMenu.styles';
-import { ProfileMenuProps } from '@/types/profileMenu.types';
+import { ProfileMenuProps } from '@/components/ProfileMenu/profileMenu.types';
 
 export const ProfileMenu = ({
     user,
@@ -31,7 +31,7 @@ export const ProfileMenu = ({
         }}
     >
         {isUserActive ? (
-            <>
+            <Box>
                 <ProfileInfo>
                     <Typography variant="body1">{user?.fullName}</Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -40,7 +40,7 @@ export const ProfileMenu = ({
                 </ProfileInfo>
 
                 <LogoutMenuItem onClick={onLogoutClick}>Logout</LogoutMenuItem>
-            </>
+            </Box>
         ) : (
             onLoginClick && (
                 <LoginMenuItem onClick={onLoginClick}>Login</LoginMenuItem>

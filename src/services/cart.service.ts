@@ -1,7 +1,10 @@
-import { StoredUser, User } from '@/types/auth.types';
-import { CartItem } from '@/types/cart.types';
+import { StoredUser, User } from '@/components/Auth/auth.types';
+import { CartItem } from '@/container/Cart/cart.types';
 
-// To fetch the record of the current user form the localStorage
+/**
+ * To fetch the record of the current user form the localStorage
+ * @returns {User | null}
+ */
 export const getCurrentUserFromStorage = (): User | null => {
     try {
         const stored = localStorage.getItem('currentUser');
@@ -17,6 +20,12 @@ export const getCurrentUserFromStorage = (): User | null => {
     }
 };
 
+/**
+ * Persist updated user cart to localStorage
+ * @param {string} userEmail
+ * @param {CartItem[]} updatedCart
+ * @returns {void}
+ */
 export const persistUserCartToStorage = (
     userEmail: string,
     updatedCart: CartItem[],

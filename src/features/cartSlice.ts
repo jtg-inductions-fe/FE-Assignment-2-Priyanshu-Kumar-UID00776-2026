@@ -1,8 +1,8 @@
+import { CartItem, CartState } from '@/container/Cart/cart.types';
 import {
     getCurrentUserFromStorage,
     persistUserCartToStorage,
 } from '@/services/cart.service';
-import { CartItem, CartState } from '@/types/cart.types';
 import { MenuItem } from '@/types/restaurant.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -15,16 +15,26 @@ const initialState: CartState = {
             : [],
 };
 
-// Cart slices containing the slices
 export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        // Set the user cart to load after refresh also in redux store
+        /**
+         * Set the user cart to load after refresh also in redux store
+         * @param {CartState} state
+         * @param {PayloadAction<CartItem[]>} action
+         * @returns {void}
+         */
         setUserCart: (state, action: PayloadAction<CartItem[]>) => {
             state.items = action.payload;
         },
-        // Add the cart to the redux store
+
+        /**
+         * Add the cart to the redux store
+         * @param {CartState} state
+         * @param {PayloadAction<{ userEmail: string; restaurantId: string; restaurantName: string; menuItem: MenuItem }>} action
+         * @returns {void}
+         */
         addItemToCart: (
             state,
             action: PayloadAction<{
@@ -61,7 +71,12 @@ export const cartSlice = createSlice({
             persistUserCartToStorage(userEmail, state.items);
         },
 
-        // Increment item for the redux store
+        /**
+         * Increment item for the redux store
+         * @param {CartState} state
+         * @param {PayloadAction<{ userEmail: string; menuItemId: string }>} action
+         * @returns {void}
+         */
         incrementCartItem: (
             state,
             action: PayloadAction<{ userEmail: string; menuItemId: string }>,
@@ -78,7 +93,12 @@ export const cartSlice = createSlice({
             }
         },
 
-        // Decrement cart for the redux store
+        /**
+         * Decrement cart for the redux store
+         * @param {CartState} state
+         * @param {PayloadAction<{ userEmail: string; menuItemId: string }>} action
+         * @returns {void}
+         */
         decrementCartItem: (
             state,
             action: PayloadAction<{ userEmail: string; menuItemId: string }>,
@@ -101,7 +121,12 @@ export const cartSlice = createSlice({
             }
         },
 
-        // Remove the cart item
+        /**
+         * Remove the cart item
+         * @param {CartState} state
+         * @param {PayloadAction<{ userEmail: string; menuItemId: string }>} action
+         * @returns {void}
+         */
         removeCartItem: (
             state,
             action: PayloadAction<{ userEmail: string; menuItemId: string }>,
@@ -113,6 +138,13 @@ export const cartSlice = createSlice({
             );
             persistUserCartToStorage(userEmail, state.items);
         },
+
+        // Clear all items from the cart and reset storage
+        clearCart: (state, action: PayloadAction<{ userEmail: string }>) => {
+            const { userEmail } = action.payload;
+            state.items = [];
+            persistUserCartToStorage(userEmail, []);
+        },
     },
 });
 
@@ -122,6 +154,7 @@ export const {
     incrementCartItem,
     decrementCartItem,
     removeCartItem,
+    clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

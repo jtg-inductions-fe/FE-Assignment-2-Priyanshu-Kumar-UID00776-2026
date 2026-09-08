@@ -3,13 +3,16 @@ import {
     Delete as DeleteIcon,
     Edit as EditIcon,
     LocationOnOutlined as LocationIcon,
+    OpenInNew as OpenInNewIcon,
     Star as StarIcon,
 } from '@mui/icons-material';
 import {
     Box,
     CardMedia,
     Chip,
+    IconButton,
     Stack,
+    Tooltip,
     Typography,
     useTheme,
 } from '@mui/material';
@@ -21,7 +24,7 @@ import {
     StyledCard,
     StyledCardContent,
 } from '@/components/RestaurantCard/RestaurantCard.styles';
-import { RestaurantCardProps } from '@/types/restaurantCard.types';
+import { RestaurantCardProps } from '@/components/RestaurantCard/restaurantCard.types';
 
 export const RestaurantCard = ({
     restaurant,
@@ -40,11 +43,20 @@ export const RestaurantCard = ({
     };
 
     return (
-        <StyledCard onClick={() => onCardClick?.(restaurant.id)}>
-            <Box position="relative">
+        <StyledCard
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    onCardClick?.(restaurant.id);
+                }
+            }}
+            onClick={() => onCardClick?.(restaurant.id)}
+        >
+            <Box position="relative" width="100%">
                 <CardMedia
                     component="img"
                     height="180"
+                    fetchPriority="high"
                     image={restaurant.image}
                     alt={restaurant.name}
                 />
@@ -97,6 +109,27 @@ export const RestaurantCard = ({
                     <MetaItem variant="body2">
                         <LocationIcon fontSize="inherit" />
                         <span>{restaurant.location}</span>
+
+                        {restaurant.locationLink && (
+                            <Tooltip title="Open location in Google Maps">
+                                <IconButton
+                                    size="small"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        window.open(
+                                            restaurant.locationLink,
+                                            '_blank',
+                                            'noopener,noreferrer',
+                                        );
+                                    }}
+                                >
+                                    <OpenInNewIcon
+                                        htmlColor={theme.palette.primary.main}
+                                        fontSize="small"
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                     </MetaItem>
                 </Box>
 

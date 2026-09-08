@@ -4,12 +4,13 @@ import { styled } from '@mui/material/styles';
 export const StyledCard = styled(Card)({
     borderRadius: '20px',
     overflow: 'hidden',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.30)',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     transition: 'transform 0.2s ease-in-out',
     cursor: 'pointer',
+    marginTop: '10px',
     '&:hover': {
         transform: 'translateY(-4px)',
     },
@@ -17,8 +18,8 @@ export const StyledCard = styled(Card)({
 
 export const StyledCardContent = styled(CardContent)(({ theme }) => ({
     padding: theme.typography.pxToRem(20),
-    flex: 1,
     display: 'flex',
+    width: '100%',
     flexDirection: 'column',
     justifyContent: 'space-between',
 }));

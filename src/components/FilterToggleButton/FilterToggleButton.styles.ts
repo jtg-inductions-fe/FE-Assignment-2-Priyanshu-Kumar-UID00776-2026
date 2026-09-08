@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import { StyledFilterButtonProps } from '@/types/filterToggleButton.types';
+import { StyledFilterButtonProps } from '@/components/FilterToggleButton/filterToggleButton.types';
 
 export const StyledButtonGroup = styled(ButtonGroup)(({ theme }) => ({
     borderRadius: '20px',

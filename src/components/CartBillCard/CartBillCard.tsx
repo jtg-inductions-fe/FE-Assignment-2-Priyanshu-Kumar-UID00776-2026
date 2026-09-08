@@ -9,7 +9,7 @@ import {
     CheckoutSubmitButton,
     SummaryCard,
 } from '@/components/CartBillCard/CartBillCard.styles';
-import { CartBill } from '@/types/cart.types';
+import { CartBill } from '@/container/Cart/cart.types';
 
 export const CartBillCard = ({
     subtotal,
@@ -20,12 +20,14 @@ export const CartBillCard = ({
     appliedPromoCode,
     onApplyPromo,
     onCheckout,
+    onCheckoutLoading,
 }: CartBill) => {
     const [couponInput, setCouponInput] = useState('');
     const theme = useTheme();
 
     return (
         <SummaryCard>
+            <Typography variant="h4">Bill Details</Typography>
             <Stack direction="row" gap={theme.typography.pxToRem(20)} py={3}>
                 <TextField
                     size="small"
@@ -41,8 +43,6 @@ export const CartBillCard = ({
                     Apply
                 </ApplyPromoButton>
             </Stack>
-
-            <Typography variant="h4">Bill Details</Typography>
 
             <Stack spacing={3}>
                 <BillRow>
@@ -94,6 +94,7 @@ export const CartBillCard = ({
                 size="large"
                 endIcon={<ArrowForwardIcon />}
                 onClick={onCheckout}
+                loading={onCheckoutLoading}
             >
                 Go to Checkout
             </CheckoutSubmitButton>

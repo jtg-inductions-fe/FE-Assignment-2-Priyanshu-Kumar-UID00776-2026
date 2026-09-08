@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import authReducer from '@/features/authSlice';
 import cartReducer from '@/features/cartSlice';
 import notificationReducer from '@/features/notificationSlice';
+import orderReducer from '@/features/orderSlice';
 import restaurantReducer from '@/features/restaurantSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
@@ -13,6 +14,7 @@ export const store = configureStore({
         notification: notificationReducer,
         restaurant: restaurantReducer,
         cart: cartReducer,
+        order: orderReducer,
     },
 });
 

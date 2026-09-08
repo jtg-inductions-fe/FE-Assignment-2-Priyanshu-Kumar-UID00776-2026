@@ -1,0 +1,119 @@
+[
+    {
+        "id": "ord_1",
+        "checkoutId": "chk_2",
+        "createdAt": "2026-08-30T14:25:59.631Z",
+        "customerContact": "9835180994",
+        "customerEmail": "priyanshu2004ss@gmail.com",
+        "customerName": "Priyanshu Ojha",
+        "restaurantId": "rest_1",
+        "restaurantName": "The Green Bowl",
+        "status": "Preparing",
+        "totalAmount": 400,
+        "items": [
+            {
+                "restaurantId": "rest_1",
+                "restaurantName": "The Green Bowl",
+                "quantity": 1,
+                "menuItem": {
+                    "id": "menu_1",
+                    "name": "White Sauce Pasta",
+                    "description": "Creamy and cheesy pasta tossed with Italian herbs and corn",
+                    "dietType": "nonVeg",
+                    "price": 260,
+                    "rating": 4.5,
+                    "stock": 14,
+                    "image": "FE-Assignment-2-Priyanshu-Kumar-UID00776-2026/src/assets/images/pizza.avif"
+                }
+            },
+            {
+                "restaurantId": "rest_1",
+                "restaurantName": "The Green Bowl",
+                "quantity": 1,
+                "menuItem": {
+                    "id": "menu_3",
+                    "name": "Garlic Bread",
+                    "description": "Toasted baguette slices brushed with garlic butter and herbs",
+                    "dietType": "veg",
+                    "price": 140,
+                    "rating": 4.4,
+                    "stock": 22,
+                    "image": "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=70"
+                }
+            }
+        ]
+    },
+    {
+        "id": "ord_2",
+        "checkoutId": "chk_3",
+        "createdAt": "2026-09-01T19:55:08.058Z",
+        "customerContact": "9835180994",
+        "customerEmail": "priyanshu2004ss@gmail.com",
+        "customerName": "Priyanshu Ojha",
+        "restaurantId": "rest_2",
+        "restaurantName": "Burger & Grill",
+        "status": "Pending",
+        "totalAmount": 540,
+        "items": [
+            {
+                "restaurantId": "rest_2",
+                "restaurantName": "Burger & Grill",
+                "quantity": 1,
+                "menuItem": {
+                    "id": "menu_2",
+                    "name": "Paneer Tikka",
+                    "description": "Marinated paneer cubes grilled in a traditional tandoor",
+                    "dietType": "veg",
+                    "price": 320,
+                    "rating": 4.6,
+                    "stock": 15,
+                    "image": "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=70"
+                }
+            },
+            {
+                "restaurantId": "rest_2",
+                "restaurantName": "Burger & Grill",
+                "quantity": 1,
+                "menuItem": {
+                    "id": "menu_4",
+                    "name": "Manchurian",
+                    "description": "Deep-fried veggie balls tossed in a tangy and savory sauce",
+                    "dietType": "veg",
+                    "price": 220,
+                    "rating": 4.5,
+                    "stock": 12,
+                    "image": "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=70"
+                }
+            }
+        ]
+    },
+    {
+        "id": "ord_4",
+        "checkoutId": "chk_4",
+        "createdAt": "2026-09-02T01:10:00.000Z",
+        "customerContact": "9835180994",
+        "customerEmail": "priyanshu2004ss@gmail.com",
+        "customerName": "Priyanshu Ojha",
+        "restaurantId": "rest_3",
+        "restaurantName": "Spice Fusion",
+        "status": "Delivered",
+        "totalAmount": 300,
+        "items": [
+            {
+                "restaurantId": "rest_3",
+                "restaurantName": "Spice Fusion",
+                "quantity": 2,
+                "menuItem": {
+                    "id": "menu_4",
+                    "name": "Momos",
+                    "description": "Steamed dumplings filled with finely chopped spiced vegetables",
+                    "dietType": "veg",
+                    "price": 150,
+                    "rating": 4.9,
+                    "stock": 30,
+                    "image": "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=70"
+                }
+            }
+        ]
+    }
+]

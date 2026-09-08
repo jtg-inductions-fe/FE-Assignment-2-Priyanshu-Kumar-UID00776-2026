@@ -1,10 +1,11 @@
 import { Box, Container, styled } from '@mui/material';
 
 export const PageRoot = styled(Box)({
-    maxHeight: '100vh',
+    height: '100%',
     display: 'flex',
     overflow: 'scroll',
     flexDirection: 'column',
+    width: '100%',
 });
 
 export const CartContainerArea = styled(Container)({

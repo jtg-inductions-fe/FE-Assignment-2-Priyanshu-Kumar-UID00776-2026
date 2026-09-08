@@ -1,5 +1,5 @@
-import { FoodVariant } from '@/types/filterToggleButton.types';
-import { DietType } from '@/types/restaurant.types';
+import { FoodVariant } from '@/components/FilterToggleButton/filterToggleButton.types';
+import { DietType, RestaurantFormData } from '@/types/restaurant.types';
 
 export const DIET_TYPE_LABELS: Record<DietType, string> = {
     veg: 'VEG',
@@ -20,3 +20,15 @@ export const FILTER_OPTIONS: { id: FoodVariant; label: string }[] = [
     { id: 'veg', label: 'Veg' },
     { id: 'nonVeg', label: 'Non-Veg' },
 ];
+
+export const EMPTY_RESTAURANT_FORM: RestaurantFormData = {
+    name: '',
+    location: '',
+    locationLink: '',
+    image: '',
+    dietType: 'both',
+    rating: 4.5,
+    deliveryTime: '',
+    openingTime: '',
+    endTime: '',
+};

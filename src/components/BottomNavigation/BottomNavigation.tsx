@@ -1,7 +1,7 @@
 import { Badge, BottomNavigationAction } from '@mui/material';
 
 import { ProfileMenu } from '@/components/ProfileMenu/ProfileMenu';
-import { BottomNavigationBarProps } from '@/types/bottomNavigation.types';
+import { BottomNavigationBarProps } from '@/container/BottomNavigationBar/bottomNavigation.types';
 
 import {
     BottomNavigationContainer,

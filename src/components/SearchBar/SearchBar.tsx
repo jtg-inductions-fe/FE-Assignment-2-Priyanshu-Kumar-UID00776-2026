@@ -2,7 +2,7 @@ import { Search as SearchIcon } from '@mui/icons-material';
 import { InputAdornment } from '@mui/material';
 
 import { SearchBar } from '@/components/SearchBar/SearchBar.styles';
-import { RestaurantSearchProps } from '@/types/serachBar.types';
+import { RestaurantSearchProps } from '@/components/SearchBar/serachBar.types';
 
 export const RestaurantSearch = ({
     value,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -23,13 +23,13 @@ import {
     SubmitButton,
     SubmitPaperWrapper,
 } from '@/components/Auth/Auth.styles';
+import { LoginFormData } from '@/components/Auth/auth.types';
 import { EMAIL_VALIDATION_REGEX } from '@/constant';
 import { setUser } from '@/features/authSlice';
 import { setUserCart } from '@/features/cartSlice';
 import { showNotification } from '@/features/notificationSlice';
 import { login } from '@/services/auth.service';
 import { useAppDispatch } from '@/store/store';
-import { LoginFormData } from '@/types/auth.types';
 
 export const Login = () => {
     const dispatch = useAppDispatch();

@@ -68,12 +68,12 @@ export const AddRestaurantButton = styled(Button)(({ theme }) => ({
     paddingLeft: theme.typography.pxToRem(15),
     paddingRight: theme.typography.pxToRem(15),
     width: '100%',
-    marginRight: 0,
+    marginRight: 10,
     float: 'none',
     [theme.breakpoints.up('sm')]: {
         width: 'auto',
         float: 'right',
-        marginRight: theme.typography.pxToRem(10),
+        marginRight: theme.typography.pxToRem(20),
     },
 }));
 
@@ -86,8 +86,12 @@ export const FilterSlideModal = styled(Button)(({ theme }) => ({
 export const RestaurantGrid = styled(Box)(({ theme }) => ({
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-    gap: theme.typography.pxToRem(12),
-    paddingBottom: theme.typography.pxToRem(40),
+    gap: theme.typography.pxToRem(15),
+    paddingBottom: theme.typography.pxToRem(90),
+    [theme.breakpoints.up('sm')]: {
+        marginRight: theme.typography.pxToRem(15),
+        gridTemplateColumns: 'repeat(auto-fill, minmax(450px, 1fr))',
+    },
 }));
 
 export const StyledCard = styled(Card)({

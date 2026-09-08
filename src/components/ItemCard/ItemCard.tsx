@@ -1,6 +1,5 @@
 import {
     Add as AddIcon,
-    Close as CloseIcon,
     Delete as DeleteIcon,
     Edit as EditIcon,
     Remove as RemoveIcon,
@@ -11,6 +10,7 @@ import {
     Chip,
     IconButton,
     Stack,
+    Tooltip,
     Typography,
     useTheme,
 } from '@mui/material';
@@ -40,10 +40,8 @@ export const MenuItemCard = ({
         <StyledMenuCard>
             <Box width={theme.typography.pxToRem(130)}>
                 <StyledCardMedia
-                    src={
-                        item.image ||
-                        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=200&q=80'
-                    }
+                    fetchPriority="high"
+                    src={item.image}
                     alt={item.name}
                 />
             </Box>
@@ -55,15 +53,22 @@ export const MenuItemCard = ({
                         justifyContent="space-between"
                         alignItems="flex-start"
                     >
-                        <Typography variant="h5">{item.name}</Typography>
+                        <Typography variant="h4" component="h3">
+                            {item.name}
+                        </Typography>
 
                         {isCart ? (
-                            <IconButton
-                                size="small"
-                                onClick={() => onAction('remove', item)}
-                            >
-                                <CloseIcon fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Delete">
+                                <IconButton
+                                    size="small"
+                                    onClick={() => onAction('remove', item)}
+                                >
+                                    <DeleteIcon
+                                        htmlColor={theme.palette.primary.main}
+                                        fontSize="small"
+                                    />
+                                </IconButton>
+                            </Tooltip>
                         ) : (
                             item.rating !== undefined && (
                                 <RatingBadge>
@@ -106,26 +111,35 @@ export const MenuItemCard = ({
                     alignItems="center"
                     mt={3}
                 >
-                    <Typography variant="h6" color="primary.main">
+                    <Typography
+                        padding={1}
+                        variant="body1"
+                        color="primary.main"
+                    >
                         ₹{item.price.toFixed(2)}
+                        {isCart && ` x ${quantity}`}
                     </Typography>
 
                     {isOwner ? (
                         <Stack direction="row" spacing={1}>
-                            <AddButton
-                                variant="outlined"
-                                size="small"
-                                onClick={() => onAction('edit', item)}
-                            >
-                                <EditIcon fontSize="small" />
-                            </AddButton>
-                            <AddButton
-                                variant="outlined"
-                                color="error"
-                                onClick={() => onAction('delete', item)}
-                            >
-                                <DeleteIcon fontSize="small" />
-                            </AddButton>
+                            <Tooltip title="Edit">
+                                <AddButton
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() => onAction('edit', item)}
+                                >
+                                    <EditIcon fontSize="small" />
+                                </AddButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <AddButton
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => onAction('delete', item)}
+                                >
+                                    <DeleteIcon fontSize="small" />
+                                </AddButton>
+                            </Tooltip>
                         </Stack>
                     ) : quantity > 0 ? (
                         <Stack

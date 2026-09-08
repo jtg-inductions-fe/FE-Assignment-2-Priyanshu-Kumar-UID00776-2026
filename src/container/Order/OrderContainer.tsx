@@ -93,7 +93,7 @@ export const OrderContainer = () => {
         }
     };
 
-    if (!visibleOrders) {
+    if (visibleOrders.length === 0) {
         return (
             <PageRoot height="100%" alignItems="center" justifyContent="center">
                 <Typography textAlign="center" variant="h4" pb={3}>

@@ -608,6 +608,7 @@ export const MenuContainer = () => {
                             <Controller
                                 name="image"
                                 control={control}
+                                rules={{ required: 'Image is required' }}
                                 render={({ field }) => (
                                     <TextField
                                         {...field}

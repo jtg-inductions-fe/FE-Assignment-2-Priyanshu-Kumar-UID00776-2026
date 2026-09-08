@@ -1,4 +1,3 @@
-import CardImage from '@/assets/images/pizza.avif';
 import restaurantData from '@/mockData/restaurant.json';
 import {
     MenuFormData,
@@ -36,7 +35,6 @@ export const addRestaurant = async (
         ...data,
         id: `rest_${crypto.randomUUID()}`,
         ownerId: ownerEmail.toLowerCase(),
-        image: CardImage,
         menus: [],
     };
 
@@ -132,7 +130,6 @@ export const addMenuItem = async (
 
     const newMenuItem: MenuItem = {
         ...menuData,
-        image: CardImage,
         id: `menu_${crypto.randomUUID()}`,
     };
 
